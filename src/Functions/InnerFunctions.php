@@ -154,3 +154,36 @@ function sort(callable $comparator, array $list)
 
     return $newList;
 }
+
+/**
+ * @param array $a
+ * @param array $b
+ *
+ * @return array
+ */
+function zip(array $a, array $b)
+{
+    $zipped = [];
+    foreach (array_intersect_key($a, $b) as $key => $value) {
+        $zipped[$key] = [$value, $b[$key]];
+    }
+
+    return $zipped;
+}
+
+/**
+ * @param callable $function
+ * @param array    $a
+ * @param array    $b
+ *
+ * @return array
+ */
+function zipWith(callable $function, array $a, array $b)
+{
+    $zipped = [];
+    foreach (array_intersect_key($a, $b) as $key => $value) {
+        $zipped[$key] = $function($value, $b[$key]);
+    }
+
+    return $zipped;
+}

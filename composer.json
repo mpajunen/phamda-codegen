@@ -1,0 +1,18 @@
+{
+    "name": "mpajunen/meta-phamda",
+    "description": "Meta-Phamda generates code in the Phamda library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mikael Pajunen",
+            "email": "mikael.pajunen@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.6.0",
+        "nikic/php-parser": "~1.1"
+    },
+    "autoload": {
+        "psr-4": {"Phamda\\": "src/"}
+    }
+}

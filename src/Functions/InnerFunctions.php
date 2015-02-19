@@ -191,4 +191,16 @@ $functions = [
                 return $zipped;
             },
     ],
+    'simple'  => [
+
+        'identity' =>
+        /**
+         * @param mixed $a
+         *
+         * @return mixed
+         */
+            function ($a) {
+                return $a;
+            },
+    ]
 ];

@@ -151,11 +151,9 @@ $functions = [
          * @return array
          */
             function (callable $comparator, array $list) {
-                $newList = $list;
-
                 usort($list, $comparator);
 
-                return $newList;
+                return $list;
             },
 
         'zip'     =>

@@ -7,10 +7,12 @@ use PhpParser\BuilderFactory;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Name;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 
 class BasicTestMethodBuilder implements BuilderInterface
 {
+    private $factory;
     private $name;
     private $source;
 
@@ -18,11 +20,13 @@ class BasicTestMethodBuilder implements BuilderInterface
     {
         $this->name   = $name;
         $this->source = $source;
+
+        $this->factory = new BuilderFactory();
     }
 
     public function build()
     {
-        return (new BuilderFactory())->method('test' . ucfirst($this->name))
+        return $this->factory->method($this->getHelperMethodName('test%s'))
             ->setDocComment($this->createComment())
             ->addParams($this->createParams())
             ->addStmts($this->createStatements())
@@ -31,20 +35,28 @@ class BasicTestMethodBuilder implements BuilderInterface
 
     private function createComment()
     {
-        $providerMethod = sprintf('get%sData', ucfirst($this->name));
-
         return <<<EOT
 /**
- * @dataProvider $providerMethod
+ * @dataProvider {$this->getHelperMethodName('get%sData')}
  */
 EOT;
+    }
+
+    private function getHelperMethodName($format)
+    {
+        return sprintf($format, ucfirst(trim($this->name, '_')));
+    }
+
+    private function returnsCallable()
+    {
+        return strpos($this->source->getDocComment(), '@return callable') !== false;
     }
 
     private function createParams()
     {
         $params = [];
         foreach ($this->source->uses as $index => $use) {
-            $params[] = (new BuilderFactory())->param($use->var);
+            $params[] = $this->factory->param($use->var);
         }
 
         foreach ($this->source->params as $param) {
@@ -53,7 +65,13 @@ EOT;
             $params[] = $newParam;
         }
 
-        $params[] = (new BuilderFactory())->param('expected');
+        $params[] = $this->factory->param('expected');
+
+        if ($this->returnsCallable()) {
+            $param = $this->factory->param('params')->getNode();
+            $param->variadic = true;
+            $params[] = $param;
+        }
 
         return $params;
     }
@@ -67,42 +85,39 @@ EOT;
 
     private function createUseStatements()
     {
-        $statements = [];
+        $function = new Expr\Variable('wrapped');
 
-        $statements[] = new Expr\Assign(
-            new Expr\Variable('wrapped'),
-            $this->createMethodCall($this->source->uses)
-        );
-
-        $statements[] = $this->createAssert($this->createClosureCall('wrapped', $this->source->params));
-
-        return $statements;
+        return [
+            new Expr\Assign($function, $this->createFunctionCall($this->source->uses)),
+            $this->createAssert($this->createFunctionCall($this->source->params, $function))
+        ];
     }
 
     private function createParameterStatements()
     {
         $statements = [];
         foreach (range(0, count($this->source->params) - 1) as $offset) {
+            $function       = null;
+            $argumentSource = $this->source->params;
+
             if ($offset !== 0) {
-                $statements[] = new Expr\Assign(
-                    new Expr\Variable('curried' . $offset),
-                    $this->createMethodCall(array_slice($this->source->params, 0, $offset))
-                );
+                $function       = new Expr\Variable('curried' . $offset);
+                $statements[]   = new Expr\Assign($function, $this->createFunctionCall(array_slice($this->source->params, 0, $offset)));
+                $argumentSource = array_slice($this->source->params, $offset);
             }
 
-            $statements[] = $this->createMethodAssert($offset);
+            if ($this->returnsCallable()) {
+                $call           = $this->createFunctionCall($argumentSource, $function);
+                $function       = new Expr\Variable('main' . $offset);
+                $statements[]   = new Expr\Assign($function, $call);
+                $argumentSource = [$this->factory->param('params')->getNode()];
+                $argumentSource[0]->variadic = true;
+            }
+
+            $statements[] = $this->createAssert($this->createFunctionCall($argumentSource, $function));
         }
 
         return $statements;
-    }
-
-    private function createMethodAssert($offset)
-    {
-        $call = ($offset === 0)
-            ? $this->createMethodCall($this->source->params)
-            : $this->createClosureCall('curried' . $offset, array_slice($this->source->params, $offset));
-
-        return $this->createAssert($call);
     }
 
     private function createAssert(Expr $call)
@@ -113,22 +128,21 @@ EOT;
         ]);
     }
 
-    private function createClosureCall($name, $argumentSource)
+    private function createFunctionCall(array $argumentSource, Expr\Variable $function = null)
     {
-        return new Expr\FuncCall(new Expr\Variable($name), $this->createArguments($argumentSource));
+        $arguments = $this->createArguments($argumentSource);
+
+        return $function !== null
+            ? new Expr\FuncCall($function, $arguments)
+            : new Expr\StaticCall(new Name('Phamda'), $this->name, $arguments);
     }
 
-    private function createMethodCall($argumentSource)
-    {
-        return new Expr\StaticCall(new Name('Phamda'), $this->name, $this->createArguments($argumentSource));
-    }
-
-    private function createArguments(array $params)
+    private function createArguments(array $sources)
     {
         $args = [];
-
-        foreach ($params as $param) {
-            $args[] = new Arg(new Expr\Variable($param->name ?: $param->var));
+        foreach ($sources as $source) {
+            /** @var Expr\ClosureUse|Param $param */
+            $args[] = new Arg(new Expr\Variable($source->name ?: $source->var), false, $source->variadic);
         }
 
         return $args;

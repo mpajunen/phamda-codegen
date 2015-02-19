@@ -49,6 +49,9 @@ class PhamdaBuilder implements BuilderInterface
             case 'curried':
                 $builder = new CurriedMethodBuilder($name, $closure);
                 break;
+            case 'simple':
+                $builder = new SimpleMethodBuilder($name, $closure);
+                break;
             default:
                 throw new \LogicException(sprintf('Invalid method type "%s".'));
         }

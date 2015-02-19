@@ -2,6 +2,7 @@
 
 namespace Phamda\Builder\Tests;
 
+use Phamda\Builder\BuilderInterface;
 use PhpParser\Builder;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Name;
@@ -9,7 +10,7 @@ use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 
-class BasicTestBuilder
+class BasicTestBuilder implements BuilderInterface
 {
     private $functions;
 
@@ -18,16 +19,14 @@ class BasicTestBuilder
         $this->functions = $functions;
     }
 
-    /**
-     * @return Builder
-     */
     public function build()
     {
         $factory = new BuilderFactory();
 
         return $factory->namespace('Phamda\Tests')
             ->addStmt(new Use_([new UseUse(new Name('Phamda\Phamda'))]))
-            ->addStmt($this->createClass($factory));
+            ->addStmt($this->createClass($factory))
+            ->getNode();
     }
 
     private function createClass(BuilderFactory $factory)
@@ -43,8 +42,8 @@ class BasicTestBuilder
     private function createClassMethods()
     {
         $methods = [];
-        foreach ($this->functions as $function) {
-            $methods[] = (new BasicTestMethodBuilder($function))->build();
+        foreach ($this->functions as $name => list(, $function)) {
+            $methods[] = (new BasicTestMethodBuilder($name, $function))->build();
         }
 
         return $methods;

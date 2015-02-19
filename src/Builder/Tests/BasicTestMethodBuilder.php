@@ -2,24 +2,27 @@
 
 namespace Phamda\Builder\Tests;
 
+use Phamda\Builder\BuilderInterface;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 
-class BasicTestMethodBuilder
+class BasicTestMethodBuilder implements BuilderInterface
 {
+    private $name;
     private $source;
 
-    public function __construct(Stmt\Function_ $source)
+    public function __construct($name, Expr\Closure $source)
     {
+        $this->name   = $name;
         $this->source = $source;
     }
 
     public function build()
     {
-        return (new BuilderFactory())->method('test' . ucfirst($this->source->name))
+        return (new BuilderFactory())->method('test' . ucfirst($this->name))
             ->setDocComment($this->createComment())
             ->addParams($this->createParams())
             ->addStmts($this->createStatements())
@@ -28,7 +31,7 @@ class BasicTestMethodBuilder
 
     private function createComment()
     {
-        $providerMethod = sprintf('get%sData', ucfirst($this->source->name));
+        $providerMethod = sprintf('get%sData', ucfirst($this->name));
 
         return <<<EOT
 /**
@@ -60,7 +63,7 @@ EOT;
                 $args = $this->createArguments(array_slice($this->source->params, 0, $offset));
                 $statements[] = new Expr\Assign(
                     new Expr\Variable('curried' . $offset),
-                    new Expr\StaticCall(new Name('Phamda'), $this->source->name, $args)
+                    new Expr\StaticCall(new Name('Phamda'), $this->name, $args)
                 );
             }
 
@@ -74,7 +77,7 @@ EOT;
     {
         $args = $this->createArguments(array_slice($this->source->params, $offset));
         $call = ($offset === 0)
-            ? new Expr\StaticCall(new Name('Phamda'), $this->source->name, $args)
+            ? new Expr\StaticCall(new Name('Phamda'), $this->name, $args)
             : new Expr\FuncCall(new Expr\Variable('curried' . $offset), $args);
 
         return new Expr\MethodCall(new Expr\Variable('this'), 'assertEquals', [

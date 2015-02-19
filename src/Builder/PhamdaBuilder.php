@@ -4,32 +4,31 @@ namespace Phamda\Builder;
 
 use PhpParser\Builder;
 use PhpParser\BuilderFactory;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\TraitUse;
 
-class PhamdaBuilder
+class PhamdaBuilder implements BuilderInterface
 {
+    private $factory;
     private $functions;
 
     public function __construct(array $functions)
     {
+        $this->factory   = new BuilderFactory();
         $this->functions = $functions;
     }
 
-    /**
-     * @return Builder
-     */
     public function build()
     {
-        $factory = new BuilderFactory();
-
-        return $factory->namespace('Phamda')
-            ->addStmt($this->createClass($factory));
+        return $this->factory->namespace('Phamda')
+            ->addStmt($this->createClass())
+            ->getNode();
     }
 
-    private function createClass(BuilderFactory $factory)
+    private function createClass()
     {
-        return $factory->class('Phamda')
+        return $this->factory->class('Phamda')
              ->addStmt(new TraitUse([new Name('CoreFunctionsTrait')]))
              ->addStmts($this->createClassMethods());
     }
@@ -37,10 +36,23 @@ class PhamdaBuilder
     private function createClassMethods()
     {
         $methods = [];
-        foreach ($this->functions as $function) {
-            $methods[] = (new PhamdaMethodBuilder($function))->build();
+        foreach ($this->functions as $name => list($type, $function)) {
+            $methods[] = $this->createClassMethod($type, $name, $function);
         }
 
         return $methods;
+    }
+
+    private function createClassMethod($type, $name, Closure $closure)
+    {
+        switch ($type) {
+            case 'curried':
+                $builder = new CurriedMethodBuilder($name, $closure);
+                break;
+            default:
+                throw new \LogicException(sprintf('Invalid method type "%s".'));
+        }
+
+        return $builder->build();
     }
 }

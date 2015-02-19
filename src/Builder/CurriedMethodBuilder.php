@@ -8,18 +8,20 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 
-class PhamdaMethodBuilder
+class CurriedMethodBuilder implements BuilderInterface
 {
+    private $name;
     private $source;
 
-    public function __construct(Stmt\Function_ $source)
+    public function __construct($name, Expr\Closure $source)
     {
+        $this->name   = $name;
         $this->source = $source;
     }
 
     public function build()
     {
-        return (new BuilderFactory())->method($this->source->name)
+        return (new BuilderFactory())->method($this->name)
             ->setDocComment($this->createComment())
             ->makeStatic()
             ->addParams($this->createParams())
@@ -53,21 +55,12 @@ class PhamdaMethodBuilder
         $arity = count($this->source->params);
 
         if ($arity < 2) {
-            $statements = $this->getSimpleWrapStatement();
+            throw new \LogicException(sprintf('Invalid curried function "%s", arity "%s".', $this->name, $arity));
         } elseif ($arity > 3) {
-            throw new \LogicException(sprintf('CurryN is not supported, arity "%s" required.', $arity));
-        } else {
-            $statements = $this->getCurriedStatements($arity);
+            throw new \LogicException(sprintf('CurryN is not supported, arity "%s" required for function "%s".', $arity, $this->name));
         }
 
-        return $statements;
-    }
-
-    private function getSimpleWrapStatement()
-    {
-        return [
-            new Stmt\Return_($this->createInnerFunction())
-        ];
+        return $this->getCurriedStatements($arity);
     }
 
     private function getCurriedStatements($arity)
@@ -84,16 +77,6 @@ class PhamdaMethodBuilder
 
     private function getCurryWrap($arity)
     {
-        return new Expr\StaticCall(new Name('static'), 'curry' . $arity, [
-            $this->createInnerFunction(),
-        ]);
-    }
-
-    private function createInnerFunction()
-    {
-        return new Expr\Closure([
-            'params' => $this->source->params,
-            'stmts'  => $this->source->stmts,
-        ]);
+        return new Expr\StaticCall(new Name('static'), 'curry' . $arity, [$this->source]);
     }
 }

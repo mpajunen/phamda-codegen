@@ -2,188 +2,193 @@
 
 namespace Phamda\Functions;
 
-/**
- * @param callable $function
- * @param array    $list
- *
- * @return bool
- */
-function all(callable $function, array $list)
-{
-    foreach ($list as $value) {
-        if (! $function($value)) {
-            return false;
-        }
-    }
+$functions = [
+    'curried' => [
 
-    return true;
-}
+        'all'     =>
+        /**
+         * @param callable $function
+         * @param array    $list
+         *
+         * @return bool
+         */
+            function (callable $function, array $list) {
+                foreach ($list as $value) {
+                    if (! $function($value)) {
+                        return false;
+                    }
+                }
 
-/**
- * @param callable $function
- * @param array    $list
- *
- * @return bool
- */
-function any(callable $function, array $list)
-{
-    foreach ($list as $value) {
-        if ($function($value)) {
-            return true;
-        }
-    }
+                return true;
+            },
 
-    return false;
-}
+        'any'     =>
+        /**
+         * @param callable $function
+         * @param array    $list
+         *
+         * @return bool
+         */
+            function (callable $function, array $list) {
+                foreach ($list as $value) {
+                    if ($function($value)) {
+                        return true;
+                    }
+                }
 
-/**
- * @param mixed $a
- * @param mixed $b
- *
- * @return bool
- */
-function eq($a, $b)
-{
-    return $a === $b;
-}
+                return false;
+            },
 
-/**
- * @param callable $function
- * @param array    $list
- *
- * @return array
- */
-function filter(callable $function, array $list)
-{
-    return array_filter($list, $function);
-}
+        'eq'      =>
+        /**
+         * @param mixed $a
+         * @param mixed $b
+         *
+         * @return bool
+         */
+            function ($a, $b) {
+                return $a === $b;
+            },
 
-/**
- * @param callable $function
- * @param array    $list
- *
- * @return array
- */
-function map(callable $function, array $list)
-{
-    return array_map($function, $list);
-}
+        'filter'  =>
+        /**
+         * @param callable $function
+         * @param array    $list
+         *
+         * @return array
+         */
+            function (callable $function, array $list) {
+                return array_filter($list, $function);
+            },
 
-/**
- * @param array $names
- * @param array $item
- *
- * @return array
- */
-function pick(array $names, array $item)
-{
-    $new = [];
-    foreach ($names as $name) {
-        if (array_key_exists($name, $item)) {
-            $new[$name] = $item[$name];
-        }
-    }
+        'map'     =>
+        /**
+         * @param callable $function
+         * @param array    $list
+         *
+         * @return array
+         */
+            function (callable $function, array $list) {
+                return array_map($function, $list);
+            },
 
-    return $new;
-}
+        'pick'    =>
+        /**
+         * @param array $names
+         * @param array $item
+         *
+         * @return array
+         */
+            function (array $names, array $item) {
+                $new = [];
+                foreach ($names as $name) {
+                    if (array_key_exists($name, $item)) {
+                        $new[$name] = $item[$name];
+                    }
+                }
 
-/**
- * @param array $names
- * @param array $item
- *
- * @return array
- */
-function pickAll(array $names, array $item)
-{
-    $new = [];
-    foreach ($names as $name) {
-        $new[$name] = isset($item[$name]) ? $item[$name] : null;
-    }
+                return $new;
+            },
 
-    return $new;
-}
+        'pickAll' =>
+        /**
+         * @param array $names
+         * @param array $item
+         *
+         * @return array
+         */
+            function (array $names, array $item) {
+                $new = [];
+                foreach ($names as $name) {
+                    $new[$name] = isset($item[$name]) ? $item[$name] : null;
+                }
 
-/**
- * @param string       $name
- * @param array|object $object
- *
- * @return mixed
- */
-function prop($name, $object)
-{
-    return is_object($object) ? $object->$name : $object[$name];
-}
+                return $new;
+            },
 
-/**
- * @param string       $name
- * @param mixed        $value
- * @param array|object $object
- *
- * @return bool
- */
-function propEq($name, $value, $object)
-{
-    return is_object($object)
-        ? $object->$name === $value
-        : $object[$name] === $value;
-}
+        'prop'    =>
+        /**
+         * @param string       $name
+         * @param array|object $object
+         *
+         * @return mixed
+         */
+            function ($name, $object) {
+                return is_object($object) ? $object->$name : $object[$name];
+            },
 
-/**
- * @param callable $function
- * @param mixed    $initial
- * @param array    $list
- *
- * @return mixed
- */
-function reduce(callable $function, $initial, array $list)
-{
-    return array_reduce($list, $function, $initial);
-}
+        'propEq'  =>
+        /**
+         * @param string       $name
+         * @param mixed        $value
+         * @param array|object $object
+         *
+         * @return bool
+         */
+            function ($name, $value, $object) {
+                return is_object($object)
+                    ? $object->$name === $value
+                    : $object[$name] === $value;
+            },
 
-/**
- * @param callable $comparator
- * @param array    $list
- *
- * @return array
- */
-function sort(callable $comparator, array $list)
-{
-    $newList = $list;
+        'reduce'  =>
+        /**
+         * @param callable $function
+         * @param mixed    $initial
+         * @param array    $list
+         *
+         * @return mixed
+         */
+            function (callable $function, $initial, array $list) {
+                return array_reduce($list, $function, $initial);
+            },
 
-    usort($list, $comparator);
+        'sort'    =>
+        /**
+         * @param callable $comparator
+         * @param array    $list
+         *
+         * @return array
+         */
+            function (callable $comparator, array $list) {
+                $newList = $list;
 
-    return $newList;
-}
+                usort($list, $comparator);
 
-/**
- * @param array $a
- * @param array $b
- *
- * @return array
- */
-function zip(array $a, array $b)
-{
-    $zipped = [];
-    foreach (array_intersect_key($a, $b) as $key => $value) {
-        $zipped[$key] = [$value, $b[$key]];
-    }
+                return $newList;
+            },
 
-    return $zipped;
-}
+        'zip'     =>
+        /**
+         * @param array $a
+         * @param array $b
+         *
+         * @return array
+         */
+            function (array $a, array $b) {
+                $zipped = [];
+                foreach (array_intersect_key($a, $b) as $key => $value) {
+                    $zipped[$key] = [$value, $b[$key]];
+                }
 
-/**
- * @param callable $function
- * @param array    $a
- * @param array    $b
- *
- * @return array
- */
-function zipWith(callable $function, array $a, array $b)
-{
-    $zipped = [];
-    foreach (array_intersect_key($a, $b) as $key => $value) {
-        $zipped[$key] = $function($value, $b[$key]);
-    }
+                return $zipped;
+            },
 
-    return $zipped;
-}
+        'zipWith' =>
+        /**
+         * @param callable $function
+         * @param array    $a
+         * @param array    $b
+         *
+         * @return array
+         */
+            function (callable $function, array $a, array $b) {
+                $zipped = [];
+                foreach (array_intersect_key($a, $b) as $key => $value) {
+                    $zipped[$key] = $function($value, $b[$key]);
+                }
+
+                return $zipped;
+            },
+    ],
+];

@@ -52,6 +52,9 @@ class PhamdaBuilder implements BuilderInterface
             case 'simple':
                 $builder = new SimpleMethodBuilder($name, $closure);
                 break;
+            case 'wrapped':
+                $builder = new WrappedMethodBuilder($name, $closure);
+                break;
             default:
                 throw new \LogicException(sprintf('Invalid method type "%s".'));
         }

@@ -43,6 +43,10 @@ EOT;
     private function createParams()
     {
         $params = [];
+        foreach ($this->source->uses as $index => $use) {
+            $params[] = (new BuilderFactory())->param($use->var);
+        }
+
         foreach ($this->source->params as $param) {
             $newParam = clone $param;
 
@@ -50,20 +54,39 @@ EOT;
         }
 
         $params[] = (new BuilderFactory())->param('expected');
-//        $params[] = (new BuilderFactory())->param('message')->setDefault(null);
 
         return $params;
     }
 
     private function createStatements()
     {
+        return $this->source->uses
+            ? $this->createUseStatements()
+            : $this->createParameterStatements();
+    }
+
+    private function createUseStatements()
+    {
+        $statements = [];
+
+        $statements[] = new Expr\Assign(
+            new Expr\Variable('wrapped'),
+            $this->createMethodCall($this->source->uses)
+        );
+
+        $statements[] = $this->createAssert($this->createClosureCall('wrapped', $this->source->params));
+
+        return $statements;
+    }
+
+    private function createParameterStatements()
+    {
         $statements = [];
         foreach (range(0, count($this->source->params) - 1) as $offset) {
             if ($offset !== 0) {
-                $args = $this->createArguments(array_slice($this->source->params, 0, $offset));
                 $statements[] = new Expr\Assign(
                     new Expr\Variable('curried' . $offset),
-                    new Expr\StaticCall(new Name('Phamda'), $this->name, $args)
+                    $this->createMethodCall(array_slice($this->source->params, 0, $offset))
                 );
             }
 
@@ -75,15 +98,29 @@ EOT;
 
     private function createMethodAssert($offset)
     {
-        $args = $this->createArguments(array_slice($this->source->params, $offset));
         $call = ($offset === 0)
-            ? new Expr\StaticCall(new Name('Phamda'), $this->name, $args)
-            : new Expr\FuncCall(new Expr\Variable('curried' . $offset), $args);
+            ? $this->createMethodCall($this->source->params)
+            : $this->createClosureCall('curried' . $offset, array_slice($this->source->params, $offset));
 
+        return $this->createAssert($call);
+    }
+
+    private function createAssert(Expr $call)
+    {
         return new Expr\MethodCall(new Expr\Variable('this'), 'assertSame', [
             new Expr\Variable('expected'),
             $call,
         ]);
+    }
+
+    private function createClosureCall($name, $argumentSource)
+    {
+        return new Expr\FuncCall(new Expr\Variable($name), $this->createArguments($argumentSource));
+    }
+
+    private function createMethodCall($argumentSource)
+    {
+        return new Expr\StaticCall(new Name('Phamda'), $this->name, $this->createArguments($argumentSource));
     }
 
     private function createArguments(array $params)
@@ -91,7 +128,7 @@ EOT;
         $args = [];
 
         foreach ($params as $param) {
-            $args[] = new Arg(new Expr\Variable($param->name));
+            $args[] = new Arg(new Expr\Variable($param->name ?: $param->var));
         }
 
         return $args;

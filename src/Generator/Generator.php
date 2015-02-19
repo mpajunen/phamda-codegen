@@ -50,7 +50,7 @@ class Generator
     {
         return $this->createParser()
             ->parse(file_get_contents(__DIR__ . '/../Functions/InnerFunctions.php'))[0]
-            ->stmts[0]
+            ->stmts[1]
             ->expr
             ->items;
     }

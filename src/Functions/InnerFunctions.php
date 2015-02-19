@@ -2,6 +2,10 @@
 
 namespace Phamda\Functions;
 
+$variables = [
+    $value = null,
+];
+
 $functions = [
     'curried' => [
 
@@ -200,5 +204,17 @@ $functions = [
             function ($a) {
                 return $a;
             },
-    ]
+    ],
+    'wrapped' => [
+
+        'always' =>
+        /**
+         * @param mixed $value
+         *
+         * @return callable
+         */
+        function () use ($value) {
+            return $value;
+        }
+    ],
 ];

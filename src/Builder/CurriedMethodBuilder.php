@@ -30,7 +30,9 @@ class CurriedMethodBuilder implements BuilderInterface
 
     private function createComment()
     {
-        return str_replace('* @return ', '* @return callable|', $this->source->getDocComment());
+        return str_replace('callable|callable', 'callable', str_replace(
+            '* @return ', '* @return callable|', $this->source->getDocComment()
+        ));
     }
 
     private function createParams()

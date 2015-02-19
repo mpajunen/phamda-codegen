@@ -26,6 +26,19 @@ $functions = [
                 return true;
             },
 
+        'and_'    =>
+        /**
+         * @param callable $a
+         * @param callable $b
+         *
+         * @return callable
+         */
+            function (callable $a, callable $b) {
+                return function (...$arguments) use ($a, $b) {
+                    return call_user_func($a, ...$arguments) && call_user_func($b, ...$arguments);
+                };
+            },
+
         'any'     =>
         /**
          * @param callable $function
@@ -74,6 +87,19 @@ $functions = [
          */
             function (callable $function, array $list) {
                 return array_map($function, $list);
+            },
+
+        'or_'    =>
+        /**
+         * @param callable $a
+         * @param callable $b
+         *
+         * @return callable
+         */
+            function (callable $a, callable $b) {
+                return function (...$arguments) use ($a, $b) {
+                    return call_user_func($a, ...$arguments) || call_user_func($b, ...$arguments);
+                };
             },
 
         'pick'    =>
@@ -213,8 +239,8 @@ $functions = [
          *
          * @return callable
          */
-        function () use ($value) {
-            return $value;
-        }
+            function () use ($value) {
+                return $value;
+            }
     ],
 ];

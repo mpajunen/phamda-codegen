@@ -80,7 +80,7 @@ EOT;
             ? new Expr\StaticCall(new Name('Phamda'), $this->name, $args)
             : new Expr\FuncCall(new Expr\Variable('curried' . $offset), $args);
 
-        return new Expr\MethodCall(new Expr\Variable('this'), 'assertEquals', [
+        return new Expr\MethodCall(new Expr\Variable('this'), 'assertSame', [
             new Expr\Variable('expected'),
             $call,
         ]);

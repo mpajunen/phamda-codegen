@@ -17,7 +17,7 @@ $variables = [
 $functions = [
     'curried' => [
 
-        'all'     =>
+        'all'      =>
         /**
          * @param callable $function
          * @param array    $list
@@ -34,7 +34,7 @@ $functions = [
                 return true;
             },
 
-        'and_'    =>
+        'and_'     =>
         /**
          * @param callable $a
          * @param callable $b
@@ -47,7 +47,7 @@ $functions = [
                 };
             },
 
-        'any'     =>
+        'any'      =>
         /**
          * @param callable $function
          * @param array    $list
@@ -64,7 +64,7 @@ $functions = [
                 return false;
             },
 
-        'curry' =>
+        'curry'    =>
         /**
          * @param callable $function
          *
@@ -72,10 +72,11 @@ $functions = [
          */
             function (callable $function) {
                 $reflection = static::createReflection($function);
+
                 return Phamda::curryN($reflection->getNumberOfParameters(), $function);
             },
 
-        'curryN'  =>
+        'curryN'   =>
         /**
          * @param int      $count
          * @param callable $function
@@ -98,7 +99,7 @@ $functions = [
                 };
             },
 
-        'eq'      =>
+        'eq'       =>
         /**
          * @param mixed $a
          * @param mixed $b
@@ -109,7 +110,7 @@ $functions = [
                 return $a === $b;
             },
 
-        'filter'  =>
+        'filter'   =>
         /**
          * @param callable $function
          * @param array    $list
@@ -130,7 +131,7 @@ $functions = [
                 return $a;
             },
 
-        'map'     =>
+        'map'      =>
         /**
          * @param callable $function
          * @param array    $list
@@ -141,7 +142,7 @@ $functions = [
                 return array_map($function, $list);
             },
 
-        'not'    =>
+        'not'      =>
         /**
          * @param callable $function
          *
@@ -153,7 +154,7 @@ $functions = [
                 };
             },
 
-        'or_'     =>
+        'or_'      =>
         /**
          * @param callable $a
          * @param callable $b
@@ -166,7 +167,7 @@ $functions = [
                 };
             },
 
-        'pick'    =>
+        'pick'     =>
         /**
          * @param array $names
          * @param array $item
@@ -184,7 +185,7 @@ $functions = [
                 return $new;
             },
 
-        'pickAll' =>
+        'pickAll'  =>
         /**
          * @param array $names
          * @param array $item
@@ -200,7 +201,7 @@ $functions = [
                 return $new;
             },
 
-        'prop'    =>
+        'prop'     =>
         /**
          * @param string       $name
          * @param array|object $object
@@ -211,7 +212,7 @@ $functions = [
                 return is_object($object) ? $object->$name : $object[$name];
             },
 
-        'propEq'  =>
+        'propEq'   =>
         /**
          * @param string       $name
          * @param mixed        $value
@@ -225,7 +226,7 @@ $functions = [
                     : $object[$name] === $value;
             },
 
-        'reduce'  =>
+        'reduce'   =>
         /**
          * @param callable $function
          * @param mixed    $initial
@@ -237,7 +238,7 @@ $functions = [
                 return array_reduce($list, $function, $initial);
             },
 
-        'sort'    =>
+        'sort'     =>
         /**
          * @param callable $comparator
          * @param array    $list
@@ -250,7 +251,7 @@ $functions = [
                 return $list;
             },
 
-        'zip'     =>
+        'zip'      =>
         /**
          * @param array $a
          * @param array $b
@@ -266,7 +267,7 @@ $functions = [
                 return $zipped;
             },
 
-        'zipWith' =>
+        'zipWith'  =>
         /**
          * @param callable $function
          * @param array    $a
@@ -285,7 +286,7 @@ $functions = [
     ],
     'simple'  => [
 
-        'compose'  =>
+        'compose' =>
         /**
          * @param callable ...$functions
          *
@@ -295,7 +296,27 @@ $functions = [
                 return Phamda::pipe(... array_reverse($functions));
             },
 
-        'pipe'     =>
+        'F'      =>
+        /**
+         * @return callable
+         */
+            function () {
+                return function () {
+                    return false;
+                };
+            },
+
+        'T'      =>
+        /**
+         * @return callable
+         */
+            function () {
+                return function () {
+                    return true;
+                };
+            },
+
+        'pipe'    =>
         /**
          * @param callable ...$functions
          *

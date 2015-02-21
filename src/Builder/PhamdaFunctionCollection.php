@@ -20,7 +20,7 @@ class PhamdaFunctionCollection
             }
         }
 
-        ksort($this->types);
+        ksort($this->types, SORT_STRING | SORT_FLAG_CASE);
     }
 
     public function getFunction($name)

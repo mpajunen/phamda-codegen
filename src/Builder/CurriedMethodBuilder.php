@@ -37,12 +37,8 @@ class CurriedMethodBuilder implements BuilderInterface
     {
         $params = [];
         foreach ($this->source->params as $index => $param) {
-            $newParam = clone $param;
-
-            // First parameter is always required.
-            if ($index !== 0) {
-                $newParam->default = new Expr\ConstFetch(new Name('null'));
-            }
+            $newParam          = clone $param;
+            $newParam->default = new Expr\ConstFetch(new Name('null'));
 
             $params[] = $newParam;
         }
@@ -54,7 +50,7 @@ class CurriedMethodBuilder implements BuilderInterface
     {
         $arity = count($this->source->params);
 
-        if ($arity < 2) {
+        if ($arity < 1) {
             throw new \LogicException(sprintf('Invalid curried function "%s", arity "%s".', $this->source->getName(), $arity));
         } elseif ($arity > 3) {
             throw new \LogicException(sprintf('CurryN is not supported, arity "%s" required for function "%s".', $arity, $this->source->getName()));

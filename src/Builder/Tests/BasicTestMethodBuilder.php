@@ -87,14 +87,18 @@ EOT;
     private function createParameterStatements()
     {
         $statements = [];
-        foreach (range(0, count($this->source->params) - 1) as $offset) {
+        foreach (range(0, count($this->source->params)) as $offset) {
             $function       = null;
             $argumentSource = $this->source->params;
 
             if ($offset !== 0) {
-                $function       = new Expr\Variable('curried' . $offset);
-                $statements[]   = new Expr\Assign($function, $this->createFunctionCall(array_slice($this->source->params, 0, $offset)));
-                $argumentSource = array_slice($this->source->params, $offset);
+                if ($this->source->getWrapType() === 'simple') {
+                    break;
+                }
+
+                $function       = new Expr\Variable('curried' . ($offset - 1));
+                $statements[]   = new Expr\Assign($function, $this->createFunctionCall(array_slice($this->source->params, 0, $offset - 1)));
+                $argumentSource = array_slice($this->source->params, $offset - 1);
             }
 
             if ($this->source->returnsCallable()) {

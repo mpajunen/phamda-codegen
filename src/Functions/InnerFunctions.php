@@ -64,6 +64,17 @@ $functions = [
                 return false;
             },
 
+        'curry' =>
+        /**
+         * @param callable $function
+         *
+         * @return callable
+         */
+            function (callable $function) {
+                $reflection = static::createReflection($function);
+                return Phamda::curryN($reflection->getNumberOfParameters(), $function);
+            },
+
         'curryN'  =>
         /**
          * @param int      $count
@@ -109,6 +120,16 @@ $functions = [
                 return array_filter($list, $function);
             },
 
+        'identity' =>
+        /**
+         * @param mixed $a
+         *
+         * @return mixed
+         */
+            function ($a) {
+                return $a;
+            },
+
         'map'     =>
         /**
          * @param callable $function
@@ -118,6 +139,18 @@ $functions = [
          */
             function (callable $function, array $list) {
                 return array_map($function, $list);
+            },
+
+        'not'    =>
+        /**
+         * @param callable $function
+         *
+         * @return callable
+         */
+            function (callable $function) {
+                return function (... $arguments) use ($function) {
+                    return ! $function(...$arguments);
+                };
             },
 
         'or_'     =>
@@ -262,27 +295,6 @@ $functions = [
                 return Phamda::pipe(... array_reverse($functions));
             },
 
-        'curry' =>
-        /**
-         * @param callable $function
-         *
-         * @return callable
-         */
-        function (callable $function) {
-            $reflection = static::createReflection($function);
-            return Phamda::curryN($reflection->getNumberOfParameters(), $function);
-        },
-
-        'identity' =>
-        /**
-         * @param mixed $a
-         *
-         * @return mixed
-         */
-            function ($a) {
-                return $a;
-            },
-
         'pipe'     =>
         /**
          * @param callable ...$functions
@@ -314,16 +326,6 @@ $functions = [
          */
             function () use ($value) {
                 return $value;
-            },
-
-        'not'    =>
-        /**
-         * @param callable $function
-         *
-         * @return callable
-         */
-            function (... $arguments) use ($function) {
-                return ! $function(...$arguments);
             },
     ],
 ];

@@ -79,6 +79,10 @@ EOT;
 
         foreach ($this->source->params as $param) {
             $newParam = clone $param;
+            if ($param->variadic && $this->getInnerFunctionParams() !== []) {
+                $newParam->type     = 'array';
+                $newParam->variadic = false;
+            }
 
             $params[] = $newParam;
         }

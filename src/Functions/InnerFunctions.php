@@ -2,6 +2,8 @@
 
 namespace Phamda\Functions;
 
+use Phamda\Phamda;
+
 $variables = [
     $value = null,
     $a = function () {
@@ -227,7 +229,17 @@ $functions = [
     ],
     'simple'  => [
 
-        'identity' =>
+        'compose' =>
+        /**
+         * @param callable ...$functions
+         *
+         * @return callable
+         */
+            function (callable ... $functions) {
+                return Phamda::pipe(... array_reverse($functions));
+            },
+
+        'identity'    =>
         /**
          * @param mixed $a
          *
@@ -235,6 +247,27 @@ $functions = [
          */
             function ($a) {
                 return $a;
+            },
+
+        'pipe' =>
+        /**
+         * @param callable ...$functions
+         *
+         * @return callable
+         */
+            function (callable ... $functions) {
+                if (count($functions) < 2) {
+                    throw new \LogicException('Pipe requires at least two argument functions.');
+                }
+
+                return function (... $arguments) use ($functions) {
+                    $result = null;
+                    foreach ($functions as $function) {
+                        $result = call_user_func_array($function, $result ? [$result] : $arguments);
+                    }
+
+                    return $result;
+                };
             },
     ],
     'wrapped' => [
@@ -247,17 +280,6 @@ $functions = [
          */
             function () use ($value) {
                 return $value;
-            },
-
-        'compose' =>
-        /**
-         * @param callable $a
-         * @param callable $b
-         *
-         * @return callable
-         */
-            function (... $arguments) use ($a, $b) {
-                return call_user_func($a, call_user_func($b, ...$arguments));
             },
 
         'not'     =>

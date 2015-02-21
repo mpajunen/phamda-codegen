@@ -43,7 +43,7 @@ $functions = [
          */
             function (callable $a, callable $b) {
                 return function (...$arguments) use ($a, $b) {
-                    return call_user_func($a, ...$arguments) && call_user_func($b, ...$arguments);
+                    return $a(...$arguments) && $b(...$arguments);
                 };
             },
 
@@ -87,12 +87,12 @@ $functions = [
                     $remainingCount = $count - count($arguments);
 
                     if ($remainingCount <= 0) {
-                        return call_user_func($function, ... $arguments);
+                        return $function(... $arguments);
                     } else {
                         $existingArguments = $arguments;
 
                         return Phamda::curryN($remainingCount, function (... $arguments) use ($function, $existingArguments) {
-                            return call_user_func($function, ... array_merge($existingArguments, $arguments));
+                            return $function(... array_merge($existingArguments, $arguments));
                         });
                     }
                 };
@@ -162,7 +162,7 @@ $functions = [
          */
             function (callable $a, callable $b) {
                 return function (...$arguments) use ($a, $b) {
-                    return call_user_func($a, ...$arguments) || call_user_func($b, ...$arguments);
+                    return $a(...$arguments) || $b(...$arguments);
                 };
             },
 
@@ -309,7 +309,9 @@ $functions = [
                 return function (... $arguments) use ($functions) {
                     $result = null;
                     foreach ($functions as $function) {
-                        $result = call_user_func_array($function, $result ? [$result] : $arguments);
+                        $result = $result !== null
+                            ? $function($result)
+                            : $function(...$arguments);
                     }
 
                     return $result;

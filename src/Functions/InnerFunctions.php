@@ -64,13 +64,13 @@ $functions = [
                 return false;
             },
 
+        'curryN'  =>
         /**
          * @param int      $count
          * @param callable $function
          *
          * @return callable
          */
-        'curryN'  =>
             function ($count, callable $function) {
                 return function (... $arguments) use ($function, $count) {
                     $remainingCount = $count - count($arguments);
@@ -261,6 +261,17 @@ $functions = [
             function (callable ... $functions) {
                 return Phamda::pipe(... array_reverse($functions));
             },
+
+        'curry' =>
+        /**
+         * @param callable $function
+         *
+         * @return callable
+         */
+        function (callable $function) {
+            $reflection = static::createReflection($function);
+            return Phamda::curryN($reflection->getNumberOfParameters(), $function);
+        },
 
         'identity' =>
         /**

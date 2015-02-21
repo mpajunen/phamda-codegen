@@ -71,7 +71,8 @@ EOT;
 
     private function createParams()
     {
-        $params = [];
+        $params = [$this->factory->param('expected')];
+
         foreach ($this->source->uses as $index => $use) {
             $params[] = $this->factory->param($use->var);
         }
@@ -81,8 +82,6 @@ EOT;
 
             $params[] = $newParam;
         }
-
-        $params[] = $this->factory->param('expected');
 
         $params = array_merge($params, $this->getInnerFunctionParams());
 

@@ -16,7 +16,7 @@ class Generator
     public function generate($outDir)
     {
         $this->writeClass($outDir . '/src/Phamda.php', $this->createPhamda());
-        $this->writeClass($outDir . '/tests/PhamdaTest.php', $this->createTests());
+        $this->writeClass($outDir . '/tests/BasicTest.php', $this->createTests());
     }
 
     private function writeClass($filename, Node $node)

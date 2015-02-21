@@ -32,7 +32,7 @@ class BasicTestBuilder implements BuilderInterface
 
     private function createClass(BuilderFactory $factory)
     {
-        return $factory->class('PhamdaTest')
+        return $factory->class('BasicTest')
             ->extend('\PHPUnit_Framework_TestCase')
             ->addStmt(new TraitUse([
                 new Name('BasicProvidersTrait'),

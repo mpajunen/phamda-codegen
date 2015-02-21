@@ -4,6 +4,12 @@ namespace Phamda\Functions;
 
 $variables = [
     $value = null,
+    $a = function () {
+    },
+    $b = function () {
+    },
+    $function = function () {
+    },
 ];
 
 $functions = [
@@ -89,7 +95,7 @@ $functions = [
                 return array_map($function, $list);
             },
 
-        'or_'    =>
+        'or_'     =>
         /**
          * @param callable $a
          * @param callable $b
@@ -233,7 +239,7 @@ $functions = [
     ],
     'wrapped' => [
 
-        'always' =>
+        'always'  =>
         /**
          * @param mixed $value
          *
@@ -241,6 +247,27 @@ $functions = [
          */
             function () use ($value) {
                 return $value;
-            }
+            },
+
+        'compose' =>
+        /**
+         * @param callable $a
+         * @param callable $b
+         *
+         * @return callable
+         */
+            function (... $arguments) use ($a, $b) {
+                return call_user_func($a, call_user_func($b, ...$arguments));
+            },
+
+        'not'     =>
+        /**
+         * @param callable $function
+         *
+         * @return callable
+         */
+            function (... $arguments) use ($function) {
+                return ! $function(...$arguments);
+            },
     ],
 ];

@@ -10,18 +10,16 @@ use PhpParser\Node\Stmt;
 
 class CurriedMethodBuilder implements BuilderInterface
 {
-    private $name;
     private $source;
 
-    public function __construct($name, Expr\Closure $source)
+    public function __construct(PhamdaFunction $source)
     {
-        $this->name   = $name;
         $this->source = $source;
     }
 
     public function build()
     {
-        return (new BuilderFactory())->method($this->name)
+        return (new BuilderFactory())->method($this->source->getName())
             ->setDocComment($this->createComment())
             ->makeStatic()
             ->addParams($this->createParams())
@@ -57,9 +55,9 @@ class CurriedMethodBuilder implements BuilderInterface
         $arity = count($this->source->params);
 
         if ($arity < 2) {
-            throw new \LogicException(sprintf('Invalid curried function "%s", arity "%s".', $this->name, $arity));
+            throw new \LogicException(sprintf('Invalid curried function "%s", arity "%s".', $this->source->getName(), $arity));
         } elseif ($arity > 3) {
-            throw new \LogicException(sprintf('CurryN is not supported, arity "%s" required for function "%s".', $arity, $this->name));
+            throw new \LogicException(sprintf('CurryN is not supported, arity "%s" required for function "%s".', $arity, $this->source->getName()));
         }
 
         return $this->getCurriedStatements($arity);
@@ -79,6 +77,6 @@ class CurriedMethodBuilder implements BuilderInterface
 
     private function getCurryWrap($arity)
     {
-        return new Expr\StaticCall(new Name('static'), 'curry' . $arity, [$this->source]);
+        return new Expr\StaticCall(new Name('static'), 'curry' . $arity, [$this->source->getClosure()]);
     }
 }

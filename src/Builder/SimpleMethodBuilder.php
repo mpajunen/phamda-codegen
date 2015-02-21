@@ -7,18 +7,16 @@ use PhpParser\Node\Expr;
 
 class SimpleMethodBuilder implements BuilderInterface
 {
-    private $name;
     private $source;
 
-    public function __construct($name, Expr\Closure $source)
+    public function __construct(PhamdaFunction $source)
     {
-        $this->name   = $name;
         $this->source = $source;
     }
 
     public function build()
     {
-        return (new BuilderFactory())->method($this->name)
+        return (new BuilderFactory())->method($this->source->getName())
             ->setDocComment($this->source->getDocComment())
             ->makeStatic()
             ->addParams($this->source->params)

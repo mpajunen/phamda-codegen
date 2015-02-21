@@ -3,6 +3,7 @@
 namespace Phamda\Builder\Tests;
 
 use Phamda\Builder\BuilderInterface;
+use Phamda\Builder\PhamdaFunctionCollection;
 use PhpParser\Builder;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Name;
@@ -14,7 +15,7 @@ class BasicTestBuilder implements BuilderInterface
 {
     private $functions;
 
-    public function __construct(array $functions)
+    public function __construct(PhamdaFunctionCollection $functions)
     {
         $this->functions = $functions;
     }
@@ -42,8 +43,8 @@ class BasicTestBuilder implements BuilderInterface
     private function createClassMethods()
     {
         $methods = [];
-        foreach ($this->functions as $name => list(, $function)) {
-            $methods[] = (new BasicTestMethodBuilder($name, $function))->build();
+        foreach ($this->functions->getFunctions() as $function) {
+            $methods[] = (new BasicTestMethodBuilder($function))->build();
         }
 
         return $methods;

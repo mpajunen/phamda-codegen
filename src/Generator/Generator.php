@@ -3,6 +3,7 @@
 namespace Phamda\Generator;
 
 use Phamda\Builder\PhamdaBuilder;
+use Phamda\Builder\PhamdaFunctionCollection;
 use Phamda\Builder\Tests\BasicTestBuilder;
 use PhpParser\Builder;
 use PhpParser\Lexer;
@@ -42,13 +43,7 @@ class Generator
             $variables[$arrayItem->value->var->name] = $arrayItem->value->expr;
         }
 
-        $functions = [];
-        foreach ($statements[1]->expr->items as $itemGroup) {
-            foreach ($itemGroup->value->items as $item) {
-                $functions[$item->key->value] = [$itemGroup->key->value, $item->value];
-            }
-        }
-        ksort($functions);
+        $functions = new PhamdaFunctionCollection($statements[1]->expr->items);
 
         return [
             $functions,

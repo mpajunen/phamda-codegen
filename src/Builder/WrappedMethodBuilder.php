@@ -10,23 +10,21 @@ use PhpParser\Node\Stmt;
 class WrappedMethodBuilder implements BuilderInterface
 {
     private $externalVariables;
-    private $name;
     private $source;
 
-    public function __construct($name, Expr\Closure $source, array $externalVariables)
+    public function __construct(PhamdaFunction $source, array $externalVariables)
     {
-        $this->name              = $name;
         $this->source            = $source;
         $this->externalVariables = $externalVariables;
     }
 
     public function build()
     {
-        return (new BuilderFactory())->method($this->name)
+        return (new BuilderFactory())->method($this->source->getName())
             ->setDocComment($this->source->getDocComment())
             ->makeStatic()
             ->addParams($this->createParams())
-            ->addStmt(new Stmt\Return_($this->source));
+            ->addStmt(new Stmt\Return_($this->source->getClosure()));
     }
 
     private function createParams()

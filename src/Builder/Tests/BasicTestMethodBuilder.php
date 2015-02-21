@@ -3,6 +3,7 @@
 namespace Phamda\Builder\Tests;
 
 use Phamda\Builder\BuilderInterface;
+use Phamda\Builder\PhamdaFunction;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -13,14 +14,11 @@ use PhpParser\Node\Stmt;
 class BasicTestMethodBuilder implements BuilderInterface
 {
     private $factory;
-    private $name;
     private $source;
 
-    public function __construct($name, Expr\Closure $source)
+    public function __construct(PhamdaFunction $source)
     {
-        $this->name   = $name;
-        $this->source = $source;
-
+        $this->source  = $source;
         $this->factory = new BuilderFactory();
     }
 
@@ -29,8 +27,7 @@ class BasicTestMethodBuilder implements BuilderInterface
         return $this->factory->method($this->getHelperMethodName('test%s'))
             ->setDocComment($this->createComment())
             ->addParams($this->createParams())
-            ->addStmts($this->createStatements())
-        ;
+            ->addStmts($this->createStatements());
     }
 
     private function createComment()
@@ -44,29 +41,7 @@ EOT;
 
     private function getHelperMethodName($format)
     {
-        return sprintf($format, ucfirst(trim($this->name, '_')));
-    }
-
-    private function returnsCallable()
-    {
-        return $this->getReturnStatement()->expr instanceof Expr\Closure;
-    }
-
-    private function getReturnStatement()
-    {
-        foreach ($this->source->stmts as $statement) {
-            if ($statement instanceof Stmt\Return_) {
-                /** @var Stmt\Return_ $statement */
-                return $statement;
-            }
-        }
-
-        return null;
-    }
-
-    private function getInnerFunctionParams()
-    {
-        return $this->returnsCallable() ? $this->getReturnStatement()->expr->params : [];
+        return sprintf($format, ucfirst(trim($this->source->getName(), '_')));
     }
 
     private function createParams()
@@ -79,7 +54,7 @@ EOT;
 
         foreach ($this->source->params as $param) {
             $newParam = clone $param;
-            if ($param->variadic && $this->getInnerFunctionParams() !== []) {
+            if ($param->variadic && $this->source->getInnerFunctionParams() !== []) {
                 $newParam->type     = 'array';
                 $newParam->variadic = false;
             }
@@ -87,7 +62,7 @@ EOT;
             $params[] = $newParam;
         }
 
-        $params = array_merge($params, $this->getInnerFunctionParams());
+        $params = array_merge($params, $this->source->getInnerFunctionParams());
 
         return $params;
     }
@@ -122,11 +97,11 @@ EOT;
                 $argumentSource = array_slice($this->source->params, $offset);
             }
 
-            if ($this->returnsCallable()) {
+            if ($this->source->returnsCallable()) {
                 $call           = $this->createFunctionCall($argumentSource, $function);
                 $function       = new Expr\Variable('main' . $offset);
                 $statements[]   = new Expr\Assign($function, $call);
-                $argumentSource = $this->getInnerFunctionParams();
+                $argumentSource = $this->source->getInnerFunctionParams();
             }
 
             $statements[] = $this->createAssert($this->createFunctionCall($argumentSource, $function));
@@ -149,7 +124,7 @@ EOT;
 
         return $function !== null
             ? new Expr\FuncCall($function, $arguments)
-            : new Expr\StaticCall(new Name('Phamda'), $this->name, $arguments);
+            : new Expr\StaticCall(new Name('Phamda'), $this->source->getName(), $arguments);
     }
 
     private function createArguments(array $sources)

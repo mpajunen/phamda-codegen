@@ -4,7 +4,6 @@ namespace Phamda\Builder;
 
 use PhpParser\Builder;
 use PhpParser\BuilderFactory;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\TraitUse;
 
@@ -14,7 +13,7 @@ class PhamdaBuilder implements BuilderInterface
     private $functions;
     private $variables;
 
-    public function __construct(array $functions, array $variables = [])
+    public function __construct(PhamdaFunctionCollection $functions, array $variables = [])
     {
         $this->factory   = new BuilderFactory();
         $this->functions = $functions;
@@ -38,27 +37,27 @@ class PhamdaBuilder implements BuilderInterface
     private function createClassMethods()
     {
         $methods = [];
-        foreach ($this->functions as $name => list($type, $function)) {
-            $methods[] = $this->createClassMethod($type, $name, $function);
+        foreach ($this->functions->getFunctions() as $function) {
+            $methods[] = $this->createClassMethod($function);
         }
 
         return $methods;
     }
 
-    private function createClassMethod($type, $name, Closure $closure)
+    private function createClassMethod(PhamdaFunction $function)
     {
-        switch ($type) {
+        switch ($function->getWrapType()) {
             case 'curried':
-                $builder = new CurriedMethodBuilder($name, $closure);
+                $builder = new CurriedMethodBuilder($function);
                 break;
             case 'simple':
-                $builder = new SimpleMethodBuilder($name, $closure);
+                $builder = new SimpleMethodBuilder($function);
                 break;
             case 'wrapped':
-                $builder = new WrappedMethodBuilder($name, $closure, $this->variables);
+                $builder = new WrappedMethodBuilder($function, $this->variables);
                 break;
             default:
-                throw new \LogicException(sprintf('Invalid method type "%s".'));
+                throw new \LogicException(sprintf('Invalid method type "%s".', $function->getWrapType()));
         }
 
         return $builder->build();

@@ -64,6 +64,29 @@ $functions = [
                 return false;
             },
 
+        /**
+         * @param int      $count
+         * @param callable $function
+         *
+         * @return callable
+         */
+        'curryN'  =>
+            function ($count, callable $function) {
+                return function (... $arguments) use ($function, $count) {
+                    $remainingCount = $count - count($arguments);
+
+                    if ($remainingCount <= 0) {
+                        return call_user_func($function, ... $arguments);
+                    } else {
+                        $existingArguments = $arguments;
+
+                        return Phamda::curryN($remainingCount, function (... $arguments) use ($function, $existingArguments) {
+                            return call_user_func($function, ... array_merge($existingArguments, $arguments));
+                        });
+                    }
+                };
+            },
+
         'eq'      =>
         /**
          * @param mixed $a
@@ -229,7 +252,7 @@ $functions = [
     ],
     'simple'  => [
 
-        'compose' =>
+        'compose'  =>
         /**
          * @param callable ...$functions
          *
@@ -239,7 +262,7 @@ $functions = [
                 return Phamda::pipe(... array_reverse($functions));
             },
 
-        'identity'    =>
+        'identity' =>
         /**
          * @param mixed $a
          *
@@ -249,7 +272,7 @@ $functions = [
                 return $a;
             },
 
-        'pipe' =>
+        'pipe'     =>
         /**
          * @param callable ...$functions
          *
@@ -272,7 +295,7 @@ $functions = [
     ],
     'wrapped' => [
 
-        'always'  =>
+        'always' =>
         /**
          * @param mixed $value
          *
@@ -282,7 +305,7 @@ $functions = [
                 return $value;
             },
 
-        'not'     =>
+        'not'    =>
         /**
          * @param callable $function
          *

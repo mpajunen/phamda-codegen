@@ -49,7 +49,24 @@ EOT;
 
     private function returnsCallable()
     {
-        return strpos($this->source->getDocComment(), '@return callable') !== false;
+        return $this->getReturnStatement()->expr instanceof Expr\Closure;
+    }
+
+    private function getReturnStatement()
+    {
+        foreach ($this->source->stmts as $statement) {
+            if ($statement instanceof Stmt\Return_) {
+                /** @var Stmt\Return_ $statement */
+                return $statement;
+            }
+        }
+
+        return null;
+    }
+
+    private function getInnerFunctionParams()
+    {
+        return $this->returnsCallable() ? $this->getReturnStatement()->expr->params : [];
     }
 
     private function createParams()
@@ -67,11 +84,7 @@ EOT;
 
         $params[] = $this->factory->param('expected');
 
-        if ($this->returnsCallable()) {
-            $param = $this->factory->param('params')->getNode();
-            $param->variadic = true;
-            $params[] = $param;
-        }
+        $params = array_merge($params, $this->getInnerFunctionParams());
 
         return $params;
     }
@@ -110,8 +123,7 @@ EOT;
                 $call           = $this->createFunctionCall($argumentSource, $function);
                 $function       = new Expr\Variable('main' . $offset);
                 $statements[]   = new Expr\Assign($function, $call);
-                $argumentSource = [$this->factory->param('params')->getNode()];
-                $argumentSource[0]->variadic = true;
+                $argumentSource = $this->getInnerFunctionParams();
             }
 
             $statements[] = $this->createAssert($this->createFunctionCall($argumentSource, $function));

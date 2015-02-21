@@ -12,11 +12,13 @@ class PhamdaBuilder implements BuilderInterface
 {
     private $factory;
     private $functions;
+    private $variables;
 
-    public function __construct(array $functions)
+    public function __construct(array $functions, array $variables = [])
     {
         $this->factory   = new BuilderFactory();
         $this->functions = $functions;
+        $this->variables = $variables;
     }
 
     public function build()
@@ -53,7 +55,7 @@ class PhamdaBuilder implements BuilderInterface
                 $builder = new SimpleMethodBuilder($name, $closure);
                 break;
             case 'wrapped':
-                $builder = new WrappedMethodBuilder($name, $closure);
+                $builder = new WrappedMethodBuilder($name, $closure, $this->variables);
                 break;
             default:
                 throw new \LogicException(sprintf('Invalid method type "%s".'));

@@ -25,34 +25,42 @@ class Generator
 
     private function createPhamda()
     {
-        return (new PhamdaBuilder($this->getInnerFunctions()))->build();
+        return (new PhamdaBuilder(... $this->getSourceData()))->build();
     }
 
     private function createTests()
     {
-        return (new BasicTestBuilder($this->getInnerFunctions()))->build();
+        return (new BasicTestBuilder(... $this->getSourceData()))->build();
     }
 
-    private function getInnerFunctions()
+    private function getSourceData()
     {
+        $statements = $this->getSourceStatements();
+
+        $variables = [];
+        foreach ($statements[0]->expr->items as $arrayItem) {
+            $variables[$arrayItem->value->var->name] = $arrayItem->value->expr;
+        }
+
         $functions = [];
-        foreach ($this->getInnerFunctionsMainNodes() as $itemGroup) {
+        foreach ($statements[1]->expr->items as $itemGroup) {
             foreach ($itemGroup->value->items as $item) {
                 $functions[$item->key->value] = [$itemGroup->key->value, $item->value];
             }
         }
         ksort($functions);
 
-        return $functions;
+        return [
+            $functions,
+            $variables,
+        ];
     }
 
-    private function getInnerFunctionsMainNodes()
+    private function getSourceStatements()
     {
         return $this->createParser()
             ->parse(file_get_contents(__DIR__ . '/../Functions/InnerFunctions.php'))[0]
-            ->stmts[1]
-            ->expr
-            ->items;
+            ->stmts;
     }
 
     private function createParser()

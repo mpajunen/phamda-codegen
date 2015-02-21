@@ -9,13 +9,15 @@ use PhpParser\Node\Stmt;
 
 class WrappedMethodBuilder implements BuilderInterface
 {
+    private $externalVariables;
     private $name;
     private $source;
 
-    public function __construct($name, Expr\Closure $source)
+    public function __construct($name, Expr\Closure $source, array $externalVariables)
     {
-        $this->name   = $name;
-        $this->source = $source;
+        $this->name              = $name;
+        $this->source            = $source;
+        $this->externalVariables = $externalVariables;
     }
 
     public function build()
@@ -31,9 +33,25 @@ class WrappedMethodBuilder implements BuilderInterface
     {
         $params = [];
         foreach ($this->source->uses as $index => $use) {
-            $params[] = (new BuilderFactory())->param($use->var);
+            $params[] = (new BuilderFactory())->param($use->var)
+                ->setTypeHint($this->getVariableTypeHint($use->var));
         }
 
         return $params;
+    }
+
+    private function getVariableTypeHint($name)
+    {
+        if (! isset($this->externalVariables[$name])) {
+            throw new \Exception(sprintf('External variable "%s" not found.', $name));
+        }
+
+        $variable = $this->externalVariables[$name];
+
+        if ($variable instanceof Expr\Closure) {
+            return 'callable';
+        }
+
+        return new Name(null);
     }
 }

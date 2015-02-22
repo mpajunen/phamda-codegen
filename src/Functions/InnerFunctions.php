@@ -292,7 +292,7 @@ $functions = [
          *
          * @return callable
          */
-            function (callable ... $functions) {
+            function (... $functions) {
                 return Phamda::pipe(... array_reverse($functions));
             },
 
@@ -322,7 +322,7 @@ $functions = [
          *
          * @return callable
          */
-            function (callable ... $functions) {
+            function (... $functions) {
                 if (count($functions) < 2) {
                     throw new \LogicException('Pipe requires at least two argument functions.');
                 }

@@ -17,7 +17,7 @@ $variables = [
 $functions = [
     'curried' => [
 
-        'add'      =>
+        'add'        =>
         /**
          * @param int|float $a
          * @param int|float $b
@@ -28,7 +28,7 @@ $functions = [
                 return $a + $b;
             },
 
-        'all'      =>
+        'all'        =>
         /**
          * @param callable $function
          * @param array    $list
@@ -45,7 +45,7 @@ $functions = [
                 return true;
             },
 
-        'and_'     =>
+        'and_'       =>
         /**
          * @param callable $a
          * @param callable $b
@@ -58,7 +58,7 @@ $functions = [
                 };
             },
 
-        'any'      =>
+        'any'        =>
         /**
          * @param callable $function
          * @param array    $list
@@ -75,7 +75,7 @@ $functions = [
                 return false;
             },
 
-        'curry'    =>
+        'curry'      =>
         /**
          * @param callable $function
          *
@@ -87,7 +87,7 @@ $functions = [
                 return Phamda::curryN($reflection->getNumberOfParameters(), $function);
             },
 
-        'curryN'   =>
+        'curryN'     =>
         /**
          * @param int      $count
          * @param callable $function
@@ -110,7 +110,7 @@ $functions = [
                 };
             },
 
-        'divide'   =>
+        'divide'     =>
         /**
          * @param int|float $a
          * @param int|float $b
@@ -121,7 +121,7 @@ $functions = [
                 return $a / $b;
             },
 
-        'eq'       =>
+        'eq'         =>
         /**
          * @param mixed $a
          * @param mixed $b
@@ -132,7 +132,19 @@ $functions = [
                 return $a === $b;
             },
 
-        'filter'   =>
+        'comparator' =>
+        /**
+         * @param callable $predicate
+         *
+         * @return callable
+         */
+            function (callable $predicate) {
+                return function ($a, $b) use ($predicate) {
+                    return $predicate($a, $b) ? -1 : ($predicate($b, $a) ? 1 : 0);
+                };
+            },
+
+        'filter'     =>
         /**
          * @param callable $function
          * @param array    $list
@@ -143,7 +155,29 @@ $functions = [
                 return array_filter($list, $function);
             },
 
-        'identity' =>
+        'gt'         =>
+        /**
+         * @param mixed $a
+         * @param mixed $b
+         *
+         * @return bool
+         */
+            function ($a, $b) {
+                return $a > $b;
+            },
+
+        'gte'        =>
+        /**
+         * @param mixed $a
+         * @param mixed $b
+         *
+         * @return bool
+         */
+            function ($a, $b) {
+                return $a >= $b;
+            },
+
+        'identity'   =>
         /**
          * @param mixed $a
          *
@@ -153,7 +187,29 @@ $functions = [
                 return $a;
             },
 
-        'map'      =>
+        'lt'         =>
+        /**
+         * @param mixed $a
+         * @param mixed $b
+         *
+         * @return bool
+         */
+            function ($a, $b) {
+                return $a < $b;
+            },
+
+        'lte'        =>
+        /**
+         * @param mixed $a
+         * @param mixed $b
+         *
+         * @return bool
+         */
+            function ($a, $b) {
+                return $a <= $b;
+            },
+
+        'map'        =>
         /**
          * @param callable $function
          * @param array    $list
@@ -164,7 +220,49 @@ $functions = [
                 return array_map($function, $list);
             },
 
-        'modulo'   =>
+        'max' =>
+        /**
+         * @param array $list
+         *
+         * @return mixed
+         */
+            function (array $list) {
+                return static::getCompareResult(Phamda::gt(), $list);
+            },
+
+        'maxBy' =>
+        /**
+         * @param callable $getValue
+         * @param array    $list
+         *
+         * @return mixed
+         */
+            function (callable $getValue, array $list) {
+                return static::getCompareByResult(Phamda::gt(), $getValue, $list);
+            },
+
+        'min' =>
+        /**
+         * @param array $list
+         *
+         * @return mixed
+         */
+            function (array $list) {
+                return static::getCompareResult(Phamda::lt(), $list);
+            },
+
+        'minBy' =>
+        /**
+         * @param callable $getValue
+         * @param array    $list
+         *
+         * @return mixed
+         */
+            function (callable $getValue, array $list) {
+                return static::getCompareByResult(Phamda::lt(), $getValue, $list);
+            },
+
+        'modulo'     =>
         /**
          * @param int $a
          * @param int $b
@@ -175,7 +273,7 @@ $functions = [
                 return $a % $b;
             },
 
-        'multiply' =>
+        'multiply'   =>
         /**
          * @param int|float $a
          * @param int|float $b
@@ -186,7 +284,7 @@ $functions = [
                 return $a * $b;
             },
 
-        'negate'   =>
+        'negate'     =>
         /**
          * @param int|float $a
          *
@@ -196,7 +294,7 @@ $functions = [
                 return Phamda::multiply($a, -1);
             },
 
-        'not'      =>
+        'not'        =>
         /**
          * @param callable $function
          *
@@ -208,7 +306,7 @@ $functions = [
                 };
             },
 
-        'or_'      =>
+        'or_'        =>
         /**
          * @param callable $a
          * @param callable $b
@@ -221,7 +319,7 @@ $functions = [
                 };
             },
 
-        'pick'     =>
+        'pick'       =>
         /**
          * @param array $names
          * @param array $item
@@ -239,7 +337,7 @@ $functions = [
                 return $new;
             },
 
-        'pickAll'  =>
+        'pickAll'    =>
         /**
          * @param array $names
          * @param array $item
@@ -255,7 +353,7 @@ $functions = [
                 return $new;
             },
 
-        'pluck'    =>
+        'pluck'      =>
         /**
          * @param string $name
          * @param array  $list
@@ -266,7 +364,7 @@ $functions = [
                 return Phamda::map(Phamda::prop($name), $list);
             },
 
-        'product'  =>
+        'product'    =>
         /**
          * @param int[]|float[] $values
          *
@@ -276,7 +374,7 @@ $functions = [
                 return Phamda::reduce(Phamda::multiply(), 1, $values);
             },
 
-        'prop'     =>
+        'prop'       =>
         /**
          * @param string       $name
          * @param array|object $object
@@ -287,7 +385,7 @@ $functions = [
                 return is_object($object) ? $object->$name : $object[$name];
             },
 
-        'propEq'   =>
+        'propEq'     =>
         /**
          * @param string       $name
          * @param mixed        $value
@@ -301,7 +399,7 @@ $functions = [
                     : $object[$name] === $value;
             },
 
-        'reduce'   =>
+        'reduce'     =>
         /**
          * @param callable $function
          * @param mixed    $initial
@@ -313,7 +411,7 @@ $functions = [
                 return array_reduce($list, $function, $initial);
             },
 
-        'sort'     =>
+        'sort'       =>
         /**
          * @param callable $comparator
          * @param array    $list
@@ -326,7 +424,7 @@ $functions = [
                 return $list;
             },
 
-        'subtract' =>
+        'subtract'   =>
         /**
          * @param int|float $a
          * @param int|float $b
@@ -337,7 +435,7 @@ $functions = [
                 return $a - $b;
             },
 
-        'sum'      =>
+        'sum'        =>
         /**
          * @param int[]|float[] $values
          *
@@ -347,7 +445,7 @@ $functions = [
                 return Phamda::reduce(Phamda::add(), 0, $values);
             },
 
-        'zip'      =>
+        'zip'        =>
         /**
          * @param array $a
          * @param array $b
@@ -363,7 +461,7 @@ $functions = [
                 return $zipped;
             },
 
-        'zipWith'  =>
+        'zipWith'    =>
         /**
          * @param callable $function
          * @param array    $a

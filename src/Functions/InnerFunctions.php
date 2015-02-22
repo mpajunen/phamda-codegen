@@ -392,23 +392,13 @@ $functions = [
                 return Phamda::pipe(... array_reverse($functions));
             },
 
-        'F'      =>
+        'false'   =>
         /**
          * @return callable
          */
             function () {
                 return function () {
                     return false;
-                };
-            },
-
-        'T'      =>
-        /**
-         * @return callable
-         */
-            function () {
-                return function () {
-                    return true;
                 };
             },
 
@@ -432,6 +422,16 @@ $functions = [
                     }
 
                     return $result;
+                };
+            },
+
+        'true'    =>
+        /**
+         * @return callable
+         */
+            function () {
+                return function () {
+                    return true;
                 };
             },
     ],

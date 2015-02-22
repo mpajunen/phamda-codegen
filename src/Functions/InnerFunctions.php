@@ -17,6 +17,17 @@ $variables = [
 $functions = [
     'curried' => [
 
+        'add'      =>
+        /**
+         * @param int|float $a
+         * @param int|float $b
+         *
+         * @return int|float
+         */
+            function ($a, $b) {
+                return $a + $b;
+            },
+
         'all'      =>
         /**
          * @param callable $function
@@ -99,6 +110,17 @@ $functions = [
                 };
             },
 
+        'divide'   =>
+        /**
+         * @param int|float $a
+         * @param int|float $b
+         *
+         * @return int|float
+         */
+            function ($a, $b) {
+                return $a / $b;
+            },
+
         'eq'       =>
         /**
          * @param mixed $a
@@ -140,6 +162,38 @@ $functions = [
          */
             function (callable $function, array $list) {
                 return array_map($function, $list);
+            },
+
+        'modulo'   =>
+        /**
+         * @param int $a
+         * @param int $b
+         *
+         * @return int
+         */
+            function ($a, $b) {
+                return $a % $b;
+            },
+
+        'multiply' =>
+        /**
+         * @param int|float $a
+         * @param int|float $b
+         *
+         * @return int|float
+         */
+            function ($a, $b) {
+                return $a * $b;
+            },
+
+        'negate'   =>
+        /**
+         * @param int|float $a
+         *
+         * @return int|float
+         */
+            function ($a) {
+                return Phamda::multiply($a, -1);
             },
 
         'not'      =>
@@ -201,6 +255,27 @@ $functions = [
                 return $new;
             },
 
+        'pluck'    =>
+        /**
+         * @param string $name
+         * @param array  $list
+         *
+         * @return mixed
+         */
+            function ($name, array $list) {
+                return Phamda::map(Phamda::prop($name), $list);
+            },
+
+        'product'  =>
+        /**
+         * @param int[]|float[] $values
+         *
+         * @return int|float
+         */
+            function (array $values) {
+                return Phamda::reduce(Phamda::multiply(), 1, $values);
+            },
+
         'prop'     =>
         /**
          * @param string       $name
@@ -249,6 +324,27 @@ $functions = [
                 usort($list, $comparator);
 
                 return $list;
+            },
+
+        'subtract' =>
+        /**
+         * @param int|float $a
+         * @param int|float $b
+         *
+         * @return int|float
+         */
+            function ($a, $b) {
+                return $a - $b;
+            },
+
+        'sum'      =>
+        /**
+         * @param int[]|float[] $values
+         *
+         * @return int|float
+         */
+            function (array $values) {
+                return Phamda::reduce(Phamda::add(), 0, $values);
             },
 
         'zip'      =>

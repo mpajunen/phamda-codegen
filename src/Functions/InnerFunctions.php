@@ -155,6 +155,28 @@ $functions = [
                 return array_filter($list, $function);
             },
 
+        'first'      =>
+        /**
+         * @param array $list
+         *
+         * @return mixed
+         */
+            function (array $list) {
+                return reset($list);
+            },
+
+        'flip'       =>
+        /**
+         * @param callable $function
+         *
+         * @return callable
+         */
+            function (callable $function) {
+                return function ($a, $b, ...$arguments) use ($function) {
+                    return $function($b, $a, ...$arguments);
+                };
+            },
+
         'gt'         =>
         /**
          * @param mixed $a
@@ -185,6 +207,54 @@ $functions = [
          */
             function ($a) {
                 return $a;
+            },
+
+        'indexOf'    =>
+        /**
+         * @param mixed $value
+         * @param array $list
+         *
+         * @return int|string|false
+         */
+            function ($value, array $list) {
+                foreach ($list as $key => $current) {
+                    if ($value === $current) {
+                        return $key;
+                    }
+                }
+
+                return false;
+            },
+
+        'isEmpty'    =>
+        /**
+         * @param array $list
+         *
+         * @return bool
+         */
+            function (array $list) {
+                return empty($list);
+            },
+
+        'isInstance' =>
+        /**
+         * @param string $class
+         * @param object $object
+         *
+         * @return bool
+         */
+            function ($class, $object) {
+                return $object instanceof $class;
+            },
+
+        'last'       =>
+        /**
+         * @param array $list
+         *
+         * @return mixed
+         */
+            function (array $list) {
+                return end($list);
             },
 
         'lt'         =>
@@ -220,7 +290,7 @@ $functions = [
                 return array_map($function, $list);
             },
 
-        'max' =>
+        'max'        =>
         /**
          * @param array $list
          *
@@ -230,7 +300,7 @@ $functions = [
                 return static::getCompareResult(Phamda::gt(), $list);
             },
 
-        'maxBy' =>
+        'maxBy'      =>
         /**
          * @param callable $getValue
          * @param array    $list
@@ -241,7 +311,7 @@ $functions = [
                 return static::getCompareByResult(Phamda::gt(), $getValue, $list);
             },
 
-        'min' =>
+        'min'        =>
         /**
          * @param array $list
          *
@@ -251,7 +321,7 @@ $functions = [
                 return static::getCompareResult(Phamda::lt(), $list);
             },
 
-        'minBy' =>
+        'minBy'      =>
         /**
          * @param callable $getValue
          * @param array    $list
@@ -292,6 +362,17 @@ $functions = [
          */
             function ($a) {
                 return Phamda::multiply($a, -1);
+            },
+
+        'none'       =>
+        /**
+         * @param callable $function
+         * @param array    $list
+         *
+         * @return bool
+         */
+            function (callable $function, array $list) {
+                return ! Phamda::any($function, $list);
             },
 
         'not'        =>
@@ -409,6 +490,39 @@ $functions = [
          */
             function (callable $function, $initial, array $list) {
                 return array_reduce($list, $function, $initial);
+            },
+
+        'reject'     =>
+        /**
+         * @param callable $function
+         * @param array    $list
+         *
+         * @return array
+         */
+            function (callable $function, array $list) {
+                return Phamda::filter(Phamda::not($function), $list);
+            },
+
+        'reverse'    =>
+        /**
+         * @param array $list
+         *
+         * @return array
+         */
+            function (array $list) {
+                return array_reverse($list);
+            },
+
+        'slice'      =>
+        /**
+         * @param int   $start
+         * @param int   $end
+         * @param array $list
+         *
+         * @return array
+         */
+            function ($start, $end, array $list) {
+                return array_slice($list, $start, $end - $start);
             },
 
         'sort'       =>

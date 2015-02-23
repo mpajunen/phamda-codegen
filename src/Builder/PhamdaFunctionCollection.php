@@ -28,6 +28,9 @@ class PhamdaFunctionCollection
         return $this->functions[$name] ?: $this->createFunction($name);
     }
 
+    /**
+     * @return PhamdaFunction[]
+     */
     public function getFunctions()
     {
         foreach (array_keys($this->types) as $name) {

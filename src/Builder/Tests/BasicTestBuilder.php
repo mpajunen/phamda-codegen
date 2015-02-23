@@ -44,9 +44,20 @@ class BasicTestBuilder implements BuilderInterface
     {
         $methods = [];
         foreach ($this->functions->getFunctions() as $function) {
+            if (in_array($function->getName(), $this->getSkipped())) {
+                continue;
+            }
+
             $methods[] = (new BasicTestMethodBuilder($function))->build();
         }
 
         return $methods;
+    }
+
+    private function getSkipped()
+    {
+        return [
+            'clone_',
+        ];
     }
 }

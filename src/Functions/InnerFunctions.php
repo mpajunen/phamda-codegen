@@ -75,6 +75,16 @@ $functions = [
                 return false;
             },
 
+        'clone_'      =>
+        /**
+         * @param object $object
+         *
+         * @return mixed
+         */
+            function ($object) {
+                return clone $object;
+            },
+
         'curry'      =>
         /**
          * @param callable $function

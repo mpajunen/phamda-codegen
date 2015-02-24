@@ -162,7 +162,14 @@ $functions = [
          * @return array
          */
             function (callable $function, array $list) {
-                return array_filter($list, $function);
+                $result = [];
+                foreach ($list as $key => $value) {
+                    if ($function($value, $key, $list)) {
+                        $result[$key] = $value;
+                    }
+                }
+
+                return $result;
             },
 
         'first'      =>
@@ -297,7 +304,12 @@ $functions = [
          * @return array
          */
             function (callable $function, array $list) {
-                return array_map($function, $list);
+                $result = [];
+                foreach ($list as $key => $value) {
+                    $result[$key] = $function($value, $key, $list);
+                }
+
+                return $result;
             },
 
         'max'        =>
@@ -499,7 +511,11 @@ $functions = [
          * @return mixed
          */
             function (callable $function, $initial, array $list) {
-                return array_reduce($list, $function, $initial);
+                foreach ($list as $key => $value) {
+                    $initial = $function($initial, $value, $key, $list);
+                }
+
+                return $initial;
             },
 
         'reject'     =>

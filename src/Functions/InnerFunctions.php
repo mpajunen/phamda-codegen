@@ -88,34 +88,32 @@ $functions = [
         'curry'      =>
         /**
          * @param callable $function
+         * @param mixed    ...$initialArguments
          *
          * @return callable
          */
-            function (callable $function) {
-                return Phamda::curryN(static::getArity($function), $function);
+            function (callable $function, ...$initialArguments) {
+                return Phamda::curryN(static::getArity($function), $function, ...$initialArguments);
             },
 
         'curryN'     =>
         /**
          * @param int      $count
          * @param callable $function
+         * @param mixed    ...$initialArguments
          *
          * @return callable
          */
-            function ($count, callable $function) {
-                return function (... $arguments) use ($function, $count) {
-                    $remainingCount = $count - count($arguments);
+            function ($count, callable $function, ...$initialArguments) {
+                return $count - count($initialArguments) <= 0
+                    ? $function(... $initialArguments)
+                    : function (... $arguments) use ($count, $function, $initialArguments) {
+                        $currentArguments = array_merge($initialArguments, $arguments);
 
-                    if ($remainingCount <= 0) {
-                        return $function(... $arguments);
-                    } else {
-                        $existingArguments = $arguments;
-
-                        return Phamda::curryN($remainingCount, function (... $arguments) use ($function, $existingArguments) {
-                            return $function(... array_merge($existingArguments, $arguments));
-                        });
-                    }
-                };
+                        return Phamda::curryN($count, function (... $arguments) use ($function) {
+                            return $function(...$arguments);
+                        }, ...$currentArguments);
+                    };
             },
 
         'divide'     =>
@@ -152,15 +150,15 @@ $functions = [
                 };
             },
 
-        'construct' =>
+        'construct'  =>
         /**
          * @param string $class
          *
          * @return object
          */
-        function ($class) {
-            return Phamda::constructN(static::getConstructorArity($class), $class);
-        },
+            function ($class) {
+                return Phamda::constructN(static::getConstructorArity($class), $class);
+            },
 
         'constructN' =>
         /**
@@ -169,11 +167,11 @@ $functions = [
          *
          * @return object
          */
-        function ($arity, $class) {
-            return Phamda::curryN($arity, function (...$arguments) use ($class) {
-                return new $class(...$arguments);
-            });
-        },
+            function ($arity, $class) {
+                return Phamda::curryN($arity, function (...$arguments) use ($class) {
+                    return new $class(...$arguments);
+                });
+            },
 
         'filter'     =>
         /**

@@ -60,6 +60,7 @@ class BasicTestBuilder implements BuilderInterface
             'clone_',
             'construct',
             'constructN',
+            'invoker',
             'partial',
             'partialN',
         ];

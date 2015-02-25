@@ -58,6 +58,8 @@ class BasicTestBuilder implements BuilderInterface
     {
         return [
             'clone_',
+            'partial',
+            'partialN',
         ];
     }
 }

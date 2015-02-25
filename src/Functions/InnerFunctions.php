@@ -92,9 +92,7 @@ $functions = [
          * @return callable
          */
             function (callable $function) {
-                $reflection = static::createReflection($function);
-
-                return Phamda::curryN($reflection->getNumberOfParameters(), $function);
+                return Phamda::curryN(static::getArity($function), $function);
             },
 
         'curryN'     =>
@@ -620,7 +618,7 @@ $functions = [
     ],
     'simple'  => [
 
-        'compose' =>
+        'compose'  =>
         /**
          * @param callable ...$functions
          *
@@ -630,7 +628,7 @@ $functions = [
                 return Phamda::pipe(... array_reverse($functions));
             },
 
-        'false'   =>
+        'false'    =>
         /**
          * @return callable
          */
@@ -640,7 +638,7 @@ $functions = [
                 };
             },
 
-        'invoker' =>
+        'invoker'  =>
         /**
          * @param int    $arity
          * @param string $method
@@ -658,7 +656,35 @@ $functions = [
                 });
             },
 
-        'pipe'    =>
+        'partial'  =>
+        /**
+         * @param callable $function
+         * @param mixed    ...$initialArguments
+         *
+         * @return callable
+         */
+            function (callable $function, ... $initialArguments) {
+                return Phamda::partialN(static::getArity($function), $function, ...$initialArguments);
+            },
+
+        'partialN' =>
+        /**
+         * @param int      $arity
+         * @param callable $function
+         * @param mixed    ...$initialArguments
+         *
+         * @return callable
+         */
+            function ($arity, callable $function, ... $initialArguments) {
+                $partial        = function (... $arguments) use ($function, $initialArguments) {
+                    return $function(...array_merge($initialArguments, $arguments));
+                };
+                $remainingCount = $arity - count($initialArguments);
+
+                return $remainingCount ? Phamda::curryN($remainingCount, $partial) : $partial;
+            },
+
+        'pipe'     =>
         /**
          * @param callable ...$functions
          *
@@ -681,7 +707,7 @@ $functions = [
                 };
             },
 
-        'true'    =>
+        'true'     =>
         /**
          * @return callable
          */

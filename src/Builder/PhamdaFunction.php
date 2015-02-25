@@ -30,6 +30,15 @@ class PhamdaFunction
         $this->innerFunction = $this->createInnerFunction($getFunction);
     }
 
+    public function getArity()
+    {
+        /** @var Node\Param $lastParam */
+        $lastParam = end($this->source->params);
+        $base      = count($this->source->params);
+
+        return $lastParam->variadic ? $base - 1 : $base;
+    }
+
     public function getClosure()
     {
         return $this->source;

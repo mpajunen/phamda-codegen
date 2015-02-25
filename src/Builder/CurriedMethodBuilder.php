@@ -38,7 +38,9 @@ class CurriedMethodBuilder implements BuilderInterface
         $params = [];
         foreach ($this->source->params as $index => $param) {
             $newParam          = clone $param;
-            $newParam->default = new Expr\ConstFetch(new Name('null'));
+            if (! $newParam->variadic) {
+                $newParam->default = new Expr\ConstFetch(new Name('null'));
+            }
 
             $params[] = $newParam;
         }
@@ -48,7 +50,7 @@ class CurriedMethodBuilder implements BuilderInterface
 
     private function createStatements()
     {
-        $arity = count($this->source->params);
+        $arity = $this->source->getArity();
 
         if ($arity < 1) {
             throw new \LogicException(sprintf('Invalid curried function "%s", arity "%s".', $this->source->getName(), $arity));

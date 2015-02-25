@@ -152,6 +152,29 @@ $functions = [
                 };
             },
 
+        'construct' =>
+        /**
+         * @param string $class
+         *
+         * @return object
+         */
+        function ($class) {
+            return Phamda::constructN(static::getConstructorArity($class), $class);
+        },
+
+        'constructN' =>
+        /**
+         * @param int    $arity
+         * @param string $class
+         *
+         * @return object
+         */
+        function ($arity, $class) {
+            return Phamda::curryN($arity, function (...$arguments) use ($class) {
+                return new $class(...$arguments);
+            });
+        },
+
         'filter'     =>
         /**
          * @param callable $function
@@ -681,7 +704,7 @@ $functions = [
                 };
                 $remainingCount = $arity - count($initialArguments);
 
-                return $remainingCount ? Phamda::curryN($remainingCount, $partial) : $partial;
+                return $remainingCount > 0 ? Phamda::curryN($remainingCount, $partial) : $partial;
             },
 
         'pipe'     =>

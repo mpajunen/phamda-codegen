@@ -85,6 +85,41 @@ $functions = [
                 return clone $object;
             },
 
+        'comparator' =>
+        /**
+         * @param callable $predicate
+         *
+         * @return callable
+         */
+            function (callable $predicate) {
+                return function ($a, $b) use ($predicate) {
+                    return $predicate($a, $b) ? -1 : ($predicate($b, $a) ? 1 : 0);
+                };
+            },
+
+        'construct'  =>
+        /**
+         * @param string $class
+         *
+         * @return object
+         */
+            function ($class) {
+                return Phamda::constructN(static::getConstructorArity($class), $class);
+            },
+
+        'constructN' =>
+        /**
+         * @param int    $arity
+         * @param string $class
+         *
+         * @return object
+         */
+            function ($arity, $class) {
+                return Phamda::curryN($arity, function (...$arguments) use ($class) {
+                    return new $class(...$arguments);
+                });
+            },
+
         'curry'      =>
         /**
          * @param callable $function
@@ -136,41 +171,6 @@ $functions = [
          */
             function ($a, $b) {
                 return $a === $b;
-            },
-
-        'comparator' =>
-        /**
-         * @param callable $predicate
-         *
-         * @return callable
-         */
-            function (callable $predicate) {
-                return function ($a, $b) use ($predicate) {
-                    return $predicate($a, $b) ? -1 : ($predicate($b, $a) ? 1 : 0);
-                };
-            },
-
-        'construct'  =>
-        /**
-         * @param string $class
-         *
-         * @return object
-         */
-            function ($class) {
-                return Phamda::constructN(static::getConstructorArity($class), $class);
-            },
-
-        'constructN' =>
-        /**
-         * @param int    $arity
-         * @param string $class
-         *
-         * @return object
-         */
-            function ($arity, $class) {
-                return Phamda::curryN($arity, function (...$arguments) use ($class) {
-                    return new $class(...$arguments);
-                });
             },
 
         'filter'     =>

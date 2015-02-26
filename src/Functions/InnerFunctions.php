@@ -271,6 +271,20 @@ $functions = [
                 return $a;
             },
 
+        'ifElse'      =>
+        /**
+         * @param callable $condition
+         * @param callable $onTrue
+         * @param callable $onFalse
+         *
+         * @return mixed
+         */
+            function (callable $condition, callable $onTrue, callable $onFalse) {
+                return function (...$arguments) use ($condition, $onTrue, $onFalse) {
+                    return $condition(...$arguments) ? $onTrue(...$arguments) : $onFalse(...$arguments);
+                };
+            },
+
         'indexOf'     =>
         /**
          * @param mixed $value

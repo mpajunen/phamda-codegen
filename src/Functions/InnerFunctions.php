@@ -162,6 +162,27 @@ $functions = [
                     };
             },
 
+        'dec' =>
+        /**
+         * @param int|float $number
+         *
+         * @return int|float
+         */
+        function ($number) {
+            return Phamda::add(-1, $number);
+        },
+
+        'defaultTo' =>
+        /**
+         * @param mixed $default
+         * @param mixed $value
+         *
+         * @return mixed
+         */
+        function ($default, $value) {
+            return $value !== null ? $value : $default;
+        },
+
         'divide'      =>
         /**
          * @param int|float $a
@@ -283,6 +304,16 @@ $functions = [
                 return function (...$arguments) use ($condition, $onTrue, $onFalse) {
                     return $condition(...$arguments) ? $onTrue(...$arguments) : $onFalse(...$arguments);
                 };
+            },
+
+        'inc' =>
+        /**
+         * @param int|float $number
+         *
+         * @return int|float
+         */
+            function ($number) {
+                return Phamda::add(1, $number);
             },
 
         'indexOf'     =>
@@ -496,6 +527,33 @@ $functions = [
                 }, [[], []], $list);
             },
 
+        'path'        =>
+        /**
+         * @param string       $path
+         * @param array|object $object
+         *
+         * @return mixed
+         */
+            function ($path, $object) {
+                return Phamda::pathOn('.', $path, $object);
+            },
+
+        'pathOn'      =>
+        /**
+         * @param string       $separator
+         * @param string       $path
+         * @param array|object $object
+         *
+         * @return mixed
+         */
+            function ($separator, $path, $object) {
+                foreach (explode($separator, $path) as $name) {
+                    $object = Phamda::prop($name, $object);
+                }
+
+                return $object;
+            },
+
         'pick'        =>
         /**
          * @param array $names
@@ -645,6 +703,26 @@ $functions = [
          * @return array
          */
             function (callable $comparator, array $list) {
+                usort($list, $comparator);
+
+                return $list;
+            },
+
+        'sortBy'      =>
+        /**
+         * @param callable $function
+         * @param array    $list
+         *
+         * @return array
+         */
+            function (callable $function, array $list) {
+                $comparator = function ($a, $b) use ($function) {
+                    $aKey = $function($a);
+                    $bKey = $function($b);
+
+                    return $aKey < $bKey ? -1 : ($aKey > $bKey ? 1 : 0);
+                };
+
                 usort($list, $comparator);
 
                 return $list;

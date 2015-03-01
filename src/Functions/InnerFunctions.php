@@ -45,19 +45,6 @@ $functions = [
                 return true;
             },
 
-        'and_'        =>
-        /**
-         * @param callable $a
-         * @param callable $b
-         *
-         * @return callable
-         */
-            function (callable $a, callable $b) {
-                return function (...$arguments) use ($a, $b) {
-                    return $a(...$arguments) && $b(...$arguments);
-                };
-            },
-
         'any'         =>
         /**
          * @param callable $function
@@ -73,6 +60,19 @@ $functions = [
                 }
 
                 return false;
+            },
+
+        'both'        =>
+        /**
+         * @param callable $a
+         * @param callable $b
+         *
+         * @return callable
+         */
+            function (callable $a, callable $b) {
+                return function (...$arguments) use ($a, $b) {
+                    return $a(...$arguments) && $b(...$arguments);
+                };
             },
 
         'clone_'      =>
@@ -192,6 +192,19 @@ $functions = [
          */
             function ($a, $b) {
                 return $a / $b;
+            },
+
+        'either'         =>
+        /**
+         * @param callable $a
+         * @param callable $b
+         *
+         * @return callable
+         */
+            function (callable $a, callable $b) {
+                return function (...$arguments) use ($a, $b) {
+                    return $a(...$arguments) || $b(...$arguments);
+                };
             },
 
         'eq'          =>
@@ -496,19 +509,6 @@ $functions = [
             function (callable $function) {
                 return function (... $arguments) use ($function) {
                     return ! $function(...$arguments);
-                };
-            },
-
-        'or_'         =>
-        /**
-         * @param callable $a
-         * @param callable $b
-         *
-         * @return callable
-         */
-            function (callable $a, callable $b) {
-                return function (...$arguments) use ($a, $b) {
-                    return $a(...$arguments) || $b(...$arguments);
                 };
             },
 

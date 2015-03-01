@@ -21,7 +21,7 @@ class Generator
 
     private function writeClass($filename, Node $node)
     {
-        file_put_contents($filename, $this->printBuilder($node) . "\n");
+        file_put_contents($filename, $this->printFile($node) . "\n");
     }
 
     private function createPhamda()
@@ -63,9 +63,32 @@ class Generator
         return new Parser(new Lexer\Emulative());
     }
 
+    private function printFile(Node $node)
+    {
+        return $this->getFileComment() . $this->printBuilder($node);
+    }
+
     private function printBuilder(Node $node)
     {
         return (new PrettyPrinter\Standard())
-            ->prettyPrintFile([$node]);
+            ->prettyPrint([$node]);
+    }
+
+    private function getFileComment()
+    {
+        return <<<EOT
+<?php
+
+/*
+ * This file is part of the Phamda library
+ *
+ * (c) Mikael Pajunen <mikael.pajunen@gmail.com>
+ *
+ * For the full copyright and license information, please see the LICENSE
+ * file that was distributed with this source code.
+ */
+
+
+EOT;
     }
 }

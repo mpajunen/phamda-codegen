@@ -115,7 +115,7 @@ $functions = [
          * @return object
          */
             function ($arity, $class) {
-                return Phamda::curryN($arity, function (...$arguments) use ($class) {
+                return static::_curryN($arity, function (...$arguments) use ($class) {
                     return new $class(...$arguments);
                 });
             },
@@ -139,27 +139,19 @@ $functions = [
          * @return callable
          */
             function (callable $function, ...$initialArguments) {
-                return Phamda::curryN(static::getArity($function), $function, ...$initialArguments);
+                return static::_curryN(static::getArity($function), $function, ...$initialArguments);
             },
 
         'curryN'      =>
         /**
-         * @param int      $count
+         * @param int      $length
          * @param callable $function
          * @param mixed    ...$initialArguments
          *
          * @return callable
          */
-            function ($count, callable $function, ...$initialArguments) {
-                return $count - count($initialArguments) <= 0
-                    ? $function(... $initialArguments)
-                    : function (... $arguments) use ($count, $function, $initialArguments) {
-                        $currentArguments = array_merge($initialArguments, $arguments);
-
-                        return Phamda::curryN($count, function (... $arguments) use ($function) {
-                            return $function(...$arguments);
-                        }, ...$currentArguments);
-                    };
+            function ($length, callable $function, ...$initialArguments) {
+                return static::_curryN($length, $function, ...$initialArguments);
             },
 
         'dec' =>
@@ -832,7 +824,7 @@ $functions = [
             function ($arity, $method, ... $initialArguments) {
                 $remainingCount = $arity - count($initialArguments) + 1;
 
-                return Phamda::curryN($remainingCount, function (... $arguments) use ($method, $initialArguments) {
+                return static::_curryN($remainingCount, function (... $arguments) use ($method, $initialArguments) {
                     $object = array_pop($arguments);
 
                     return $object->$method(...array_merge($initialArguments, $arguments));
@@ -864,7 +856,7 @@ $functions = [
                 };
                 $remainingCount = $arity - count($initialArguments);
 
-                return $remainingCount > 0 ? Phamda::curryN($remainingCount, $partial) : $partial;
+                return $remainingCount > 0 ? static::_curryN($remainingCount, $partial) : $partial;
             },
 
         'pipe'     =>

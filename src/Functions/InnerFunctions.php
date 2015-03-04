@@ -45,6 +45,24 @@ $functions = [
                 return true;
             },
 
+        'allPass'     =>
+        /**
+         * @param callable[] $predicates
+         *
+         * @return callable
+         */
+            function (array $predicates) {
+                return function (...$arguments) use ($predicates) {
+                    foreach ($predicates as $predicate) {
+                        if (! $predicate(...$arguments)) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                };
+            },
+
         'any'         =>
         /**
          * @param callable $function
@@ -60,6 +78,24 @@ $functions = [
                 }
 
                 return false;
+            },
+
+        'anyPass'     =>
+        /**
+         * @param callable[] $predicates
+         *
+         * @return callable
+         */
+            function (array $predicates) {
+                return function (...$arguments) use ($predicates) {
+                    foreach ($predicates as $predicate) {
+                        if ($predicate(...$arguments)) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                };
             },
 
         'both'        =>
@@ -739,6 +775,30 @@ $functions = [
          */
             function (array $values) {
                 return Phamda::reduce(Phamda::add(), 0, $values);
+            },
+
+        'tap'         =>
+        /**
+         * @param callable $function
+         * @param object   $object
+         *
+         * @return object
+         */
+            function (callable $function, $object) {
+                $function($object);
+
+                return $object;
+            },
+
+        'times'       =>
+        /**
+         * @param callable $function
+         * @param int      $count
+         *
+         * @return array
+         */
+            function (callable $function, $count) {
+                return Phamda::map($function, range(0, $count - 1));
             },
 
         'zip'         =>

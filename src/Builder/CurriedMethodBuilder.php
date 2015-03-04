@@ -58,23 +58,14 @@ class CurriedMethodBuilder implements BuilderInterface
             throw new \LogicException(sprintf('CurryN is not supported, arity "%s" required for function "%s".', $arity, $this->source->getName()));
         }
 
-        return $this->getCurriedStatements($arity);
-    }
-
-    private function getCurriedStatements($arity)
-    {
-        $returnCall = new Expr\FuncCall(new Expr\Variable('func'), [
-            new Arg(new Expr\FuncCall(new Name('func_get_args')), false, true),
-        ]);
-
-        return [
-            new Expr\Assign(new Expr\Variable('func'), $this->getCurryWrap($arity)),
-            new Stmt\Return_($returnCall)
-        ];
+        return [new Stmt\Return_($this->getCurryWrap($arity))];
     }
 
     private function getCurryWrap($arity)
     {
-        return new Expr\StaticCall(new Name('static'), 'curry' . $arity, [$this->source->getClosure()]);
+        return new Expr\StaticCall(new Name('static'), 'curry' . $arity, [
+            $this->source->getClosure(),
+            new Arg(new Expr\FuncCall(new Name('func_get_args'))),
+        ]);
     }
 }

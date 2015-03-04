@@ -154,26 +154,26 @@ $functions = [
                 return static::_curryN($length, $function, ...$initialArguments);
             },
 
-        'dec' =>
+        'dec'         =>
         /**
          * @param int|float $number
          *
          * @return int|float
          */
-        function ($number) {
-            return Phamda::add(-1, $number);
-        },
+            function ($number) {
+                return Phamda::add(-1, $number);
+            },
 
-        'defaultTo' =>
+        'defaultTo'   =>
         /**
          * @param mixed $default
          * @param mixed $value
          *
          * @return mixed
          */
-        function ($default, $value) {
-            return $value !== null ? $value : $default;
-        },
+            function ($default, $value) {
+                return $value !== null ? $value : $default;
+            },
 
         'divide'      =>
         /**
@@ -186,7 +186,7 @@ $functions = [
                 return $a / $b;
             },
 
-        'either'         =>
+        'either'      =>
         /**
          * @param callable $a
          * @param callable $b
@@ -311,7 +311,7 @@ $functions = [
                 };
             },
 
-        'inc' =>
+        'inc'         =>
         /**
          * @param int|float $number
          *

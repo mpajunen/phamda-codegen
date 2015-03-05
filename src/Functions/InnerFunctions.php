@@ -17,7 +17,7 @@ $variables = [
 $functions = [
     'curried' => [
 
-        'add'         =>
+        'add'           =>
         /**
          * @param int|float $a
          * @param int|float $b
@@ -28,7 +28,7 @@ $functions = [
                 return $a + $b;
             },
 
-        'all'         =>
+        'all'           =>
         /**
          * @param callable $function
          * @param array    $list
@@ -45,7 +45,7 @@ $functions = [
                 return true;
             },
 
-        'allPass'     =>
+        'allPass'       =>
         /**
          * @param callable[] $predicates
          *
@@ -63,7 +63,7 @@ $functions = [
                 };
             },
 
-        'any'         =>
+        'any'           =>
         /**
          * @param callable $function
          * @param array    $list
@@ -80,7 +80,7 @@ $functions = [
                 return false;
             },
 
-        'anyPass'     =>
+        'anyPass'       =>
         /**
          * @param callable[] $predicates
          *
@@ -98,7 +98,7 @@ $functions = [
                 };
             },
 
-        'both'        =>
+        'both'          =>
         /**
          * @param callable $a
          * @param callable $b
@@ -111,7 +111,7 @@ $functions = [
                 };
             },
 
-        'clone_'      =>
+        'clone_'        =>
         /**
          * @param object $object
          *
@@ -121,7 +121,7 @@ $functions = [
                 return clone $object;
             },
 
-        'comparator'  =>
+        'comparator'    =>
         /**
          * @param callable $predicate
          *
@@ -133,7 +133,7 @@ $functions = [
                 };
             },
 
-        'construct'   =>
+        'construct'     =>
         /**
          * @param string $class
          *
@@ -143,7 +143,7 @@ $functions = [
                 return Phamda::constructN(static::getConstructorArity($class), $class);
             },
 
-        'constructN'  =>
+        'constructN'    =>
         /**
          * @param int    $arity
          * @param string $class
@@ -156,7 +156,7 @@ $functions = [
                 });
             },
 
-        'contains'    =>
+        'contains'      =>
         /**
          * @param mixed $value
          * @param array $list
@@ -167,7 +167,7 @@ $functions = [
                 return in_array($value, $list, true);
             },
 
-        'curry'       =>
+        'curry'         =>
         /**
          * @param callable $function
          * @param mixed    ...$initialArguments
@@ -178,7 +178,7 @@ $functions = [
                 return static::_curryN(static::getArity($function), $function, ...$initialArguments);
             },
 
-        'curryN'      =>
+        'curryN'        =>
         /**
          * @param int      $length
          * @param callable $function
@@ -190,7 +190,7 @@ $functions = [
                 return static::_curryN($length, $function, ...$initialArguments);
             },
 
-        'dec'         =>
+        'dec'           =>
         /**
          * @param int|float $number
          *
@@ -200,7 +200,7 @@ $functions = [
                 return Phamda::add(-1, $number);
             },
 
-        'defaultTo'   =>
+        'defaultTo'     =>
         /**
          * @param mixed $default
          * @param mixed $value
@@ -211,7 +211,7 @@ $functions = [
                 return $value !== null ? $value : $default;
             },
 
-        'divide'      =>
+        'divide'        =>
         /**
          * @param int|float $a
          * @param int|float $b
@@ -222,7 +222,7 @@ $functions = [
                 return $a / $b;
             },
 
-        'either'      =>
+        'either'        =>
         /**
          * @param callable $a
          * @param callable $b
@@ -235,7 +235,7 @@ $functions = [
                 };
             },
 
-        'eq'          =>
+        'eq'            =>
         /**
          * @param mixed $a
          * @param mixed $b
@@ -246,7 +246,7 @@ $functions = [
                 return $a === $b;
             },
 
-        'filter'      =>
+        'filter'        =>
         /**
          * @param callable $function
          * @param array    $list
@@ -264,7 +264,75 @@ $functions = [
                 return $result;
             },
 
-        'first'       =>
+        'find'          =>
+        /**
+         * @param callable $predicate
+         * @param array    $list
+         *
+         * @return mixed|null
+         */
+            function (callable $predicate, array $list) {
+                foreach ($list as $value) {
+                    if ($predicate($value)) {
+                        return $value;
+                    }
+                }
+
+                return null;
+            },
+
+        'findIndex'     =>
+        /**
+         * @param callable $predicate
+         * @param array    $list
+         *
+         * @return int|string|null
+         */
+            function (callable $predicate, array $list) {
+                foreach ($list as $index => $value) {
+                    if ($predicate($value)) {
+                        return $index;
+                    }
+                }
+
+                return null;
+            },
+
+        'findLast'      =>
+        /**
+         * @param callable $predicate
+         * @param array    $list
+         *
+         * @return mixed|null
+         */
+            function (callable $predicate, array $list) {
+                foreach (array_reverse($list) as $value) {
+                    if ($predicate($value)) {
+                        return $value;
+                    }
+                }
+
+                return null;
+            },
+
+        'findLastIndex' =>
+        /**
+         * @param callable $predicate
+         * @param array    $list
+         *
+         * @return int|string|null
+         */
+            function (callable $predicate, array $list) {
+                foreach (array_reverse($list, true) as $index => $value) {
+                    if ($predicate($value)) {
+                        return $index;
+                    }
+                }
+
+                return null;
+            },
+
+        'first'         =>
         /**
          * @param array $list
          *
@@ -274,7 +342,7 @@ $functions = [
                 return reset($list);
             },
 
-        'flip'        =>
+        'flip'          =>
         /**
          * @param callable $function
          *
@@ -286,7 +354,7 @@ $functions = [
                 };
             },
 
-        'groupBy'     =>
+        'groupBy'       =>
         /**
          * @param callable $function
          * @param array    $list
@@ -301,7 +369,7 @@ $functions = [
                 }, [], $list);
             },
 
-        'gt'          =>
+        'gt'            =>
         /**
          * @param mixed $a
          * @param mixed $b
@@ -312,7 +380,7 @@ $functions = [
                 return $a > $b;
             },
 
-        'gte'         =>
+        'gte'           =>
         /**
          * @param mixed $a
          * @param mixed $b
@@ -323,7 +391,7 @@ $functions = [
                 return $a >= $b;
             },
 
-        'identity'    =>
+        'identity'      =>
         /**
          * @param mixed $a
          *
@@ -333,7 +401,7 @@ $functions = [
                 return $a;
             },
 
-        'ifElse'      =>
+        'ifElse'        =>
         /**
          * @param callable $condition
          * @param callable $onTrue
@@ -347,7 +415,7 @@ $functions = [
                 };
             },
 
-        'inc'         =>
+        'inc'           =>
         /**
          * @param int|float $number
          *
@@ -357,7 +425,7 @@ $functions = [
                 return Phamda::add(1, $number);
             },
 
-        'indexOf'     =>
+        'indexOf'       =>
         /**
          * @param mixed $value
          * @param array $list
@@ -374,7 +442,7 @@ $functions = [
                 return false;
             },
 
-        'isEmpty'     =>
+        'isEmpty'       =>
         /**
          * @param array $list
          *
@@ -384,7 +452,7 @@ $functions = [
                 return empty($list);
             },
 
-        'isInstance'  =>
+        'isInstance'    =>
         /**
          * @param string $class
          * @param object $object
@@ -395,7 +463,7 @@ $functions = [
                 return $object instanceof $class;
             },
 
-        'last'        =>
+        'last'          =>
         /**
          * @param array $list
          *
@@ -405,7 +473,7 @@ $functions = [
                 return end($list);
             },
 
-        'lt'          =>
+        'lt'            =>
         /**
          * @param mixed $a
          * @param mixed $b
@@ -416,7 +484,7 @@ $functions = [
                 return $a < $b;
             },
 
-        'lte'         =>
+        'lte'           =>
         /**
          * @param mixed $a
          * @param mixed $b
@@ -427,7 +495,7 @@ $functions = [
                 return $a <= $b;
             },
 
-        'map'         =>
+        'map'           =>
         /**
          * @param callable $function
          * @param array    $list
@@ -443,7 +511,7 @@ $functions = [
                 return $result;
             },
 
-        'max'         =>
+        'max'           =>
         /**
          * @param array $list
          *
@@ -453,7 +521,7 @@ $functions = [
                 return static::getCompareResult(Phamda::gt(), $list);
             },
 
-        'maxBy'       =>
+        'maxBy'         =>
         /**
          * @param callable $getValue
          * @param array    $list
@@ -464,7 +532,7 @@ $functions = [
                 return static::getCompareByResult(Phamda::gt(), $getValue, $list);
             },
 
-        'min'         =>
+        'min'           =>
         /**
          * @param array $list
          *
@@ -474,7 +542,7 @@ $functions = [
                 return static::getCompareResult(Phamda::lt(), $list);
             },
 
-        'minBy'       =>
+        'minBy'         =>
         /**
          * @param callable $getValue
          * @param array    $list
@@ -485,7 +553,7 @@ $functions = [
                 return static::getCompareByResult(Phamda::lt(), $getValue, $list);
             },
 
-        'modulo'      =>
+        'modulo'        =>
         /**
          * @param int $a
          * @param int $b
@@ -496,7 +564,7 @@ $functions = [
                 return $a % $b;
             },
 
-        'multiply'    =>
+        'multiply'      =>
         /**
          * @param int|float $a
          * @param int|float $b
@@ -507,7 +575,7 @@ $functions = [
                 return $a * $b;
             },
 
-        'negate'      =>
+        'negate'        =>
         /**
          * @param int|float $a
          *
@@ -517,7 +585,7 @@ $functions = [
                 return Phamda::multiply($a, -1);
             },
 
-        'none'        =>
+        'none'          =>
         /**
          * @param callable $function
          * @param array    $list
@@ -528,7 +596,7 @@ $functions = [
                 return ! Phamda::any($function, $list);
             },
 
-        'not'         =>
+        'not'           =>
         /**
          * @param callable $function
          *
@@ -540,7 +608,7 @@ $functions = [
                 };
             },
 
-        'partition'   =>
+        'partition'     =>
         /**
          * @param callable $predicate
          * @param array    $list
@@ -555,7 +623,7 @@ $functions = [
                 }, [[], []], $list);
             },
 
-        'path'        =>
+        'path'          =>
         /**
          * @param string       $path
          * @param array|object $object
@@ -566,7 +634,7 @@ $functions = [
                 return Phamda::pathOn('.', $path, $object);
             },
 
-        'pathOn'      =>
+        'pathOn'        =>
         /**
          * @param string       $separator
          * @param string       $path
@@ -582,7 +650,7 @@ $functions = [
                 return $object;
             },
 
-        'pick'        =>
+        'pick'          =>
         /**
          * @param array $names
          * @param array $item
@@ -600,7 +668,7 @@ $functions = [
                 return $new;
             },
 
-        'pickAll'     =>
+        'pickAll'       =>
         /**
          * @param array $names
          * @param array $item
@@ -616,7 +684,7 @@ $functions = [
                 return $new;
             },
 
-        'pluck'       =>
+        'pluck'         =>
         /**
          * @param string $name
          * @param array  $list
@@ -627,7 +695,7 @@ $functions = [
                 return Phamda::map(Phamda::prop($name), $list);
             },
 
-        'product'     =>
+        'product'       =>
         /**
          * @param int[]|float[] $values
          *
@@ -637,7 +705,7 @@ $functions = [
                 return Phamda::reduce(Phamda::multiply(), 1, $values);
             },
 
-        'prop'        =>
+        'prop'          =>
         /**
          * @param string       $name
          * @param array|object $object
@@ -648,7 +716,7 @@ $functions = [
                 return is_object($object) ? $object->$name : $object[$name];
             },
 
-        'propEq'      =>
+        'propEq'        =>
         /**
          * @param string       $name
          * @param mixed        $value
@@ -662,7 +730,7 @@ $functions = [
                     : $object[$name] === $value;
             },
 
-        'reduce'      =>
+        'reduce'        =>
         /**
          * @param callable $function
          * @param mixed    $initial
@@ -678,7 +746,7 @@ $functions = [
                 return $initial;
             },
 
-        'reduceRight' =>
+        'reduceRight'   =>
         /**
          * @param callable $function
          * @param mixed    $initial
@@ -690,7 +758,7 @@ $functions = [
                 return Phamda::reduce($function, $initial, array_reverse($list));
             },
 
-        'reject'      =>
+        'reject'        =>
         /**
          * @param callable $function
          * @param array    $list
@@ -701,7 +769,7 @@ $functions = [
                 return Phamda::filter(Phamda::not($function), $list);
             },
 
-        'reverse'     =>
+        'reverse'       =>
         /**
          * @param array $list
          *
@@ -711,7 +779,7 @@ $functions = [
                 return array_reverse($list);
             },
 
-        'slice'       =>
+        'slice'         =>
         /**
          * @param int   $start
          * @param int   $end
@@ -723,7 +791,7 @@ $functions = [
                 return array_slice($list, $start, $end - $start);
             },
 
-        'sort'        =>
+        'sort'          =>
         /**
          * @param callable $comparator
          * @param array    $list
@@ -736,7 +804,7 @@ $functions = [
                 return $list;
             },
 
-        'sortBy'      =>
+        'sortBy'        =>
         /**
          * @param callable $function
          * @param array    $list
@@ -756,7 +824,7 @@ $functions = [
                 return $list;
             },
 
-        'subtract'    =>
+        'subtract'      =>
         /**
          * @param int|float $a
          * @param int|float $b
@@ -767,7 +835,7 @@ $functions = [
                 return $a - $b;
             },
 
-        'sum'         =>
+        'sum'           =>
         /**
          * @param int[]|float[] $values
          *
@@ -777,7 +845,7 @@ $functions = [
                 return Phamda::reduce(Phamda::add(), 0, $values);
             },
 
-        'tap'         =>
+        'tap'           =>
         /**
          * @param callable $function
          * @param object   $object
@@ -790,7 +858,7 @@ $functions = [
                 return $object;
             },
 
-        'times'       =>
+        'times'         =>
         /**
          * @param callable $function
          * @param int      $count
@@ -801,7 +869,7 @@ $functions = [
                 return Phamda::map($function, range(0, $count - 1));
             },
 
-        'zip'         =>
+        'zip'           =>
         /**
          * @param array $a
          * @param array $b
@@ -817,7 +885,7 @@ $functions = [
                 return $zipped;
             },
 
-        'zipWith'     =>
+        'zipWith'       =>
         /**
          * @param callable $function
          * @param array    $a
@@ -834,7 +902,7 @@ $functions = [
                 return $zipped;
             },
 
-        'where'       =>
+        'where'         =>
         /**
          * @param array        $specification
          * @param array|object $object

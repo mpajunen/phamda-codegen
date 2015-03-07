@@ -638,6 +638,18 @@ $functions = [
                 return $object;
             },
 
+        'pathEq'        =>
+        /**
+         * @param array        $path
+         * @param mixed        $value
+         * @param array|object $object
+         *
+         * @return boolean
+         */
+            function (array $path, $value, $object) {
+                return Phamda::path($path, $object) === $value;
+            },
+
         'pick'          =>
         /**
          * @param array $names

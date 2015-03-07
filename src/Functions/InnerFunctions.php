@@ -625,25 +625,13 @@ $functions = [
 
         'path'          =>
         /**
-         * @param string       $path
+         * @param array        $path
          * @param array|object $object
          *
          * @return mixed
          */
-            function ($path, $object) {
-                return Phamda::pathOn('.', $path, $object);
-            },
-
-        'pathOn'        =>
-        /**
-         * @param string       $separator
-         * @param string       $path
-         * @param array|object $object
-         *
-         * @return mixed
-         */
-            function ($separator, $path, $object) {
-                foreach (explode($separator, $path) as $name) {
+            function (array $path, $object) {
+                foreach ($path as $name) {
                     $object = Phamda::prop($name, $object);
                 }
 

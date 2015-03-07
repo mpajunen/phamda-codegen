@@ -98,6 +98,30 @@ $functions = [
                 };
             },
 
+        'assoc'         =>
+        /**
+         * @param string       $property
+         * @param mixed        $value
+         * @param array|object $object
+         *
+         * @return array|object
+         */
+            function ($property, $value, $object) {
+                return static::_assoc($property, $value, $object);
+            },
+
+        'assocPath'     =>
+        /**
+         * @param array        $path
+         * @param mixed        $value
+         * @param array|object $object
+         *
+         * @return array|object
+         */
+            function (array $path, $value, $object) {
+                return static::_assocPath($path, $value, $object);
+            },
+
         'both'          =>
         /**
          * @param callable $a

@@ -324,7 +324,7 @@ $functions = [
          * @return mixed|null
          */
             function (callable $predicate, array $collection) {
-                foreach (array_reverse($collection) as $item) {
+                foreach (static::_reverse($collection) as $item) {
                     if ($predicate($item)) {
                         return $item;
                     }
@@ -341,7 +341,7 @@ $functions = [
          * @return int|string|null
          */
             function (callable $predicate, array $collection) {
-                foreach (array_reverse($collection, true) as $index => $item) {
+                foreach (static::_reverse($collection, true) as $index => $item) {
                     if ($predicate($item)) {
                         return $index;
                     }
@@ -380,7 +380,7 @@ $functions = [
          * @return array[]
          */
             function (callable $function, array $collection) {
-                return Phamda::reduce(function (array $collections, $item) use ($function) {
+                return static::_reduce(function (array $collections, $item) use ($function) {
                     $collections[$function($item)][] = $item;
 
                     return $collections;
@@ -634,7 +634,7 @@ $functions = [
          * @return array[]
          */
             function (callable $predicate, array $collection) {
-                return Phamda::reduce(function (array $collections, $item) use ($predicate) {
+                return static::_reduce(function (array $collections, $item) use ($predicate) {
                     $collections[$predicate($item) ? 0 : 1][] = $item;
 
                     return $collections;
@@ -720,7 +720,7 @@ $functions = [
          * @return int|float
          */
             function (array $values) {
-                return Phamda::reduce(Phamda::multiply(), 1, $values);
+                return static::_reduce(Phamda::multiply(), 1, $values);
             },
 
         'prop'          =>
@@ -757,11 +757,7 @@ $functions = [
          * @return mixed
          */
             function (callable $function, $initial, array $collection) {
-                foreach ($collection as $key => $item) {
-                    $initial = $function($initial, $item, $key, $collection);
-                }
-
-                return $initial;
+                return static::_reduce($function, $initial, $collection);
             },
 
         'reduceRight'   =>
@@ -773,7 +769,7 @@ $functions = [
          * @return mixed
          */
             function (callable $function, $initial, array $collection) {
-                return Phamda::reduce($function, $initial, array_reverse($collection));
+                return static::_reduce($function, $initial, static::_reverse($collection));
             },
 
         'reject'        =>
@@ -794,7 +790,7 @@ $functions = [
          * @return array
          */
             function (array $collection) {
-                return array_reverse($collection);
+                return static::_reverse($collection);
             },
 
         'slice'         =>
@@ -860,7 +856,7 @@ $functions = [
          * @return int|float
          */
             function (array $values) {
-                return Phamda::reduce(Phamda::add(), 0, $values);
+                return static::_reduce(Phamda::add(), 0, $values);
             },
 
         'tap'           =>

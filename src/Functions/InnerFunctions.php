@@ -24,12 +24,12 @@ $functions = [
 
         'all'           =>
         /**
-         * @param callable $predicate
-         * @param array    $collection
+         * @param callable           $predicate
+         * @param array|\Traversable $collection
          *
          * @return bool
          */
-            function (callable $predicate, array $collection) {
+            function (callable $predicate, $collection) {
                 foreach ($collection as $item) {
                     if (! $predicate($item)) {
                         return false;
@@ -59,12 +59,12 @@ $functions = [
 
         'any'           =>
         /**
-         * @param callable $predicate
-         * @param array    $collection
+         * @param callable           $predicate
+         * @param array|\Traversable $collection
          *
          * @return bool
          */
-            function (callable $predicate, array $collection) {
+            function (callable $predicate, $collection) {
                 foreach ($collection as $item) {
                     if ($predicate($item)) {
                         return true;
@@ -176,13 +176,19 @@ $functions = [
 
         'contains'      =>
         /**
-         * @param mixed $item
-         * @param array $collection
+         * @param mixed              $value
+         * @param array|\Traversable $collection
          *
          * @return bool
          */
-            function ($item, array $collection) {
-                return in_array($item, $collection, true);
+            function ($value, $collection) {
+                foreach ($collection as $item) {
+                    if ($item === $value) {
+                        return true;
+                    }
+                }
+
+                return false;
             },
 
         'curry'         =>
@@ -284,12 +290,12 @@ $functions = [
 
         'find'          =>
         /**
-         * @param callable $predicate
-         * @param array    $collection
+         * @param callable           $predicate
+         * @param array|\Traversable $collection
          *
          * @return mixed|null
          */
-            function (callable $predicate, array $collection) {
+            function (callable $predicate, $collection) {
                 foreach ($collection as $item) {
                     if ($predicate($item)) {
                         return $item;
@@ -301,12 +307,12 @@ $functions = [
 
         'findIndex'     =>
         /**
-         * @param callable $predicate
-         * @param array    $collection
+         * @param callable           $predicate
+         * @param array|\Traversable $collection
          *
          * @return int|string|null
          */
-            function (callable $predicate, array $collection) {
+            function (callable $predicate, $collection) {
                 foreach ($collection as $index => $item) {
                     if ($predicate($item)) {
                         return $index;
@@ -318,12 +324,12 @@ $functions = [
 
         'findLast'      =>
         /**
-         * @param callable $predicate
-         * @param array    $collection
+         * @param callable           $predicate
+         * @param array|\Traversable $collection
          *
          * @return mixed|null
          */
-            function (callable $predicate, array $collection) {
+            function (callable $predicate, $collection) {
                 foreach (static::_reverse($collection) as $item) {
                     if ($predicate($item)) {
                         return $item;
@@ -335,12 +341,12 @@ $functions = [
 
         'findLastIndex' =>
         /**
-         * @param callable $predicate
-         * @param array    $collection
+         * @param callable           $predicate
+         * @param array|\Traversable $collection
          *
          * @return int|string|null
          */
-            function (callable $predicate, array $collection) {
+            function (callable $predicate, $collection) {
                 foreach (static::_reverse($collection, true) as $index => $item) {
                     if ($predicate($item)) {
                         return $index;
@@ -445,8 +451,8 @@ $functions = [
 
         'indexOf'       =>
         /**
-         * @param mixed $item
-         * @param array $collection
+         * @param mixed              $item
+         * @param array|\Traversable $collection
          *
          * @return int|string|false
          */
@@ -531,43 +537,43 @@ $functions = [
 
         'max'           =>
         /**
-         * @param array $collection
+         * @param array|\Traversable $collection
          *
          * @return mixed
          */
-            function (array $collection) {
+            function ($collection) {
                 return static::getCompareResult(Phamda::gt(), $collection);
             },
 
         'maxBy'         =>
         /**
-         * @param callable $getValue
-         * @param array    $collection
+         * @param callable           $getValue
+         * @param array|\Traversable $collection
          *
          * @return mixed
          */
-            function (callable $getValue, array $collection) {
+            function (callable $getValue, $collection) {
                 return static::getCompareByResult(Phamda::gt(), $getValue, $collection);
             },
 
         'min'           =>
         /**
-         * @param array $collection
+         * @param array|\Traversable $collection
          *
          * @return mixed
          */
-            function (array $collection) {
+            function ($collection) {
                 return static::getCompareResult(Phamda::lt(), $collection);
             },
 
         'minBy'         =>
         /**
-         * @param callable $getValue
-         * @param array    $collection
+         * @param callable           $getValue
+         * @param array|\Traversable $collection
          *
          * @return mixed
          */
-            function (callable $getValue, array $collection) {
+            function (callable $getValue, $collection) {
                 return static::getCompareByResult(Phamda::lt(), $getValue, $collection);
             },
 
@@ -605,12 +611,12 @@ $functions = [
 
         'none'          =>
         /**
-         * @param callable $predicate
-         * @param array    $collection
+         * @param callable           $predicate
+         * @param array|\Traversable $collection
          *
          * @return bool
          */
-            function (callable $predicate, array $collection) {
+            function (callable $predicate, $collection) {
                 return ! Phamda::any($predicate, $collection);
             },
 
@@ -750,25 +756,25 @@ $functions = [
 
         'reduce'        =>
         /**
-         * @param callable $function
-         * @param mixed    $initial
-         * @param array    $collection
+         * @param callable           $function
+         * @param mixed              $initial
+         * @param array|\Traversable $collection
          *
          * @return mixed
          */
-            function (callable $function, $initial, array $collection) {
+            function (callable $function, $initial, $collection) {
                 return static::_reduce($function, $initial, $collection);
             },
 
         'reduceRight'   =>
         /**
-         * @param callable $function
-         * @param mixed    $initial
-         * @param array    $collection
+         * @param callable           $function
+         * @param mixed              $initial
+         * @param array|\Traversable $collection
          *
          * @return mixed
          */
-            function (callable $function, $initial, array $collection) {
+            function (callable $function, $initial, $collection) {
                 return static::_reduce($function, $initial, static::_reverse($collection));
             },
 
@@ -785,11 +791,11 @@ $functions = [
 
         'reverse'       =>
         /**
-         * @param array $collection
+         * @param array|\Traversable $collection
          *
          * @return array
          */
-            function (array $collection) {
+            function ($collection) {
                 return static::_reverse($collection);
             },
 

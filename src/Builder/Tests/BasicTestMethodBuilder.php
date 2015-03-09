@@ -135,7 +135,7 @@ EOT;
     {
         $args = [];
         foreach ($sources as $source) {
-            /** @var Expr\ClosureUse|Param $param */
+            /** @var Expr\ClosureUse|Param $source */
             $args[] = new Arg(new Expr\Variable($source->name ?: $source->var), false, $source->variadic);
         }
 

@@ -69,6 +69,15 @@ class PhamdaFunction
                || ($this->innerFunction && $this->innerFunction->returnsCallable());
     }
 
+    public function isCollectionFunction()
+    {
+        $params    = $this->source->params;
+        /** @var Node\Param $lastParam */
+        $lastParam = end($params);
+
+        return $lastParam !== false && $lastParam->name === 'collection' && $lastParam->type === null;
+    }
+
     public function __call($name, $args)
     {
         return $this->source->$name(...$args);

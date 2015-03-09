@@ -6,12 +6,6 @@ use Phamda\Phamda;
 
 $variables = [
     $value = null,
-    $a = function () {
-    },
-    $b = function () {
-    },
-    $function = function () {
-    },
 ];
 
 $functions = [
@@ -19,25 +13,25 @@ $functions = [
 
         'add'           =>
         /**
-         * @param int|float $a
-         * @param int|float $b
+         * @param int|float $x
+         * @param int|float $y
          *
          * @return int|float
          */
-            function ($a, $b) {
-                return $a + $b;
+            function ($x, $y) {
+                return $x + $y;
             },
 
         'all'           =>
         /**
-         * @param callable $function
-         * @param array    $list
+         * @param callable $predicate
+         * @param array    $collection
          *
          * @return bool
          */
-            function (callable $function, array $list) {
-                foreach ($list as $value) {
-                    if (! $function($value)) {
+            function (callable $predicate, array $collection) {
+                foreach ($collection as $item) {
+                    if (! $predicate($item)) {
                         return false;
                     }
                 }
@@ -65,14 +59,14 @@ $functions = [
 
         'any'           =>
         /**
-         * @param callable $function
-         * @param array    $list
+         * @param callable $predicate
+         * @param array    $collection
          *
          * @return bool
          */
-            function (callable $function, array $list) {
-                foreach ($list as $value) {
-                    if ($function($value)) {
+            function (callable $predicate, array $collection) {
+                foreach ($collection as $item) {
+                    if ($predicate($item)) {
                         return true;
                     }
                 }
@@ -152,8 +146,8 @@ $functions = [
          * @return callable
          */
             function (callable $predicate) {
-                return function ($a, $b) use ($predicate) {
-                    return $predicate($a, $b) ? -1 : ($predicate($b, $a) ? 1 : 0);
+                return function ($x, $y) use ($predicate) {
+                    return $predicate($x, $y) ? -1 : ($predicate($y, $x) ? 1 : 0);
                 };
             },
 
@@ -182,13 +176,13 @@ $functions = [
 
         'contains'      =>
         /**
-         * @param mixed $value
-         * @param array $list
+         * @param mixed $item
+         * @param array $collection
          *
          * @return bool
          */
-            function ($value, array $list) {
-                return in_array($value, $list, true);
+            function ($item, array $collection) {
+                return in_array($item, $collection, true);
             },
 
         'curry'         =>
@@ -237,13 +231,13 @@ $functions = [
 
         'divide'        =>
         /**
-         * @param int|float $a
-         * @param int|float $b
+         * @param int|float $x
+         * @param int|float $y
          *
          * @return int|float
          */
-            function ($a, $b) {
-                return $a / $b;
+            function ($x, $y) {
+                return $x / $y;
             },
 
         'either'        =>
@@ -261,27 +255,27 @@ $functions = [
 
         'eq'            =>
         /**
-         * @param mixed $a
-         * @param mixed $b
+         * @param mixed $x
+         * @param mixed $y
          *
          * @return bool
          */
-            function ($a, $b) {
-                return $a === $b;
+            function ($x, $y) {
+                return $x === $y;
             },
 
         'filter'        =>
         /**
-         * @param callable $function
-         * @param array    $list
+         * @param callable $predicate
+         * @param array    $collection
          *
          * @return array
          */
-            function (callable $function, array $list) {
+            function (callable $predicate, array $collection) {
                 $result = [];
-                foreach ($list as $key => $value) {
-                    if ($function($value, $key, $list)) {
-                        $result[$key] = $value;
+                foreach ($collection as $key => $item) {
+                    if ($predicate($item, $key, $collection)) {
+                        $result[$key] = $item;
                     }
                 }
 
@@ -291,14 +285,14 @@ $functions = [
         'find'          =>
         /**
          * @param callable $predicate
-         * @param array    $list
+         * @param array    $collection
          *
          * @return mixed|null
          */
-            function (callable $predicate, array $list) {
-                foreach ($list as $value) {
-                    if ($predicate($value)) {
-                        return $value;
+            function (callable $predicate, array $collection) {
+                foreach ($collection as $item) {
+                    if ($predicate($item)) {
+                        return $item;
                     }
                 }
 
@@ -308,13 +302,13 @@ $functions = [
         'findIndex'     =>
         /**
          * @param callable $predicate
-         * @param array    $list
+         * @param array    $collection
          *
          * @return int|string|null
          */
-            function (callable $predicate, array $list) {
-                foreach ($list as $index => $value) {
-                    if ($predicate($value)) {
+            function (callable $predicate, array $collection) {
+                foreach ($collection as $index => $item) {
+                    if ($predicate($item)) {
                         return $index;
                     }
                 }
@@ -325,14 +319,14 @@ $functions = [
         'findLast'      =>
         /**
          * @param callable $predicate
-         * @param array    $list
+         * @param array    $collection
          *
          * @return mixed|null
          */
-            function (callable $predicate, array $list) {
-                foreach (array_reverse($list) as $value) {
-                    if ($predicate($value)) {
-                        return $value;
+            function (callable $predicate, array $collection) {
+                foreach (array_reverse($collection) as $item) {
+                    if ($predicate($item)) {
+                        return $item;
                     }
                 }
 
@@ -342,13 +336,13 @@ $functions = [
         'findLastIndex' =>
         /**
          * @param callable $predicate
-         * @param array    $list
+         * @param array    $collection
          *
          * @return int|string|null
          */
-            function (callable $predicate, array $list) {
-                foreach (array_reverse($list, true) as $index => $value) {
-                    if ($predicate($value)) {
+            function (callable $predicate, array $collection) {
+                foreach (array_reverse($collection, true) as $index => $item) {
+                    if ($predicate($item)) {
                         return $index;
                     }
                 }
@@ -358,12 +352,12 @@ $functions = [
 
         'first'         =>
         /**
-         * @param array $list
+         * @param array $collection
          *
          * @return mixed
          */
-            function (array $list) {
-                return reset($list);
+            function (array $collection) {
+                return reset($collection);
             },
 
         'flip'          =>
@@ -381,48 +375,48 @@ $functions = [
         'groupBy'       =>
         /**
          * @param callable $function
-         * @param array    $list
+         * @param array    $collection
          *
          * @return array[]
          */
-            function (callable $function, array $list) {
-                return Phamda::reduce(function (array $lists, $value) use ($function) {
-                    $lists[$function($value)][] = $value;
+            function (callable $function, array $collection) {
+                return Phamda::reduce(function (array $collections, $item) use ($function) {
+                    $collections[$function($item)][] = $item;
 
-                    return $lists;
-                }, [], $list);
+                    return $collections;
+                }, [], $collection);
             },
 
         'gt'            =>
         /**
-         * @param mixed $a
-         * @param mixed $b
+         * @param mixed $x
+         * @param mixed $y
          *
          * @return bool
          */
-            function ($a, $b) {
-                return $a > $b;
+            function ($x, $y) {
+                return $x > $y;
             },
 
         'gte'           =>
         /**
-         * @param mixed $a
-         * @param mixed $b
+         * @param mixed $x
+         * @param mixed $y
          *
          * @return bool
          */
-            function ($a, $b) {
-                return $a >= $b;
+            function ($x, $y) {
+                return $x >= $y;
             },
 
         'identity'      =>
         /**
-         * @param mixed $a
+         * @param mixed $x
          *
          * @return mixed
          */
-            function ($a) {
-                return $a;
+            function ($x) {
+                return $x;
             },
 
         'ifElse'        =>
@@ -451,14 +445,14 @@ $functions = [
 
         'indexOf'       =>
         /**
-         * @param mixed $value
-         * @param array $list
+         * @param mixed $item
+         * @param array $collection
          *
          * @return int|string|false
          */
-            function ($value, array $list) {
-                foreach ($list as $key => $current) {
-                    if ($value === $current) {
+            function ($item, array $collection) {
+                foreach ($collection as $key => $current) {
+                    if ($item === $current) {
                         return $key;
                     }
                 }
@@ -468,12 +462,12 @@ $functions = [
 
         'isEmpty'       =>
         /**
-         * @param array $list
+         * @param array $collection
          *
          * @return bool
          */
-            function (array $list) {
-                return empty($list);
+            function (array $collection) {
+                return empty($collection);
             },
 
         'isInstance'    =>
@@ -489,47 +483,47 @@ $functions = [
 
         'last'          =>
         /**
-         * @param array $list
+         * @param array $collection
          *
          * @return mixed
          */
-            function (array $list) {
-                return end($list);
+            function (array $collection) {
+                return end($collection);
             },
 
         'lt'            =>
         /**
-         * @param mixed $a
-         * @param mixed $b
+         * @param mixed $x
+         * @param mixed $y
          *
          * @return bool
          */
-            function ($a, $b) {
-                return $a < $b;
+            function ($x, $y) {
+                return $x < $y;
             },
 
         'lte'           =>
         /**
-         * @param mixed $a
-         * @param mixed $b
+         * @param mixed $x
+         * @param mixed $y
          *
          * @return bool
          */
-            function ($a, $b) {
-                return $a <= $b;
+            function ($x, $y) {
+                return $x <= $y;
             },
 
         'map'           =>
         /**
          * @param callable $function
-         * @param array    $list
+         * @param array    $collection
          *
          * @return array
          */
-            function (callable $function, array $list) {
+            function (callable $function, array $collection) {
                 $result = [];
-                foreach ($list as $key => $value) {
-                    $result[$key] = $function($value, $key, $list);
+                foreach ($collection as $key => $item) {
+                    $result[$key] = $function($item, $key, $collection);
                 }
 
                 return $result;
@@ -537,114 +531,114 @@ $functions = [
 
         'max'           =>
         /**
-         * @param array $list
+         * @param array $collection
          *
          * @return mixed
          */
-            function (array $list) {
-                return static::getCompareResult(Phamda::gt(), $list);
+            function (array $collection) {
+                return static::getCompareResult(Phamda::gt(), $collection);
             },
 
         'maxBy'         =>
         /**
          * @param callable $getValue
-         * @param array    $list
+         * @param array    $collection
          *
          * @return mixed
          */
-            function (callable $getValue, array $list) {
-                return static::getCompareByResult(Phamda::gt(), $getValue, $list);
+            function (callable $getValue, array $collection) {
+                return static::getCompareByResult(Phamda::gt(), $getValue, $collection);
             },
 
         'min'           =>
         /**
-         * @param array $list
+         * @param array $collection
          *
          * @return mixed
          */
-            function (array $list) {
-                return static::getCompareResult(Phamda::lt(), $list);
+            function (array $collection) {
+                return static::getCompareResult(Phamda::lt(), $collection);
             },
 
         'minBy'         =>
         /**
          * @param callable $getValue
-         * @param array    $list
+         * @param array    $collection
          *
          * @return mixed
          */
-            function (callable $getValue, array $list) {
-                return static::getCompareByResult(Phamda::lt(), $getValue, $list);
+            function (callable $getValue, array $collection) {
+                return static::getCompareByResult(Phamda::lt(), $getValue, $collection);
             },
 
         'modulo'        =>
         /**
-         * @param int $a
-         * @param int $b
+         * @param int $x
+         * @param int $y
          *
          * @return int
          */
-            function ($a, $b) {
-                return $a % $b;
+            function ($x, $y) {
+                return $x % $y;
             },
 
         'multiply'      =>
         /**
-         * @param int|float $a
-         * @param int|float $b
+         * @param int|float $x
+         * @param int|float $y
          *
          * @return int|float
          */
-            function ($a, $b) {
-                return $a * $b;
+            function ($x, $y) {
+                return $x * $y;
             },
 
         'negate'        =>
         /**
-         * @param int|float $a
+         * @param int|float $x
          *
          * @return int|float
          */
-            function ($a) {
-                return Phamda::multiply($a, -1);
+            function ($x) {
+                return Phamda::multiply($x, -1);
             },
 
         'none'          =>
         /**
-         * @param callable $function
-         * @param array    $list
+         * @param callable $predicate
+         * @param array    $collection
          *
          * @return bool
          */
-            function (callable $function, array $list) {
-                return ! Phamda::any($function, $list);
+            function (callable $predicate, array $collection) {
+                return ! Phamda::any($predicate, $collection);
             },
 
         'not'           =>
         /**
-         * @param callable $function
+         * @param callable $predicate
          *
          * @return callable
          */
-            function (callable $function) {
-                return function (... $arguments) use ($function) {
-                    return ! $function(...$arguments);
+            function (callable $predicate) {
+                return function (... $arguments) use ($predicate) {
+                    return ! $predicate(...$arguments);
                 };
             },
 
         'partition'     =>
         /**
          * @param callable $predicate
-         * @param array    $list
+         * @param array    $collection
          *
          * @return array[]
          */
-            function (callable $predicate, array $list) {
-                return Phamda::reduce(function (array $lists, $value) use ($predicate) {
-                    $lists[$predicate($value) ? 0 : 1][] = $value;
+            function (callable $predicate, array $collection) {
+                return Phamda::reduce(function (array $collections, $item) use ($predicate) {
+                    $collections[$predicate($item) ? 0 : 1][] = $item;
 
-                    return $lists;
-                }, [[], []], $list);
+                    return $collections;
+                }, [[], []], $collection);
             },
 
         'path'          =>
@@ -711,12 +705,12 @@ $functions = [
         'pluck'         =>
         /**
          * @param string $name
-         * @param array  $list
+         * @param array  $collection
          *
          * @return mixed
          */
-            function ($name, array $list) {
-                return Phamda::map(Phamda::prop($name), $list);
+            function ($name, array $collection) {
+                return Phamda::map(Phamda::prop($name), $collection);
             },
 
         'product'       =>
@@ -758,13 +752,13 @@ $functions = [
         /**
          * @param callable $function
          * @param mixed    $initial
-         * @param array    $list
+         * @param array    $collection
          *
          * @return mixed
          */
-            function (callable $function, $initial, array $list) {
-                foreach ($list as $key => $value) {
-                    $initial = $function($initial, $value, $key, $list);
+            function (callable $function, $initial, array $collection) {
+                foreach ($collection as $key => $item) {
+                    $initial = $function($initial, $item, $key, $collection);
                 }
 
                 return $initial;
@@ -774,89 +768,89 @@ $functions = [
         /**
          * @param callable $function
          * @param mixed    $initial
-         * @param array    $list
+         * @param array    $collection
          *
          * @return mixed
          */
-            function (callable $function, $initial, array $list) {
-                return Phamda::reduce($function, $initial, array_reverse($list));
+            function (callable $function, $initial, array $collection) {
+                return Phamda::reduce($function, $initial, array_reverse($collection));
             },
 
         'reject'        =>
         /**
-         * @param callable $function
-         * @param array    $list
+         * @param callable $predicate
+         * @param array    $collection
          *
          * @return array
          */
-            function (callable $function, array $list) {
-                return Phamda::filter(Phamda::not($function), $list);
+            function (callable $predicate, array $collection) {
+                return Phamda::filter(Phamda::not($predicate), $collection);
             },
 
         'reverse'       =>
         /**
-         * @param array $list
+         * @param array $collection
          *
          * @return array
          */
-            function (array $list) {
-                return array_reverse($list);
+            function (array $collection) {
+                return array_reverse($collection);
             },
 
         'slice'         =>
         /**
          * @param int   $start
          * @param int   $end
-         * @param array $list
+         * @param array $collection
          *
          * @return array
          */
-            function ($start, $end, array $list) {
-                return array_slice($list, $start, $end - $start);
+            function ($start, $end, array $collection) {
+                return array_slice($collection, $start, $end - $start);
             },
 
         'sort'          =>
         /**
          * @param callable $comparator
-         * @param array    $list
+         * @param array    $collection
          *
          * @return array
          */
-            function (callable $comparator, array $list) {
-                usort($list, $comparator);
+            function (callable $comparator, array $collection) {
+                usort($collection, $comparator);
 
-                return $list;
+                return $collection;
             },
 
         'sortBy'        =>
         /**
          * @param callable $function
-         * @param array    $list
+         * @param array    $collection
          *
          * @return array
          */
-            function (callable $function, array $list) {
-                $comparator = function ($a, $b) use ($function) {
-                    $aKey = $function($a);
-                    $bKey = $function($b);
+            function (callable $function, array $collection) {
+                $comparator = function ($x, $y) use ($function) {
+                    $xKey = $function($x);
+                    $yKey = $function($y);
 
-                    return $aKey < $bKey ? -1 : ($aKey > $bKey ? 1 : 0);
+                    return $xKey < $yKey ? -1 : ($xKey > $yKey ? 1 : 0);
                 };
 
-                usort($list, $comparator);
+                usort($collection, $comparator);
 
-                return $list;
+                return $collection;
             },
 
         'subtract'      =>
         /**
-         * @param int|float $a
-         * @param int|float $b
+         * @param int|float $x
+         * @param int|float $y
          *
          * @return int|float
          */
-            function ($a, $b) {
-                return $a - $b;
+            function ($x, $y) {
+                return $x - $y;
             },
 
         'sum'           =>

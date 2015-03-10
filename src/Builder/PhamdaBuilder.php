@@ -6,6 +6,8 @@ use PhpParser\Builder;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\TraitUse;
+use PhpParser\Node\Stmt\Use_;
+use PhpParser\Node\Stmt\UseUse;
 
 class PhamdaBuilder implements BuilderInterface
 {
@@ -23,6 +25,7 @@ class PhamdaBuilder implements BuilderInterface
     public function build()
     {
         return $this->factory->namespace('Phamda')
+            ->addStmt(new Use_([new UseUse(new Name('Doctrine\Common\Collections\Collection'))]))
             ->addStmt($this->createClass())
             ->getNode();
     }

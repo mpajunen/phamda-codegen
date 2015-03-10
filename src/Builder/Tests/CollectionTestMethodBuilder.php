@@ -13,9 +13,6 @@ use PhpParser\Node\Stmt;
 
 class CollectionTestMethodBuilder implements BuilderInterface
 {
-    const COLLECTION_ARGUMENT_NAME = 'collection';
-    const COLLECTION_VARIABLE_NAME = 'arrayCollection';
-
     private $factory;
     private $source;
 
@@ -71,9 +68,9 @@ EOT;
     private function createCollectionAssignment()
     {
         return new Expr\Assign(
-            new Expr\Variable(self::COLLECTION_VARIABLE_NAME),
+            new Expr\Variable('_' . $this->source->getCollectionArgumentName()),
             new Expr\New_(new Name('ArrayCollection'), [
-                new Expr\Variable(self::COLLECTION_ARGUMENT_NAME)
+                new Expr\Variable($this->source->getCollectionArgumentName())
             ])
         );
     }
@@ -98,7 +95,7 @@ EOT;
         $args = [];
         foreach ($sources as $source) {
             /** @var Param $source */
-            $name   = $source->name === self::COLLECTION_ARGUMENT_NAME ? self::COLLECTION_VARIABLE_NAME : $source->name;
+            $name   = $source->name === $this->source->getCollectionArgumentName() ? '_' . $source->name : $source->name;
             $args[] = new Arg(new Expr\Variable($name), false, $source->variadic);
         }
 

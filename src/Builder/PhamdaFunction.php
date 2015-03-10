@@ -63,6 +63,11 @@ class PhamdaFunction
         return $this->wrapType;
     }
 
+    public function getCollectionArgumentName()
+    {
+        return $this->getLastParam()->name;
+    }
+
     public function returnsCallable()
     {
         return $this->getReturnExpression() instanceof Expr\Closure
@@ -71,11 +76,9 @@ class PhamdaFunction
 
     public function isCollectionFunction()
     {
-        $params    = $this->source->params;
-        /** @var Node\Param $lastParam */
-        $lastParam = end($params);
-
-        return $lastParam !== false && $lastParam->name === 'collection' && $lastParam->type === null;
+        return $this->getLastParam() !== false
+            && in_array($this->getLastParam()->name, ['collection', 'values'])
+            && $this->getLastParam()->type === null;
     }
 
     public function __call($name, $args)
@@ -88,6 +91,14 @@ class PhamdaFunction
         return $this->source->$name;
     }
 
+    /**
+     * @return Node\Param|false
+     */
+    private function getLastParam()
+    {
+        return end($this->source->params);
+    }
+
     private function getReturnExpression()
     {
         foreach ($this->source->stmts as $statement) {
@@ -96,7 +107,7 @@ class PhamdaFunction
             }
         }
 
-        throw new \LogicException(sprintf('Function "%s" does not have a return statement. Every function should return something.', $this->name));
+        return null;
     }
 
     /**

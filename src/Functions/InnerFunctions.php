@@ -351,12 +351,22 @@ $functions = [
 
         'first'         =>
         /**
-         * @param array $collection
+         * @param array|\Traversable|Collection $collection
          *
          * @return mixed
          */
-            function (array $collection) {
-                return reset($collection);
+            function ($collection) {
+                if (is_array($collection)) {
+                    return reset($collection);
+                } elseif (method_exists($collection, 'first')) {
+                    return $collection->first();
+                } else {
+                    foreach (static::_reverse($collection) as $item) {
+                        return $item;
+                    }
+
+                    return false;
+                }
             },
 
         'flip'          =>
@@ -449,7 +459,7 @@ $functions = [
          *
          * @return int|string|false
          */
-            function ($item, array $collection) {
+            function ($item, $collection) {
                 foreach ($collection as $key => $current) {
                     if ($item === $current) {
                         return $key;
@@ -461,12 +471,22 @@ $functions = [
 
         'isEmpty'       =>
         /**
-         * @param array $collection
+         * @param array|\Traversable|Collection $collection
          *
          * @return bool
          */
-            function (array $collection) {
-                return empty($collection);
+            function ($collection) {
+                if (is_array($collection)) {
+                    return empty($collection);
+                } elseif (method_exists($collection, 'empty')) {
+                    return $collection->empty();
+                } else {
+                    foreach ($collection as $item) {
+                        return false;
+                    }
+
+                    return true;
+                }
             },
 
         'isInstance'    =>
@@ -482,12 +502,22 @@ $functions = [
 
         'last'          =>
         /**
-         * @param array $collection
+         * @param array|\Traversable|Collection $collection
          *
          * @return mixed
          */
-            function (array $collection) {
-                return end($collection);
+            function ($collection) {
+                if (is_array($collection)) {
+                    return end($collection);
+                } elseif (method_exists($collection, 'last')) {
+                    return $collection->last();
+                } else {
+                    foreach (static::_reverse($collection) as $item) {
+                        return $item;
+                    }
+
+                    return false;
+                }
             },
 
         'lt'            =>
@@ -713,7 +743,7 @@ $functions = [
          *
          * @return int|float
          */
-            function (array $values) {
+            function ($values) {
                 return static::_reduce(Phamda::multiply(), 1, $values);
             },
 
@@ -847,7 +877,7 @@ $functions = [
          *
          * @return int|float
          */
-            function (array $values) {
+            function ($values) {
                 return static::_reduce(Phamda::add(), 0, $values);
             },
 

@@ -9,6 +9,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
+use PhpParser\Node\Scalar\String;
 use PhpParser\Node\Stmt;
 
 class CollectionTestMethodBuilder implements BuilderInterface
@@ -61,7 +62,9 @@ EOT;
     {
         return [
             $this->createCollectionAssignment(),
-            $this->createAssert($this->createFunctionCall()),
+            $this->createResultAssignment(),
+            $this->createResultAssert(),
+            $this->createImmutabilityAssert()
         ];
     }
 
@@ -75,11 +78,29 @@ EOT;
         );
     }
 
-    private function createAssert(Expr $call)
+    private function createResultAssignment()
+    {
+        return new Expr\Assign(
+            new Expr\Variable('result'),
+            $this->createFunctionCall()
+        );
+    }
+
+    private function createResultAssert()
     {
         return new Expr\MethodCall(new Expr\Variable('this'), 'assertSame', [
             new Expr\Variable('expected'),
-            $call,
+            new Expr\Variable('result'),
+            new String(sprintf('%s works for collection objects.', $this->source->getName())),
+        ]);
+    }
+
+    private function createImmutabilityAssert()
+    {
+        return new Expr\MethodCall(new Expr\Variable('this'), 'assertSame', [
+            new Expr\Variable($this->source->getCollectionArgumentName()),
+            new Expr\MethodCall(new Expr\Variable('_' . $this->source->getCollectionArgumentName()), 'toArray'),
+            new String(sprintf('%s does not modify to original collection values.', $this->source->getName())),
         ]);
     }
 

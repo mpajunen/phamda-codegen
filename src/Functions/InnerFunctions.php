@@ -731,7 +731,7 @@ $functions = [
          * @param string $name
          * @param array  $collection
          *
-         * @return mixed
+         * @return array
          */
             function ($name, array $collection) {
                 return static::_map(Phamda::prop($name), $collection);

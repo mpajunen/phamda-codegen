@@ -278,14 +278,7 @@ $functions = [
          * @return array
          */
             function (callable $predicate, array $collection) {
-                $result = [];
-                foreach ($collection as $key => $item) {
-                    if ($predicate($item, $key, $collection)) {
-                        $result[$key] = $item;
-                    }
-                }
-
-                return $result;
+                return static::_filter($predicate, $collection);
             },
 
         'find'          =>
@@ -527,12 +520,7 @@ $functions = [
          * @return array
          */
             function (callable $function, array $collection) {
-                $result = [];
-                foreach ($collection as $key => $item) {
-                    $result[$key] = $function($item, $key, $collection);
-                }
-
-                return $result;
+                return static::_map($function, $collection);
             },
 
         'max'           =>
@@ -656,7 +644,7 @@ $functions = [
          */
             function (array $path, $object) {
                 foreach ($path as $name) {
-                    $object = Phamda::prop($name, $object);
+                    $object = static::_prop($name, $object);
                 }
 
                 return $object;
@@ -716,7 +704,7 @@ $functions = [
          * @return mixed
          */
             function ($name, array $collection) {
-                return Phamda::map(Phamda::prop($name), $collection);
+                return static::_map(Phamda::prop($name), $collection);
             },
 
         'product'       =>
@@ -731,13 +719,13 @@ $functions = [
 
         'prop'          =>
         /**
-         * @param string       $name
-         * @param array|object $object
+         * @param string                    $name
+         * @param array|object|\ArrayAccess $object
          *
          * @return mixed
          */
             function ($name, $object) {
-                return is_object($object) ? $object->$name : $object[$name];
+                return static::_prop($name, $object);
             },
 
         'propEq'        =>
@@ -749,9 +737,7 @@ $functions = [
          * @return bool
          */
             function ($name, $value, $object) {
-                return is_object($object)
-                    ? $object->$name === $value
-                    : $object[$name] === $value;
+                return static::_prop($name, $object) === $value;
             },
 
         'reduce'        =>
@@ -786,7 +772,7 @@ $functions = [
          * @return array
          */
             function (callable $predicate, array $collection) {
-                return Phamda::filter(Phamda::not($predicate), $collection);
+                return static::_filter(Phamda::not($predicate), $collection);
             },
 
         'reverse'       =>
@@ -886,7 +872,7 @@ $functions = [
          * @return array
          */
             function (callable $function, $count) {
-                return Phamda::map($function, range(0, $count - 1));
+                return static::_map($function, range(0, $count - 1));
             },
 
         'zip'           =>

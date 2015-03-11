@@ -25,7 +25,7 @@ class PhamdaBuilder implements BuilderInterface
     public function build()
     {
         return $this->factory->namespace('Phamda')
-            ->addStmt(new Use_([new UseUse(new Name('Doctrine\Common\Collections\Collection'))]))
+            ->addStmt(new Use_([new UseUse(new Name('Phamda\Collection\Collection'))]))
             ->addStmt($this->createClass())
             ->getNode();
     }

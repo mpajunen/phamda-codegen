@@ -25,8 +25,8 @@ class CollectionTestBuilder implements BuilderInterface
         $factory = new BuilderFactory();
 
         return $factory->namespace('Phamda\Tests')
-            ->addStmt(new Use_([new UseUse(new Name('Doctrine\Common\Collections\ArrayCollection'))]))
             ->addStmt(new Use_([new UseUse(new Name('Phamda\Phamda'))]))
+            ->addStmt(new Use_([new UseUse(new Name('Phamda\Tests\Fixtures\ArrayCollection'))]))
             ->addStmt($this->createClass($factory))
             ->getNode();
     }

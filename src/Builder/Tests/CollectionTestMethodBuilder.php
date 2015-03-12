@@ -100,7 +100,7 @@ EOT;
         return new Expr\MethodCall(new Expr\Variable('this'), 'assertSame', [
             new Expr\Variable($this->source->getCollectionArgumentName()),
             new Expr\MethodCall(new Expr\Variable('_' . $this->source->getCollectionArgumentName()), 'toArray'),
-            new String(sprintf('%s does not modify to original collection values.', $this->source->getName())),
+            new String(sprintf('%s does not modify original collection values.', $this->source->getName())),
         ]);
     }
 

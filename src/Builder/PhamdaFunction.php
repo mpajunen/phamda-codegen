@@ -74,6 +74,16 @@ class PhamdaFunction
                || ($this->innerFunction && $this->innerFunction->returnsCallable());
     }
 
+    public function returnsCollection()
+    {
+        return strpos($this->getDocComment(), '@return array|Collection') !== false;
+    }
+
+    public function returnsCollections()
+    {
+        return strpos($this->getDocComment(), '@return array[]|Collection[]') !== false;
+    }
+
     public function isCollectionFunction()
     {
         return $this->getLastParam() !== false

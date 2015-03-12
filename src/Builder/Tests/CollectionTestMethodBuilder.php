@@ -90,7 +90,7 @@ EOT;
     {
         return new Expr\MethodCall(new Expr\Variable('this'), 'assertSame', [
             new Expr\Variable('expected'),
-            new Expr\Variable('result'),
+            $this->createResultComparison(),
             new String(sprintf('%s works for collection objects.', $this->source->getName())),
         ]);
     }
@@ -102,6 +102,23 @@ EOT;
             new Expr\MethodCall(new Expr\Variable('_' . $this->source->getCollectionArgumentName()), 'toArray'),
             new String(sprintf('%s does not modify to original collection values.', $this->source->getName())),
         ]);
+    }
+
+    private function createResultComparison()
+    {
+        if ($this->source->returnsCollections()) {
+            $result = new Expr\MethodCall(new Expr\Variable('this'), 'getCollectionGroupArray', [
+                new Expr\Variable('result'),
+            ]);
+        } elseif ($this->source->returnsCollection()) {
+            $result = new Expr\MethodCall(new Expr\Variable('this'), 'getCollectionArray', [
+                new Expr\Variable('result'),
+            ]);
+        } else {
+            $result = new Expr\Variable('result');
+        }
+
+        return $result;
     }
 
     private function createFunctionCall()

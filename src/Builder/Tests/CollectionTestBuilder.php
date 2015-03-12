@@ -37,6 +37,7 @@ class CollectionTestBuilder implements BuilderInterface
             ->extend('\PHPUnit_Framework_TestCase')
             ->addStmt(new TraitUse([
                 new Name('BasicProvidersTrait'),
+                new Name('CollectionTestTrait'),
             ]))
             ->addStmts($this->createClassMethods());
     }

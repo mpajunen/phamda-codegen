@@ -3,6 +3,7 @@
 namespace Phamda\Functions;
 
 use Phamda\Phamda;
+use Phamda\Collection\Collection;
 
 $variables = [
     $value = null,

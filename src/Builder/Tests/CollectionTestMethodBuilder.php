@@ -15,17 +15,19 @@ use PhpParser\Node\Stmt;
 class CollectionTestMethodBuilder implements BuilderInterface
 {
     private $factory;
+    private $simple;
     private $source;
 
-    public function __construct(PhamdaFunction $source)
+    public function __construct(PhamdaFunction $source, $simple)
     {
         $this->source  = $source;
+        $this->simple  = $simple;
         $this->factory = new BuilderFactory();
     }
 
     public function build()
     {
-        return $this->factory->method($this->getHelperMethodName('test%s'))
+        return $this->factory->method($this->getHelperMethodName('test%s' . ($this->simple ? 'Simple' : '')))
             ->setDocComment($this->createComment())
             ->addParams($this->createParams())
             ->addStmts($this->createStatements());
@@ -72,7 +74,7 @@ EOT;
     {
         return new Expr\Assign(
             new Expr\Variable('_' . $this->source->getCollectionArgumentName()),
-            new Expr\New_(new Name('ArrayCollection'), [
+            new Expr\New_(new Name($this->simple ? 'ArrayContainer' : 'ArrayCollection'), [
                 new Expr\Variable($this->source->getCollectionArgumentName())
             ])
         );
@@ -91,7 +93,7 @@ EOT;
         return new Expr\MethodCall(new Expr\Variable('this'), 'assertSame', [
             new Expr\Variable('expected'),
             $this->createResultComparison(),
-            new String(sprintf('%s works for collection objects.', $this->source->getName())),
+            new String(sprintf('%s works for%s collection objects.', $this->source->getName(), $this->simple ? ' simple' : '')),
         ]);
     }
 
@@ -106,16 +108,12 @@ EOT;
 
     private function createResultComparison()
     {
-        if ($this->source->returnsCollections()) {
-            $result = new Expr\MethodCall(new Expr\Variable('this'), 'getCollectionGroupArray', [
-                new Expr\Variable('result'),
-            ]);
-        } elseif ($this->source->returnsCollection()) {
-            $result = new Expr\MethodCall(new Expr\Variable('this'), 'getCollectionArray', [
-                new Expr\Variable('result'),
-            ]);
-        } else {
-            $result = new Expr\Variable('result');
+        $result = new Expr\Variable('result');
+
+        if (! $this->simple && ($this->source->returnsCollection() || $this->source->returnsCollections())) {
+            $helperMethod = $this->source->returnsCollections() ? 'getCollectionGroupArray' : 'getCollectionArray';
+
+            $result = new Expr\MethodCall(new Expr\Variable('this'), $helperMethod, [$result]);
         }
 
         return $result;

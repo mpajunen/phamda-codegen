@@ -27,6 +27,7 @@ class CollectionTestBuilder implements BuilderInterface
         return $factory->namespace('Phamda\Tests')
             ->addStmt(new Use_([new UseUse(new Name('Phamda\Phamda'))]))
             ->addStmt(new Use_([new UseUse(new Name('Phamda\Tests\Fixtures\ArrayCollection'))]))
+            ->addStmt(new Use_([new UseUse(new Name('Phamda\Tests\Fixtures\ArrayContainer'))]))
             ->addStmt($this->createClass($factory))
             ->getNode();
     }
@@ -47,7 +48,8 @@ class CollectionTestBuilder implements BuilderInterface
         $methods = [];
         foreach ($this->functions->getFunctions() as $function) {
             if ($function->isCollectionFunction()) {
-                $methods[] = (new CollectionTestMethodBuilder($function))->build();
+                $methods[] = (new CollectionTestMethodBuilder($function, false))->build();
+                $methods[] = (new CollectionTestMethodBuilder($function, true))->build();
             }
         }
 

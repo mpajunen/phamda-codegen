@@ -9,6 +9,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
+use PhpParser\Node\Scalar\String;
 use PhpParser\Node\Stmt;
 
 class BasicTestMethodBuilder implements BuilderInterface
@@ -80,7 +81,7 @@ EOT;
 
         return [
             new Expr\Assign($function, $this->createFunctionCall($this->source->uses)),
-            $this->createAssert($this->createFunctionCall($this->source->params, $function))
+            $this->createAssert($this->createFunctionCall($this->source->params, $function), false)
         ];
     }
 
@@ -108,17 +109,18 @@ EOT;
                 $argumentSource = $this->source->getInnerFunctionParams();
             }
 
-            $statements[] = $this->createAssert($this->createFunctionCall($argumentSource, $function));
+            $statements[] = $this->createAssert($this->createFunctionCall($argumentSource, $function), $function === null);
         }
 
         return $statements;
     }
 
-    private function createAssert(Expr $call)
+    private function createAssert(Expr $call, $isDirectCall)
     {
         return new Expr\MethodCall(new Expr\Variable('this'), 'assertSame', [
             new Expr\Variable('expected'),
             $call,
+            new String(sprintf($isDirectCall ? '%s produces correct results.' : '%s is curried correctly.', $this->source->getName())),
         ]);
     }
 

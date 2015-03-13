@@ -362,7 +362,7 @@ $functions = [
                 } elseif (method_exists($collection, 'first')) {
                     return $collection->first();
                 } else {
-                    foreach (static::_reverse($collection) as $item) {
+                    foreach ($collection as $item) {
                         return $item;
                     }
 
@@ -483,8 +483,8 @@ $functions = [
             function ($collection) {
                 if (is_array($collection)) {
                     return empty($collection);
-                } elseif (method_exists($collection, 'empty')) {
-                    return $collection->empty();
+                } elseif (method_exists($collection, 'isEmpty')) {
+                    return $collection->isEmpty();
                 } else {
                     foreach ($collection as $item) {
                         return false;

@@ -46,11 +46,11 @@ class Generator
         $statements = $this->getSourceStatements();
 
         $variables = [];
-        foreach ($statements[2]->expr->items as $arrayItem) {
+        foreach ($statements[3]->expr->items as $arrayItem) {
             $variables[$arrayItem->value->var->name] = $arrayItem->value->expr;
         }
 
-        $functions = new PhamdaFunctionCollection($statements[3]->expr->items);
+        $functions = new PhamdaFunctionCollection($statements[4]->expr->items);
 
         return [
             $functions,

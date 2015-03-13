@@ -26,6 +26,7 @@ class PhamdaBuilder implements BuilderInterface
     {
         return $this->factory->namespace('Phamda')
             ->addStmt(new Use_([new UseUse(new Name('Phamda\Collection\Collection'))]))
+            ->addStmt(new Use_([new UseUse(new Name('Phamda\Exception\InvalidFunctionCompositionException'))]))
             ->addStmt($this->createClass())
             ->getNode();
     }

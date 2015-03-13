@@ -4,6 +4,7 @@ namespace Phamda\Functions;
 
 use Phamda\Phamda;
 use Phamda\Collection\Collection;
+use Phamda\Exception\InvalidFunctionCompositionException;
 
 $variables = [
     $value = null,
@@ -1036,7 +1037,7 @@ $functions = [
          */
             function (... $functions) {
                 if (count($functions) < 2) {
-                    throw new \LogicException('Pipe requires at least two argument functions.');
+                    throw InvalidFunctionCompositionException::create();
                 }
 
                 return function (... $arguments) use ($functions) {

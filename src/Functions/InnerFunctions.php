@@ -6,10 +6,6 @@ use Phamda\Phamda;
 use Phamda\Collection\Collection;
 use Phamda\Exception\InvalidFunctionCompositionException;
 
-$variables = [
-    $value = null,
-];
-
 $functions = [
     'curried' => [
 
@@ -56,6 +52,18 @@ $functions = [
                     }
 
                     return true;
+                };
+            },
+
+        'always'        =>
+        /**
+         * @param mixed $value
+         *
+         * @return callable
+         */
+            function ($value) {
+                return function () use ($value) {
+                    return $value;
                 };
             },
 
@@ -1060,18 +1068,6 @@ $functions = [
                 return function () {
                     return true;
                 };
-            },
-    ],
-    'wrapped' => [
-
-        'always' =>
-        /**
-         * @param mixed $value
-         *
-         * @return callable
-         */
-            function () use ($value) {
-                return $value;
             },
     ],
 ];

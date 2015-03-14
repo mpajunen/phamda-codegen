@@ -2,8 +2,8 @@
 
 namespace Phamda\Builder\Tests;
 
-use Phamda\Builder\BuilderInterface;
 use Phamda\Builder\PhamdaFunction;
+use Phamda\Builder\SimpleMethodBuilder;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -12,26 +12,22 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String;
 use PhpParser\Node\Stmt;
 
-class BasicTestMethodBuilder implements BuilderInterface
+class BasicTestMethodBuilder extends SimpleMethodBuilder
 {
-    private $factory;
-    private $source;
+    protected $factory;
 
     public function __construct(PhamdaFunction $source)
     {
-        $this->source  = $source;
+        parent::__construct($source);
         $this->factory = new BuilderFactory();
     }
 
-    public function build()
+    protected function getName()
     {
-        return $this->factory->method($this->getHelperMethodName('test%s'))
-            ->setDocComment($this->createComment())
-            ->addParams($this->createParams())
-            ->addStmts($this->createStatements());
+        return $this->getHelperMethodName('test%s');
     }
 
-    private function createComment()
+    protected function createComment()
     {
         return <<<EOT
 /**
@@ -40,12 +36,7 @@ class BasicTestMethodBuilder implements BuilderInterface
 EOT;
     }
 
-    private function getHelperMethodName($format)
-    {
-        return sprintf($format, ucfirst(trim($this->source->getName(), '_')));
-    }
-
-    private function createParams()
+    protected function createParams()
     {
         $params = [$this->factory->param('expected')];
 
@@ -68,24 +59,7 @@ EOT;
         return $params;
     }
 
-    private function createStatements()
-    {
-        return $this->source->uses
-            ? $this->createUseStatements()
-            : $this->createParameterStatements();
-    }
-
-    private function createUseStatements()
-    {
-        $function = new Expr\Variable('wrapped');
-
-        return [
-            new Expr\Assign($function, $this->createFunctionCall($this->source->uses)),
-            $this->createAssert($this->createFunctionCall($this->source->params, $function), false)
-        ];
-    }
-
-    private function createParameterStatements()
+    protected function createStatements()
     {
         $statements = [];
         foreach (range(0, count($this->source->params)) as $offset) {
@@ -137,8 +111,8 @@ EOT;
     {
         $args = [];
         foreach ($sources as $source) {
-            /** @var Expr\ClosureUse|Param $source */
-            $args[] = new Arg(new Expr\Variable($source->name ?: $source->var), false, $source->variadic);
+            /** @var Param $source */
+            $args[] = new Arg(new Expr\Variable($source->name), false, $source->variadic);
         }
 
         return $args;

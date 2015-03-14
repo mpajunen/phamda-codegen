@@ -2,9 +2,7 @@
 
 namespace Phamda\Builder\Tests;
 
-use Phamda\Builder\BuilderInterface;
 use Phamda\Builder\PhamdaFunction;
-use PhpParser\BuilderFactory;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Name;
@@ -12,42 +10,22 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String;
 use PhpParser\Node\Stmt;
 
-class CollectionTestMethodBuilder implements BuilderInterface
+class CollectionTestMethodBuilder extends BasicTestMethodBuilder
 {
-    private $factory;
     private $simple;
-    private $source;
 
     public function __construct(PhamdaFunction $source, $simple)
     {
-        $this->source  = $source;
-        $this->simple  = $simple;
-        $this->factory = new BuilderFactory();
+        parent::__construct($source);
+        $this->simple = $simple;
     }
 
-    public function build()
+    protected function getName()
     {
-        return $this->factory->method($this->getHelperMethodName('test%s' . ($this->simple ? 'Simple' : '')))
-            ->setDocComment($this->createComment())
-            ->addParams($this->createParams())
-            ->addStmts($this->createStatements());
+        return $this->getHelperMethodName('test%s' . ($this->simple ? 'Simple' : ''));
     }
 
-    private function createComment()
-    {
-        return <<<EOT
-/**
- * @dataProvider {$this->getHelperMethodName('get%sData')}
- */
-EOT;
-    }
-
-    private function getHelperMethodName($format)
-    {
-        return sprintf($format, ucfirst(trim($this->source->getName(), '_')));
-    }
-
-    private function createParams()
+    protected function createParams()
     {
         $params = [$this->factory->param('expected')];
 
@@ -60,7 +38,7 @@ EOT;
         return $params;
     }
 
-    private function createStatements()
+    protected function createStatements()
     {
         return [
             $this->createCollectionAssignment(),

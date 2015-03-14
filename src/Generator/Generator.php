@@ -29,34 +29,22 @@ class Generator
 
     private function createPhamda()
     {
-        return (new PhamdaBuilder(... $this->getSourceData()))->build();
+        return (new PhamdaBuilder($this->getSourceFunctions()))->build();
     }
 
     private function createBasicTests()
     {
-        return (new BasicTestBuilder(... $this->getSourceData()))->build();
+        return (new BasicTestBuilder($this->getSourceFunctions()))->build();
     }
 
     private function createCollectionTests()
     {
-        return (new CollectionTestBuilder(... $this->getSourceData()))->build();
+        return (new CollectionTestBuilder($this->getSourceFunctions()))->build();
     }
 
-    private function getSourceData()
+    private function getSourceFunctions()
     {
-        $statements = $this->getSourceStatements();
-
-        $variables = [];
-        foreach ($statements[3]->expr->items as $arrayItem) {
-            $variables[$arrayItem->value->var->name] = $arrayItem->value->expr;
-        }
-
-        $functions = new PhamdaFunctionCollection($statements[4]->expr->items);
-
-        return [
-            $functions,
-            $variables,
-        ];
+        return new PhamdaFunctionCollection($this->getSourceStatements()[3]->expr->items);
     }
 
     private function getSourceStatements()

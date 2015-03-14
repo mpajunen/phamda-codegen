@@ -2,38 +2,21 @@
 
 namespace Phamda\Builder;
 
-use PhpParser\BuilderFactory;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 
-class CurriedMethodBuilder implements BuilderInterface
+class CurriedMethodBuilder extends SimpleMethodBuilder
 {
-    private $source;
-
-    public function __construct(PhamdaFunction $source)
-    {
-        $this->source = $source;
-    }
-
-    public function build()
-    {
-        return (new BuilderFactory())->method($this->source->getName())
-            ->setDocComment($this->createComment())
-            ->makeStatic()
-            ->addParams($this->createParams())
-            ->addStmts($this->createStatements());
-    }
-
-    private function createComment()
+    protected function createComment()
     {
         return str_replace('callable|callable', 'callable', str_replace(
-            '* @return ', '* @return callable|', $this->source->getDocComment()
+            '* @return ', '* @return callable|', parent::createComment()
         ));
     }
 
-    private function createParams()
+    protected function createParams()
     {
         $params = [];
         foreach ($this->source->params as $index => $param) {
@@ -48,7 +31,7 @@ class CurriedMethodBuilder implements BuilderInterface
         return $params;
     }
 
-    private function createStatements()
+    protected function createStatements()
     {
         $arity = $this->source->getArity();
 

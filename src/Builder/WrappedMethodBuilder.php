@@ -31,8 +31,13 @@ class WrappedMethodBuilder implements BuilderInterface
     {
         $params = [];
         foreach ($this->source->uses as $index => $use) {
-            $params[] = (new BuilderFactory())->param($use->var)
-                ->setTypeHint($this->getVariableTypeHint($use->var));
+            $param = (new BuilderFactory())->param($use->var);
+            $type  = $this->getVariableTypeHint($use->var);
+            if ($type) {
+                $param->setTypeHint($type);
+            }
+
+            $params[] = $param;
         }
 
         return $params;
@@ -50,6 +55,6 @@ class WrappedMethodBuilder implements BuilderInterface
             return 'callable';
         }
 
-        return new Name(null);
+        return null;
     }
 }

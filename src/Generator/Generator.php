@@ -6,6 +6,7 @@ use Phamda\Builder\PhamdaBuilder;
 use Phamda\Builder\PhamdaFunctionCollection;
 use Phamda\Builder\Tests\BasicTestBuilder;
 use Phamda\Builder\Tests\CollectionTestBuilder;
+use Phamda\Printer\PhamdaPrinter;
 use PhpParser\Builder;
 use PhpParser\Lexer;
 use PhpParser\Node;
@@ -72,13 +73,7 @@ class Generator
 
     private function printFile(Node $node)
     {
-        return $this->getFileComment() . $this->printBuilder($node);
-    }
-
-    private function printBuilder(Node $node)
-    {
-        return (new PrettyPrinter\Standard())
-            ->prettyPrint([$node]);
+        return $this->getFileComment() . (new PhamdaPrinter())->prettyPrint([$node]);
     }
 
     private function getFileComment()

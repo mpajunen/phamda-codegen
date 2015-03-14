@@ -83,7 +83,7 @@ EOT;
                 $argumentSource = $this->source->getInnerFunctionParams();
             }
 
-            $statements[] = $this->createAssert($this->createFunctionCall($argumentSource, $function), $function === null);
+            $statements[] = $this->createAssert($this->createFunctionCall($argumentSource, $function), $offset === 0);
         }
 
         return $statements;

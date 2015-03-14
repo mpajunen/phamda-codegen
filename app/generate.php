@@ -1,6 +1,7 @@
 <?php
 
 require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/../../phamda/vendor/autoload.php'; //! !!
 
 if (! isset($argv[1])) {
     echo 'Output directory needed as the first parameter!';

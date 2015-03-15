@@ -2,6 +2,7 @@
 
 namespace Phamda\Generator;
 
+use Phamda\Builder\BuilderInterface;
 use Phamda\Builder\PhamdaBuilder;
 use Phamda\Builder\PhamdaFunctionCollection;
 use Phamda\Builder\Tests\BasicTestBuilder;
@@ -17,29 +18,16 @@ class Generator
 {
     public function generate($outDir)
     {
-        $this->writeClass($outDir . '/src/Phamda.php', $this->createPhamda());
-        $this->writeClass($outDir . '/tests/BasicTest.php', $this->createBasicTests());
-        $this->writeClass($outDir . '/tests/CollectionTest.php', $this->createCollectionTests());
+        $functions = $this->getSourceFunctions();
+
+        $this->writeClass($outDir . '/src/Phamda.php', (new PhamdaBuilder($functions)));
+        $this->writeClass($outDir . '/tests/BasicTest.php', (new BasicTestBuilder($functions)));
+        $this->writeClass($outDir . '/tests/CollectionTest.php', (new CollectionTestBuilder($functions)));
     }
 
-    private function writeClass($filename, Node $node)
+    private function writeClass($filename, BuilderInterface $builder)
     {
-        file_put_contents($filename, $this->printFile($node) . "\n");
-    }
-
-    private function createPhamda()
-    {
-        return (new PhamdaBuilder($this->getSourceFunctions()))->build();
-    }
-
-    private function createBasicTests()
-    {
-        return (new BasicTestBuilder($this->getSourceFunctions()))->build();
-    }
-
-    private function createCollectionTests()
-    {
-        return (new CollectionTestBuilder($this->getSourceFunctions()))->build();
+        file_put_contents($filename, $this->printFile($builder->build()) . "\n");
     }
 
     private function getSourceFunctions()

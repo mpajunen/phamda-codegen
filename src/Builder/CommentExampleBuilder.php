@@ -11,6 +11,8 @@ use PhpParser\Node\Expr\Variable;
 
 class CommentExampleBuilder
 {
+    const BASIC_EXAMPLE_COUNT = 3;
+
     private $source;
 
     public function __construct(PhamdaFunction $source)
@@ -48,11 +50,12 @@ class CommentExampleBuilder
             return [];
         }
 
-        $testData = $helper->$method();
+        $examples = [];
+        foreach (array_slice($helper->$method(), 0, self::BASIC_EXAMPLE_COUNT) as $testData) {
+            $examples[] = $this->getTestDataExample(...$testData);
+        }
 
-        return [
-            $this->getTestDataExample(...$testData[0]),
-        ];
+        return Phamda::reject(function ($example) { return strpos($example, '{') !== false; }, $examples);
     }
 
     private function getTestDataExample($expected, ... $parameters)
@@ -75,7 +78,7 @@ class CommentExampleBuilder
             }
         };
 
-        return sprintf('Phamda::%s(%s); // %s',
+        return sprintf('Phamda::%s(%s); // => %s',
             $this->source->getName(),
             implode(', ', array_map($print, $parameters)),
             $print($expected)

@@ -8,6 +8,7 @@ use Phamda\Builder\PhamdaFunctionCollection;
 use Phamda\Builder\Tests\BasicTestBuilder;
 use Phamda\Builder\Tests\CollectionTestBuilder;
 use Phamda\Printer\PhamdaPrinter;
+use Phamda\Tests\FunctionExampleTest;
 use PhpParser\Builder;
 use PhpParser\Lexer;
 use PhpParser\Node;
@@ -32,7 +33,23 @@ class Generator
 
     private function getSourceFunctions()
     {
-        return new PhamdaFunctionCollection($this->getSourceStatements()[3]->expr->items);
+        return new PhamdaFunctionCollection(
+            $this->getSourceStatements()[3]->expr->items,
+            $this->getCustomExampleSource()
+        );
+    }
+
+    private function getCustomExampleSource()
+    {
+        $file = (new \ReflectionClass(FunctionExampleTest::class))->getFileName();
+
+        foreach ($this->createParser()->parse(file_get_contents($file))[0]->stmts as $node) {
+            if ($node instanceof Node\Stmt\Class_) {
+                return $node->stmts;
+            }
+        }
+
+        throw new \LogicException(sprintf('Class statement not found.'));
     }
 
     private function getSourceStatements()

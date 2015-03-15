@@ -2,6 +2,13 @@
 
 namespace Phamda\Builder;
 
+use Phamda\Phamda;
+use Phamda\Printer\PhamdaPrinter;
+use PhpParser\Lexer;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
+
 class CommentExampleBuilder
 {
     private $source;
@@ -13,16 +20,27 @@ class CommentExampleBuilder
 
     public function getRows()
     {
-        try {
-            $examples = $this->getExamples();
-        } catch (\InvalidArgumentException $e) {
-            $examples = [];
-        }
+        $examples = $this->getCustomExamples() ?: $this->getBasicExamples();
 
         return $examples ? array_merge(['```php'], $examples, ['```']) : [];
     }
 
-    private function getExamples()
+    private function getCustomExamples()
+    {
+        $statements = $this->getCustomExampleStatements();
+        if (! $statements) {
+            return [];
+        }
+
+        $printed = (new PhamdaPrinter())->prettyPrint($statements);
+
+        return array_map(
+            function ($row) { return strpos($row, '//') !== false ? substr($row, 0, -1) : $row; },
+            explode("\n", str_replace("\n" . '$placeholder =', ' // =>', $printed))
+        );
+    }
+
+    private function getBasicExamples()
     {
         $helper = new ExampleHelper();
         $method = $this->source->getHelperMethodName('get%sData');
@@ -42,10 +60,8 @@ class CommentExampleBuilder
         $print = function ($variable) use (&$print) {
             if (is_callable($variable)) {
                 return '{function}';
-            } elseif (is_object($variable)) {
-                return '{object}';
             } elseif (is_array($variable)) {
-                return sprintf('[%s]', implode(', ', array_map($print, $variable)));
+                return $this->printArray($variable, $print);
             } elseif (is_string($variable)) {
                 return "'$variable'";
             } elseif (is_numeric($variable)) {
@@ -55,11 +71,7 @@ class CommentExampleBuilder
             } elseif (is_null($variable)) {
                 return 'null';
             } else {
-                throw new \InvalidArgumentException(sprintf(
-                    'Invalid example variable of type "%s" for function "%s".',
-                    gettype($variable),
-                    $this->source->getName()
-                ));
+                return sprintf('{%s}', gettype($variable));
             }
         };
 
@@ -68,5 +80,29 @@ class CommentExampleBuilder
             implode(', ', array_map($print, $parameters)),
             $print($expected)
         );
+    }
+
+    private function printArray(array $values, callable $print)
+    {
+        $mapPrint = array_keys($values) === range(0, count($values) - 1)
+            ? $print
+            : function ($value, $key) use ($print) { return sprintf('%s => %s', $print($key), $print($value)); };
+
+        return sprintf('[%s]', implode(', ', Phamda::map($mapPrint, $values)));
+    }
+
+    private function getCustomExampleStatements()
+    {
+        $statements = [];
+        foreach ($this->source->getExampleStatements() as $statement) {
+            if ($statement instanceof MethodCall && $statement->name === 'assertSame') {
+                $statements[] = $statement->args[1]->value;
+                $statements[] = new Assign(new Variable('placeholder'), $statement->args[0]->value);
+            } else {
+                $statements[] = $statement;
+            }
+        }
+
+        return $statements;
     }
 }

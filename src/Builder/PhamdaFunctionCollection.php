@@ -2,13 +2,16 @@
 
 namespace Phamda\Builder;
 
+use PhpParser\Node\Stmt\ClassMethod;
+
 class PhamdaFunctionCollection
 {
     private $closures;
+    private $exampleStatements;
     private $functions;
     private $types;
 
-    public function __construct(array $closureGroups)
+    public function __construct(array $closureGroups, array $exampleFunctions)
     {
         foreach ($closureGroups as $group) {
             foreach ($group->value->items as $item) {
@@ -21,6 +24,12 @@ class PhamdaFunctionCollection
         }
 
         ksort($this->types, SORT_STRING | SORT_FLAG_CASE);
+
+        foreach ($exampleFunctions as $function) {
+            if ($function instanceof ClassMethod) {
+                $this->exampleStatements[lcfirst(substr($function->name, strlen('test')))] = $function->stmts;
+            }
+        }
     }
 
     public function getFunction($name)
@@ -42,7 +51,13 @@ class PhamdaFunctionCollection
     {
         $getFunction = function ($name) { return $this->getFunction($name); };
 
-        $this->functions[$name] = $function = new PhamdaFunction($name, $this->types[$name], $this->closures[$name], $getFunction);
+        $this->functions[$name] = $function = new PhamdaFunction(
+            $name,
+            $this->types[$name],
+            $this->closures[$name],
+            $getFunction,
+            isset($this->exampleStatements[$name]) ? $this->exampleStatements[$name] : []
+        );
 
         return $function;
     }

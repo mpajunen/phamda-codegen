@@ -21,13 +21,15 @@ class PhamdaFunction
     private $name;
     private $source;
     private $wrapType;
+    private $exampleStatements;
 
-    public function __construct($name, $wrapType, Expr\Closure $source, callable $getFunction)
+    public function __construct($name, $wrapType, Expr\Closure $source, callable $getFunction, array $exampleStatements)
     {
-        $this->name          = $name;
-        $this->wrapType      = $wrapType;
-        $this->source        = $source;
-        $this->innerFunction = $this->createInnerFunction($getFunction);
+        $this->name              = $name;
+        $this->wrapType          = $wrapType;
+        $this->source            = $source;
+        $this->innerFunction     = $this->createInnerFunction($getFunction);
+        $this->exampleStatements = $exampleStatements;
     }
 
     public function getArity()
@@ -42,6 +44,11 @@ class PhamdaFunction
     public function getClosure()
     {
         return $this->source;
+    }
+
+    public function getExampleStatements()
+    {
+        return $this->exampleStatements;
     }
 
     public function getHelperMethodName($format)

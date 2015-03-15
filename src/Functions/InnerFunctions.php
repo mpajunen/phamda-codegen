@@ -11,6 +11,8 @@ $functions = [
 
         'add'           =>
         /**
+         * Adds two numbers.
+         *
          * @param int|float $x
          * @param int|float $y
          *
@@ -22,6 +24,8 @@ $functions = [
 
         'all'           =>
         /**
+         * Returns `true` if all elements of the collection match the predicate, `false` otherwise.
+         *
          * @param callable           $predicate
          * @param array|\Traversable $collection
          *
@@ -39,6 +43,8 @@ $functions = [
 
         'allPass'       =>
         /**
+         * Creates a single predicate from a list of predicates that returns `true` when all the predicates match, `false` otherwise.
+         *
          * @param callable[] $predicates
          *
          * @return callable
@@ -57,6 +63,8 @@ $functions = [
 
         'always'        =>
         /**
+         * Returns a function that always returns the passed value.
+         *
          * @param mixed $value
          *
          * @return callable
@@ -69,6 +77,8 @@ $functions = [
 
         'any'           =>
         /**
+         * Returns `true` if any element of the collection matches the predicate, `false` otherwise.
+         *
          * @param callable           $predicate
          * @param array|\Traversable $collection
          *
@@ -86,6 +96,8 @@ $functions = [
 
         'anyPass'       =>
         /**
+         * Creates a single predicate from a list of predicates that returns `true` when any of the predicates matches, `false` otherwise.
+         *
          * @param callable[] $predicates
          *
          * @return callable
@@ -104,6 +116,8 @@ $functions = [
 
         'assoc'         =>
         /**
+         * Returns a new array or object, setting the given value to the specified property.
+         *
          * @param string       $property
          * @param mixed        $value
          * @param array|object $object
@@ -116,6 +130,8 @@ $functions = [
 
         'assocPath'     =>
         /**
+         * Returns a new array or object, setting the given value to the property specified by the path.
+         *
          * @param array        $path
          * @param mixed        $value
          * @param array|object $object
@@ -128,6 +144,8 @@ $functions = [
 
         'both'          =>
         /**
+         * Returns a function that returns `true` when both of the predicates match, `false` otherwise.
+         *
          * @param callable $a
          * @param callable $b
          *
@@ -141,6 +159,8 @@ $functions = [
 
         'clone_'        =>
         /**
+         * Clones an object.
+         *
          * @param object $object
          *
          * @return mixed
@@ -151,6 +171,8 @@ $functions = [
 
         'comparator'    =>
         /**
+         * Creates a comparator function from a function that returns whether the first argument is less than the second.
+         *
          * @param callable $predicate
          *
          * @return callable
@@ -163,6 +185,8 @@ $functions = [
 
         'construct'     =>
         /**
+         * Wraps the constructor of the given class to a function.
+         *
          * @param string $class
          *
          * @return object
@@ -173,6 +197,8 @@ $functions = [
 
         'constructN'    =>
         /**
+         * Wraps the constructor of the given class to a function of specified arity.
+         *
          * @param int    $arity
          * @param string $class
          *
@@ -186,6 +212,8 @@ $functions = [
 
         'contains'      =>
         /**
+         * Returns `true` if the specified item is found in the collection, `false` otherwise.
+         *
          * @param mixed              $value
          * @param array|\Traversable $collection
          *
@@ -203,6 +231,8 @@ $functions = [
 
         'curry'         =>
         /**
+         * Wraps the given function to a function that returns a new function until all required parameters are given.
+         *
          * @param callable $function
          * @param mixed    ...$initialArguments
          *
@@ -214,6 +244,8 @@ $functions = [
 
         'curryN'        =>
         /**
+         * Wraps the given function to a function of specified arity that returns a new function until all required parameters are given.
+         *
          * @param int      $length
          * @param callable $function
          * @param mixed    ...$initialArguments
@@ -226,6 +258,8 @@ $functions = [
 
         'dec'           =>
         /**
+         * Decrements the given number.
+         *
          * @param int|float $number
          *
          * @return int|float
@@ -236,6 +270,8 @@ $functions = [
 
         'defaultTo'     =>
         /**
+         * Returns the default argument if the value argument is `null`.
+         *
          * @param mixed $default
          * @param mixed $value
          *
@@ -247,6 +283,8 @@ $functions = [
 
         'divide'        =>
         /**
+         * Divides two numbers.
+         *
          * @param int|float $x
          * @param int|float $y
          *
@@ -258,6 +296,8 @@ $functions = [
 
         'either'        =>
         /**
+         * Returns a function that returns `true` when either of the predicates matches, `false` otherwise.
+         *
          * @param callable $a
          * @param callable $b
          *
@@ -271,6 +311,8 @@ $functions = [
 
         'eq'            =>
         /**
+         * Return true when the arguments are strictly equal.
+         *
          * @param mixed $x
          * @param mixed $y
          *
@@ -282,6 +324,8 @@ $functions = [
 
         'filter'        =>
         /**
+         * Returns a new collection containing the items that match the given predicate.
+         *
          * @param callable                      $predicate
          * @param array|\Traversable|Collection $collection
          *
@@ -293,6 +337,8 @@ $functions = [
 
         'find'          =>
         /**
+         * Returns the first item of a collection for which the given predicate matches, or null if no match is found.
+         *
          * @param callable           $predicate
          * @param array|\Traversable $collection
          *
@@ -310,6 +356,8 @@ $functions = [
 
         'findIndex'     =>
         /**
+         * Returns the index of the first item of a collection for which the given predicate matches, or null if no match is found.
+         *
          * @param callable           $predicate
          * @param array|\Traversable $collection
          *
@@ -327,6 +375,8 @@ $functions = [
 
         'findLast'      =>
         /**
+         * Returns the last item of a collection for which the given predicate matches, or null if no match is found.
+         *
          * @param callable           $predicate
          * @param array|\Traversable $collection
          *
@@ -344,6 +394,8 @@ $functions = [
 
         'findLastIndex' =>
         /**
+         * Returns the index of the last item of a collection for which the given predicate matches, or null if no match is found.
+         *
          * @param callable           $predicate
          * @param array|\Traversable $collection
          *
@@ -361,6 +413,8 @@ $functions = [
 
         'first'         =>
         /**
+         * Returns the first item of a collection, or false if the collection is empty.
+         *
          * @param array|\Traversable|Collection $collection
          *
          * @return mixed
@@ -381,6 +435,8 @@ $functions = [
 
         'flip'          =>
         /**
+         * Wraps the given function and returns a new function for which the order of the first two parameters is reversed.
+         *
          * @param callable $function
          *
          * @return callable
@@ -393,6 +449,8 @@ $functions = [
 
         'groupBy'       =>
         /**
+         * Returns an array of sub collections based on a function that returns the group keys for each item.
+         *
          * @param callable                      $function
          * @param array|\Traversable|Collection $collection
          *
@@ -412,6 +470,8 @@ $functions = [
 
         'gt'            =>
         /**
+         * Returns `true` if the first parameter is greater than the second, `false` otherwise.
+         *
          * @param mixed $x
          * @param mixed $y
          *
@@ -423,6 +483,8 @@ $functions = [
 
         'gte'           =>
         /**
+         * Returns `true` if the first parameter is greater than or equal to the second, `false` otherwise.
+         *
          * @param mixed $x
          * @param mixed $y
          *
@@ -434,6 +496,8 @@ $functions = [
 
         'identity'      =>
         /**
+         * Returns the given parameter.
+         *
          * @param mixed $x
          *
          * @return mixed
@@ -444,6 +508,8 @@ $functions = [
 
         'ifElse'        =>
         /**
+         * Returns a function that applies either the `onTrue` or the `onFalse` function, depending on the result of the `condition` predicate.
+         *
          * @param callable $condition
          * @param callable $onTrue
          * @param callable $onFalse
@@ -458,6 +524,8 @@ $functions = [
 
         'inc'           =>
         /**
+         * Increments the given number.
+         *
          * @param int|float $number
          *
          * @return int|float
@@ -468,6 +536,8 @@ $functions = [
 
         'indexOf'       =>
         /**
+         * Returns the index of the given item in a collection, or `false` if the item is not found.
+         *
          * @param mixed              $item
          * @param array|\Traversable $collection
          *
@@ -485,6 +555,8 @@ $functions = [
 
         'isEmpty'       =>
         /**
+         * Returns `true` if a collection has no elements, `false` otherwise.
+         *
          * @param array|\Traversable|Collection $collection
          *
          * @return bool
@@ -505,6 +577,8 @@ $functions = [
 
         'isInstance'    =>
         /**
+         * Return `true` if an object is of the specified class, `false` otherwise.
+         *
          * @param string $class
          * @param object $object
          *
@@ -516,6 +590,8 @@ $functions = [
 
         'last'          =>
         /**
+         * Returns the last item of a collection, or false if the collection is empty.
+         *
          * @param array|\Traversable|Collection $collection
          *
          * @return mixed
@@ -536,6 +612,8 @@ $functions = [
 
         'lt'            =>
         /**
+         * Returns `true` if the first parameter is less than the second, `false` otherwise.
+         *
          * @param mixed $x
          * @param mixed $y
          *
@@ -547,6 +625,8 @@ $functions = [
 
         'lte'           =>
         /**
+         * Returns `true` if the first parameter is less than or equal to the second, `false` otherwise.
+         *
          * @param mixed $x
          * @param mixed $y
          *
@@ -558,6 +638,8 @@ $functions = [
 
         'map'           =>
         /**
+         * Returns a new collection where values are created from the original collection by calling the supplied function.
+         *
          * @param callable                      $function
          * @param array|\Traversable|Collection $collection
          *
@@ -569,6 +651,8 @@ $functions = [
 
         'max'           =>
         /**
+         * Returns the largest value in the collection.
+         *
          * @param array|\Traversable $collection
          *
          * @return mixed
@@ -579,6 +663,8 @@ $functions = [
 
         'maxBy'         =>
         /**
+         * Returns the item from a collection for which the supplied function returns the largest value.
+         *
          * @param callable           $getValue
          * @param array|\Traversable $collection
          *
@@ -590,6 +676,8 @@ $functions = [
 
         'min'           =>
         /**
+         * Returns the smallest value in the collection.
+         *
          * @param array|\Traversable $collection
          *
          * @return mixed
@@ -600,6 +688,8 @@ $functions = [
 
         'minBy'         =>
         /**
+         * Returns the item from a collection for which the supplied function returns the smallest value.
+         *
          * @param callable           $getValue
          * @param array|\Traversable $collection
          *
@@ -611,6 +701,8 @@ $functions = [
 
         'modulo'        =>
         /**
+         * Divides two integers and returns the modulo.
+         *
          * @param int $x
          * @param int $y
          *
@@ -622,6 +714,8 @@ $functions = [
 
         'multiply'      =>
         /**
+         * Multiplies two numbers.
+         *
          * @param int|float $x
          * @param int|float $y
          *
@@ -633,6 +727,8 @@ $functions = [
 
         'negate'        =>
         /**
+         * Returns the negation of a number.
+         *
          * @param int|float $x
          *
          * @return int|float
@@ -643,6 +739,8 @@ $functions = [
 
         'none'          =>
         /**
+         * Returns `true` if no element in the collection matches the predicate, `false` otherwise.
+         *
          * @param callable           $predicate
          * @param array|\Traversable $collection
          *
@@ -654,6 +752,8 @@ $functions = [
 
         'not'           =>
         /**
+         * Wraps a predicate and returns a function that return `true` if the wrapped function returns a falsey value, `false` otherwise.
+         *
          * @param callable $predicate
          *
          * @return callable
@@ -666,6 +766,8 @@ $functions = [
 
         'partition'     =>
         /**
+         * Returns the items of the original collection divided into two collections based on a predicate function.
+         *
          * @param callable                      $predicate
          * @param array|\Traversable|Collection $collection
          *
@@ -685,6 +787,8 @@ $functions = [
 
         'path'          =>
         /**
+         * Returns a value found at the given path.
+         *
          * @param array        $path
          * @param array|object $object
          *
@@ -700,6 +804,8 @@ $functions = [
 
         'pathEq'        =>
         /**
+         * Returns `true` if the given value is found at the specified path, `false` otherwise.
+         *
          * @param array        $path
          * @param mixed        $value
          * @param array|object $object
@@ -712,6 +818,8 @@ $functions = [
 
         'pick'          =>
         /**
+         * Returns a new array, containing only the values that have keys matching the given list.
+         *
          * @param array $names
          * @param array $item
          *
@@ -730,6 +838,8 @@ $functions = [
 
         'pickAll'       =>
         /**
+         * Returns a new array, containing the values that have keys matching the given list, including keys that are not found in the item.
+         *
          * @param array $names
          * @param array $item
          *
@@ -746,6 +856,8 @@ $functions = [
 
         'pluck'         =>
         /**
+         * Returns a new collection, where the items are single properties plucked from the given collection.
+         *
          * @param string                        $name
          * @param array|\Traversable|Collection $collection
          *
@@ -757,6 +869,8 @@ $functions = [
 
         'product'       =>
         /**
+         * Multiplies a list of numbers.
+         *
          * @param int[]|float[] $values
          *
          * @return int|float
@@ -767,6 +881,8 @@ $functions = [
 
         'prop'          =>
         /**
+         * Returns the given element of an array or property of an object.
+         *
          * @param string                    $name
          * @param array|object|\ArrayAccess $object
          *
@@ -778,6 +894,8 @@ $functions = [
 
         'propEq'        =>
         /**
+         * Returns `true` if the specified property has the given value, `false` otherwise.
+         *
          * @param string       $name
          * @param mixed        $value
          * @param array|object $object
@@ -790,6 +908,8 @@ $functions = [
 
         'reduce'        =>
         /**
+         * Returns a value accumulated by calling the given function for each element of the collection.
+         *
          * @param callable           $function
          * @param mixed              $initial
          * @param array|\Traversable $collection
@@ -802,6 +922,8 @@ $functions = [
 
         'reduceRight'   =>
         /**
+         * Returns a value accumulated by calling the given function for each element of the collection in reverse order.
+         *
          * @param callable           $function
          * @param mixed              $initial
          * @param array|\Traversable $collection
@@ -814,6 +936,8 @@ $functions = [
 
         'reject'        =>
         /**
+         * Returns a new collection containing the items that do not match the given predicate.
+         *
          * @param callable                      $predicate
          * @param array|\Traversable|Collection $collection
          *
@@ -825,6 +949,8 @@ $functions = [
 
         'reverse'       =>
         /**
+         * Returns a new collection where the items are in a reverse order.
+         *
          * @param array|\Traversable $collection
          *
          * @return array
@@ -835,6 +961,8 @@ $functions = [
 
         'slice'         =>
         /**
+         * Returns a new collection, containing the items of the original from index `start` (inclusive) to index `end` (exclusive).
+         *
          * @param int                           $start
          * @param int                           $end
          * @param array|\Traversable|Collection $collection
@@ -847,6 +975,8 @@ $functions = [
 
         'sort'          =>
         /**
+         * Returns a new collection sorted by the given comparator function.
+         *
          * @param callable                      $comparator
          * @param array|\Traversable|Collection $collection
          *
@@ -858,6 +988,8 @@ $functions = [
 
         'sortBy'        =>
         /**
+         * Returns a new collection sorted by comparing the values provided by calling the given function for each item.
+         *
          * @param callable                      $function
          * @param array|\Traversable|Collection $collection
          *
@@ -876,6 +1008,8 @@ $functions = [
 
         'subtract'      =>
         /**
+         * Subtracts two numbers.
+         *
          * @param int|float $x
          * @param int|float $y
          *
@@ -887,6 +1021,8 @@ $functions = [
 
         'sum'           =>
         /**
+         * Adds together a list of numbers.
+         *
          * @param int[]|float[] $values
          *
          * @return int|float
@@ -897,6 +1033,8 @@ $functions = [
 
         'tap'           =>
         /**
+         * Calls the provided function with the given value as a parameter and returns the value.
+         *
          * @param callable $function
          * @param object   $object
          *
@@ -910,6 +1048,8 @@ $functions = [
 
         'times'         =>
         /**
+         * Calls the provided function the specified number of times and returns the results in an array.
+         *
          * @param callable $function
          * @param int      $count
          *
@@ -921,6 +1061,8 @@ $functions = [
 
         'zip'           =>
         /**
+         * Returns a new array of value pairs from the values of the given arrays with matching keys.
+         *
          * @param array $a
          * @param array $b
          *
@@ -937,6 +1079,8 @@ $functions = [
 
         'zipWith'       =>
         /**
+         * Returns a new array of values created by calling the given function with the matching values of the given arrays.
+         *
          * @param callable $function
          * @param array    $a
          * @param array    $b
@@ -954,6 +1098,8 @@ $functions = [
 
         'where'         =>
         /**
+         * Returns true if the given object matches the specification.
+         *
          * @param array        $specification
          * @param array|object $object
          *
@@ -973,6 +1119,8 @@ $functions = [
 
         'compose'  =>
         /**
+         * Returns a new function that calls each supplied function in turn in reverse order and passes the result as a parameter to the next function.
+         *
          * @param callable ...$functions
          *
          * @return callable
@@ -983,6 +1131,8 @@ $functions = [
 
         'false'    =>
         /**
+         * Returns a function that always returns `false`.
+         *
          * @return callable
          */
             function () {
@@ -993,6 +1143,8 @@ $functions = [
 
         'invoker'  =>
         /**
+         * Returns a function that calls the specified method of a given object.
+         *
          * @param int    $arity
          * @param string $method
          * @param mixed  ...$initialArguments
@@ -1011,6 +1163,8 @@ $functions = [
 
         'partial'  =>
         /**
+         * Wraps the given function and returns a new function that can be called with the remaining parameters.
+         *
          * @param callable $function
          * @param mixed    ...$initialArguments
          *
@@ -1022,6 +1176,8 @@ $functions = [
 
         'partialN' =>
         /**
+         * Wraps the given function and returns a new function of fixed arity that can be called with the remaining parameters.
+         *
          * @param int      $arity
          * @param callable $function
          * @param mixed    ...$initialArguments
@@ -1039,6 +1195,8 @@ $functions = [
 
         'pipe'     =>
         /**
+         * Returns a new function that calls each supplied function in turn and passes the result as a parameter to the next function.
+         *
          * @param callable ...$functions
          *
          * @return callable
@@ -1062,6 +1220,8 @@ $functions = [
 
         'true'     =>
         /**
+         * Returns a function that always returns `true`.
+         *
          * @return callable
          */
             function () {

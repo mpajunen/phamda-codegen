@@ -951,9 +951,9 @@ $functions = [
         /**
          * Returns a new collection where the items are in a reverse order.
          *
-         * @param array|\Traversable $collection
+         * @param array|\Traversable|Collection $collection
          *
-         * @return array
+         * @return array|Collection
          */
             function ($collection) {
                 return static::_reverse($collection);
@@ -1036,9 +1036,9 @@ $functions = [
          * Calls the provided function with the given value as a parameter and returns the value.
          *
          * @param callable $function
-         * @param object   $object
+         * @param mixed    $object
          *
-         * @return object
+         * @return mixed
          */
             function (callable $function, $object) {
                 $function($object);

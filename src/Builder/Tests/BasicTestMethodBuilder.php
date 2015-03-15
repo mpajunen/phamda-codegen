@@ -2,8 +2,8 @@
 
 namespace Phamda\Builder\Tests;
 
+use Phamda\Builder\AbstractMethodBuilder;
 use Phamda\Builder\PhamdaFunction;
-use Phamda\Builder\SimpleMethodBuilder;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -12,7 +12,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String;
 use PhpParser\Node\Stmt;
 
-class BasicTestMethodBuilder extends SimpleMethodBuilder
+class BasicTestMethodBuilder extends AbstractMethodBuilder
 {
     protected $factory;
 
@@ -24,14 +24,14 @@ class BasicTestMethodBuilder extends SimpleMethodBuilder
 
     protected function getName()
     {
-        return $this->getHelperMethodName('test%s');
+        return $this->source->getHelperMethodName('test%s');
     }
 
     protected function createComment()
     {
         return <<<EOT
 /**
- * @dataProvider {$this->getHelperMethodName('get%sData')}
+ * @dataProvider {$this->source->getHelperMethodName('get%sData')}
  */
 EOT;
     }

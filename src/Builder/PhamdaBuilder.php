@@ -61,6 +61,6 @@ class PhamdaBuilder implements BuilderInterface
                 throw new \LogicException(sprintf('Invalid method type "%s".', $function->getWrapType()));
         }
 
-        return $builder->build()->makeStatic();
+        return $builder->build();
     }
 }

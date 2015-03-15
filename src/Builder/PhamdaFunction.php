@@ -44,6 +44,11 @@ class PhamdaFunction
         return $this->source;
     }
 
+    public function getHelperMethodName($format)
+    {
+        return sprintf($format, ucfirst(trim($this->getName(), '_')));
+    }
+
     public function getInnerFunctionParams()
     {
         if ($this->getReturnExpression() instanceof Expr\Closure) {
@@ -71,7 +76,7 @@ class PhamdaFunction
     public function returnsCallable()
     {
         return $this->getReturnExpression() instanceof Expr\Closure
-               || ($this->innerFunction && $this->innerFunction->returnsCallable());
+            || ($this->innerFunction && $this->innerFunction->returnsCallable());
     }
 
     public function returnsCollection()

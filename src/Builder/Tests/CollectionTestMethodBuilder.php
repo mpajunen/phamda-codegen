@@ -22,7 +22,7 @@ class CollectionTestMethodBuilder extends BasicTestMethodBuilder
 
     protected function getName()
     {
-        return $this->getHelperMethodName('test%s' . ($this->simple ? 'Simple' : ''));
+        return $this->source->getHelperMethodName('test%s' . ($this->simple ? 'Simple' : ''));
     }
 
     protected function createParams()

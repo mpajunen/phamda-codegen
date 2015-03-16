@@ -23,8 +23,11 @@ class ListDocFunctionBuilder
     {
         return implode("\n", [
             '',
+            '',
             sprintf('<a name="%s"></a>', $this->function->getName()),
             '### ' . $this->function->getName(),
+            sprintf('`%s`', ((new MethodSignatureBuilder($this->function))->getSignature())),
+            '',
             $this->getSummary(),
             '##### Examples',
             implode("\n", (new CommentExampleBuilder($this->function))->getRows()),

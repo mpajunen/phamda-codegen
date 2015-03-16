@@ -20,15 +20,18 @@ class Generator
     public function generate($outDir)
     {
         $functions = $this->getSourceFunctions();
+        $write     = function ($fileSubPath, $content) use ($outDir) {
+            file_put_contents($outDir . '/' . $fileSubPath, $content . "\n");
+        };
 
-        $this->writeClass($outDir . '/src/Phamda.php', (new PhamdaBuilder($functions)));
-        $this->writeClass($outDir . '/tests/BasicTest.php', (new BasicTestBuilder($functions)));
-        $this->writeClass($outDir . '/tests/CollectionTest.php', (new CollectionTestBuilder($functions)));
+        $write('src/Phamda.php', $this->printClass(new PhamdaBuilder($functions)));
+        $write('tests/BasicTest.php', $this->printClass(new BasicTestBuilder($functions)));
+        $write('tests/CollectionTest.php', $this->printClass(new CollectionTestBuilder($functions)));
     }
 
-    private function writeClass($filename, BuilderInterface $builder)
+    private function printClass(BuilderInterface $builder)
     {
-        file_put_contents($filename, $this->printFile($builder->build()) . "\n");
+        return $this->getPhpFileComment() . (new PhamdaPrinter())->prettyPrint([$builder->build()]);
     }
 
     private function getSourceFunctions()
@@ -64,12 +67,7 @@ class Generator
         return new Parser(new Lexer\Emulative());
     }
 
-    private function printFile(Node $node)
-    {
-        return $this->getFileComment() . (new PhamdaPrinter())->prettyPrint([$node]);
-    }
-
-    private function getFileComment()
+    private function getPhpFileComment()
     {
         return <<<EOT
 <?php

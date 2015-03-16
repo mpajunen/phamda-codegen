@@ -3,6 +3,7 @@
 namespace Phamda\Generator;
 
 use Phamda\Builder\BuilderInterface;
+use Phamda\Builder\Docs\ListDocBuilder;
 use Phamda\Builder\PhamdaBuilder;
 use Phamda\Builder\PhamdaFunctionCollection;
 use Phamda\Builder\Tests\BasicTestBuilder;
@@ -27,6 +28,7 @@ class Generator
         $write('src/Phamda.php', $this->printClass(new PhamdaBuilder($functions)));
         $write('tests/BasicTest.php', $this->printClass(new BasicTestBuilder($functions)));
         $write('tests/CollectionTest.php', $this->printClass(new CollectionTestBuilder($functions)));
+        $write('docs/Functions.md', (new ListDocBuilder($functions))->build());
     }
 
     private function printClass(BuilderInterface $builder)

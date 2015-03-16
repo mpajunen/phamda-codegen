@@ -4,7 +4,7 @@ namespace Phamda\Builder;
 
 use PhpParser\Node\Stmt\ClassMethod;
 
-class PhamdaFunctionCollection
+class PhamdaFunctionCollection implements \Countable
 {
     private $closures;
     private $exampleStatements;
@@ -45,6 +45,11 @@ class PhamdaFunctionCollection
         foreach (array_keys($this->types) as $name) {
             yield $name => $this->getFunction($name);
         }
+    }
+
+    public function count()
+    {
+        return count($this->types);
     }
 
     private function createFunction($name)

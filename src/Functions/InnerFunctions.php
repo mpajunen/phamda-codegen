@@ -188,11 +188,12 @@ $functions = [
          * Wraps the constructor of the given class to a function.
          *
          * @param string $class
+         * @param mixed  ...$initialArguments
          *
          * @return object
          */
-            function ($class) {
-                return Phamda::constructN(static::getConstructorArity($class), $class);
+            function ($class, ... $initialArguments) {
+                return Phamda::constructN(static::getConstructorArity($class), $class, ...$initialArguments);
             },
 
         'constructN'    =>
@@ -201,13 +202,14 @@ $functions = [
          *
          * @param int    $arity
          * @param string $class
+         * @param mixed  ...$initialArguments
          *
          * @return object
          */
-            function ($arity, $class) {
+            function ($arity, $class, ... $initialArguments) {
                 return static::_curryN($arity, function (...$arguments) use ($class) {
-                    return new $class(...$arguments);
-                });
+                    return new $class(...array_merge($arguments));
+                }, ...$initialArguments);
             },
 
         'contains'      =>

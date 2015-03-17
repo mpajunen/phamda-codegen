@@ -727,6 +727,21 @@ $functions = [
                 return $x * $y;
             },
 
+        'nAry'          =>
+        /**
+         * Wraps the given function in a function that accepts exactly the given amount of parameters.
+         *
+         * @param int      $arity
+         * @param callable $function
+         *
+         * @return callable
+         */
+            function ($arity, callable $function) {
+                return function (...$arguments) use ($arity, $function) {
+                    return $function(...array_slice($arguments, 0, $arity));
+                };
+            },
+
         'negate'        =>
         /**
          * Returns the negation of a number.

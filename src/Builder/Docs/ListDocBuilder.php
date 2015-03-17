@@ -19,9 +19,9 @@ class ListDocBuilder
         $builders = Phamda::map(Phamda::construct(ListDocFunctionBuilder::class), $this->functions->getFunctions());
 
         return $this->getHeader(count($this->functions))
-            . implode("\n", Phamda::map(function (ListDocFunctionBuilder $builder) { return $builder->getLink(); }, $builders))
+            . implode("\n", Phamda::map(Phamda::unary(Phamda::invoker(0, 'getLink')), $builders))
             . "\n"
-            . implode("\n", Phamda::map(function (ListDocFunctionBuilder $builder) { return $builder->getSection(); }, $builders))
+            . implode("\n", Phamda::map(Phamda::unary(Phamda::invoker(0, 'getSection')), $builders))
         ;
     }
 

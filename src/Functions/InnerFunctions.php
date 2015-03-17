@@ -142,6 +142,20 @@ $functions = [
                 return static::_assocPath($path, $value, $object);
             },
 
+        'binary'        =>
+        /**
+         * Wraps the given function in a function that accepts exactly two parameters.
+         *
+         * @param callable $function
+         *
+         * @return callable
+         */
+            function (callable $function) {
+                return function ($a, $b) use ($function) {
+                    return $function($a, $b);
+                };
+            },
+
         'both'          =>
         /**
          * Returns a function that returns `true` when both of the predicates match, `false` otherwise.
@@ -1074,6 +1088,20 @@ $functions = [
          */
             function (callable $function, $count) {
                 return static::_map($function, range(0, $count - 1));
+            },
+
+        'unary'         =>
+        /**
+         * Wraps the given function in a function that accepts exactly one parameter.
+         *
+         * @param callable $function
+         *
+         * @return callable
+         */
+            function (callable $function) {
+                return function ($a) use ($function) {
+                    return $function($a);
+                };
             },
 
         'zip'           =>

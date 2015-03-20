@@ -36,10 +36,16 @@ class CommentExampleBuilder
 
         $printed = (new PhamdaPrinter())->prettyPrint($statements);
 
-        return array_map(
-            function ($row) { return strpos($row, '//') !== false ? substr($row, 0, -1) : $row; },
-            explode("\n", str_replace("\n" . '$placeholder =', ' // =>', $printed))
+        $process = Phamda::pipe(
+            Phamda::curry(
+                'str_replace',
+                ["\n\$placeholder =", "\n    ", "\n}"],
+                [' // =>', ' ', ' }']),
+            Phamda::curry('explode', "\n"),
+            Phamda::map(function ($row) { return strpos($row, '//') !== false ? substr($row, 0, -1) : $row; })
         );
+
+        return $process($printed);
     }
 
     private function getBasicExamples()

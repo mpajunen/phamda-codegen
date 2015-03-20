@@ -9,7 +9,7 @@ use Phamda\Exception\InvalidFunctionCompositionException;
 $functions = [
     'curried' => [
 
-        'add'           =>
+        'add'               =>
         /**
          * Adds two numbers.
          *
@@ -22,7 +22,7 @@ $functions = [
                 return $x + $y;
             },
 
-        'all'           =>
+        'all'               =>
         /**
          * Returns `true` if all elements of the collection match the predicate, `false` otherwise.
          *
@@ -41,7 +41,7 @@ $functions = [
                 return true;
             },
 
-        'allPass'       =>
+        'allPass'           =>
         /**
          * Creates a single predicate from a list of predicates that returns `true` when all the predicates match, `false` otherwise.
          *
@@ -61,7 +61,7 @@ $functions = [
                 };
             },
 
-        'always'        =>
+        'always'            =>
         /**
          * Returns a function that always returns the passed value.
          *
@@ -75,7 +75,7 @@ $functions = [
                 };
             },
 
-        'any'           =>
+        'any'               =>
         /**
          * Returns `true` if any element of the collection matches the predicate, `false` otherwise.
          *
@@ -94,7 +94,7 @@ $functions = [
                 return false;
             },
 
-        'anyPass'       =>
+        'anyPass'           =>
         /**
          * Creates a single predicate from a list of predicates that returns `true` when any of the predicates matches, `false` otherwise.
          *
@@ -114,7 +114,7 @@ $functions = [
                 };
             },
 
-        'assoc'         =>
+        'assoc'             =>
         /**
          * Returns a new array or object, setting the given value to the specified property.
          *
@@ -128,7 +128,7 @@ $functions = [
                 return static::_assoc($property, $value, $object);
             },
 
-        'assocPath'     =>
+        'assocPath'         =>
         /**
          * Returns a new array or object, setting the given value to the property specified by the path.
          *
@@ -142,7 +142,7 @@ $functions = [
                 return static::_assocPath($path, $value, $object);
             },
 
-        'binary'        =>
+        'binary'            =>
         /**
          * Wraps the given function in a function that accepts exactly two parameters.
          *
@@ -156,7 +156,7 @@ $functions = [
                 };
             },
 
-        'both'          =>
+        'both'              =>
         /**
          * Returns a function that returns `true` when both of the predicates match, `false` otherwise.
          *
@@ -171,7 +171,7 @@ $functions = [
                 };
             },
 
-        'clone_'        =>
+        'clone_'            =>
         /**
          * Clones an object.
          *
@@ -183,7 +183,7 @@ $functions = [
                 return clone $object;
             },
 
-        'comparator'    =>
+        'comparator'        =>
         /**
          * Creates a comparator function from a function that returns whether the first argument is less than the second.
          *
@@ -197,7 +197,7 @@ $functions = [
                 };
             },
 
-        'construct'     =>
+        'construct'         =>
         /**
          * Wraps the constructor of the given class to a function.
          *
@@ -210,7 +210,7 @@ $functions = [
                 return Phamda::constructN(static::getConstructorArity($class), $class, ...$initialArguments);
             },
 
-        'constructN'    =>
+        'constructN'        =>
         /**
          * Wraps the constructor of the given class to a function of specified arity.
          *
@@ -226,7 +226,7 @@ $functions = [
                 }, ...$initialArguments);
             },
 
-        'contains'      =>
+        'contains'          =>
         /**
          * Returns `true` if the specified item is found in the collection, `false` otherwise.
          *
@@ -245,7 +245,7 @@ $functions = [
                 return false;
             },
 
-        'curry'         =>
+        'curry'             =>
         /**
          * Wraps the given function to a function that returns a new function until all required parameters are given.
          *
@@ -258,7 +258,7 @@ $functions = [
                 return static::_curryN(static::getArity($function), $function, ...$initialArguments);
             },
 
-        'curryN'        =>
+        'curryN'            =>
         /**
          * Wraps the given function to a function of specified arity that returns a new function until all required parameters are given.
          *
@@ -272,7 +272,7 @@ $functions = [
                 return static::_curryN($length, $function, ...$initialArguments);
             },
 
-        'dec'           =>
+        'dec'               =>
         /**
          * Decrements the given number.
          *
@@ -284,7 +284,7 @@ $functions = [
                 return Phamda::add(-1, $number);
             },
 
-        'defaultTo'     =>
+        'defaultTo'         =>
         /**
          * Returns the default argument if the value argument is `null`.
          *
@@ -297,7 +297,7 @@ $functions = [
                 return $value !== null ? $value : $default;
             },
 
-        'divide'        =>
+        'divide'            =>
         /**
          * Divides two numbers.
          *
@@ -310,7 +310,7 @@ $functions = [
                 return $x / $y;
             },
 
-        'either'        =>
+        'either'            =>
         /**
          * Returns a function that returns `true` when either of the predicates matches, `false` otherwise.
          *
@@ -325,7 +325,7 @@ $functions = [
                 };
             },
 
-        'eq'            =>
+        'eq'                =>
         /**
          * Return true when the arguments are strictly equal.
          *
@@ -338,7 +338,7 @@ $functions = [
                 return $x === $y;
             },
 
-        'filter'        =>
+        'filter'            =>
         /**
          * Returns a new collection containing the items that match the given predicate.
          *
@@ -351,7 +351,7 @@ $functions = [
                 return static::_filter($predicate, $collection);
             },
 
-        'find'          =>
+        'find'              =>
         /**
          * Returns the first item of a collection for which the given predicate matches, or null if no match is found.
          *
@@ -370,7 +370,7 @@ $functions = [
                 return null;
             },
 
-        'findIndex'     =>
+        'findIndex'         =>
         /**
          * Returns the index of the first item of a collection for which the given predicate matches, or null if no match is found.
          *
@@ -389,7 +389,7 @@ $functions = [
                 return null;
             },
 
-        'findLast'      =>
+        'findLast'          =>
         /**
          * Returns the last item of a collection for which the given predicate matches, or null if no match is found.
          *
@@ -408,7 +408,7 @@ $functions = [
                 return null;
             },
 
-        'findLastIndex' =>
+        'findLastIndex'     =>
         /**
          * Returns the index of the last item of a collection for which the given predicate matches, or null if no match is found.
          *
@@ -427,7 +427,7 @@ $functions = [
                 return null;
             },
 
-        'first'         =>
+        'first'             =>
         /**
          * Returns the first item of a collection, or false if the collection is empty.
          *
@@ -449,7 +449,7 @@ $functions = [
                 }
             },
 
-        'flip'          =>
+        'flip'              =>
         /**
          * Wraps the given function and returns a new function for which the order of the first two parameters is reversed.
          *
@@ -463,7 +463,7 @@ $functions = [
                 };
             },
 
-        'groupBy'       =>
+        'groupBy'           =>
         /**
          * Returns an array of sub collections based on a function that returns the group keys for each item.
          *
@@ -484,7 +484,7 @@ $functions = [
                 }, [], $collection);
             },
 
-        'gt'            =>
+        'gt'                =>
         /**
          * Returns `true` if the first parameter is greater than the second, `false` otherwise.
          *
@@ -497,7 +497,7 @@ $functions = [
                 return $x > $y;
             },
 
-        'gte'           =>
+        'gte'               =>
         /**
          * Returns `true` if the first parameter is greater than or equal to the second, `false` otherwise.
          *
@@ -510,7 +510,7 @@ $functions = [
                 return $x >= $y;
             },
 
-        'identity'      =>
+        'identity'          =>
         /**
          * Returns the given parameter.
          *
@@ -522,7 +522,7 @@ $functions = [
                 return $x;
             },
 
-        'ifElse'        =>
+        'ifElse'            =>
         /**
          * Returns a function that applies either the `onTrue` or the `onFalse` function, depending on the result of the `condition` predicate.
          *
@@ -538,7 +538,7 @@ $functions = [
                 };
             },
 
-        'inc'           =>
+        'inc'               =>
         /**
          * Increments the given number.
          *
@@ -550,7 +550,7 @@ $functions = [
                 return Phamda::add(1, $number);
             },
 
-        'indexOf'       =>
+        'indexOf'           =>
         /**
          * Returns the index of the given item in a collection, or `false` if the item is not found.
          *
@@ -569,7 +569,7 @@ $functions = [
                 return false;
             },
 
-        'isEmpty'       =>
+        'isEmpty'           =>
         /**
          * Returns `true` if a collection has no elements, `false` otherwise.
          *
@@ -591,7 +591,7 @@ $functions = [
                 }
             },
 
-        'isInstance'    =>
+        'isInstance'        =>
         /**
          * Return `true` if an object is of the specified class, `false` otherwise.
          *
@@ -604,7 +604,7 @@ $functions = [
                 return $object instanceof $class;
             },
 
-        'last'          =>
+        'last'              =>
         /**
          * Returns the last item of a collection, or false if the collection is empty.
          *
@@ -626,7 +626,7 @@ $functions = [
                 }
             },
 
-        'lt'            =>
+        'lt'                =>
         /**
          * Returns `true` if the first parameter is less than the second, `false` otherwise.
          *
@@ -639,7 +639,7 @@ $functions = [
                 return $x < $y;
             },
 
-        'lte'           =>
+        'lte'               =>
         /**
          * Returns `true` if the first parameter is less than or equal to the second, `false` otherwise.
          *
@@ -652,7 +652,7 @@ $functions = [
                 return $x <= $y;
             },
 
-        'map'           =>
+        'map'               =>
         /**
          * Returns a new collection where values are created from the original collection by calling the supplied function.
          *
@@ -665,7 +665,7 @@ $functions = [
                 return static::_map($function, $collection);
             },
 
-        'max'           =>
+        'max'               =>
         /**
          * Returns the largest value in the collection.
          *
@@ -677,7 +677,7 @@ $functions = [
                 return static::getCompareResult(Phamda::gt(), $collection);
             },
 
-        'maxBy'         =>
+        'maxBy'             =>
         /**
          * Returns the item from a collection for which the supplied function returns the largest value.
          *
@@ -690,7 +690,7 @@ $functions = [
                 return static::getCompareByResult(Phamda::gt(), $getValue, $collection);
             },
 
-        'min'           =>
+        'min'               =>
         /**
          * Returns the smallest value in the collection.
          *
@@ -702,7 +702,7 @@ $functions = [
                 return static::getCompareResult(Phamda::lt(), $collection);
             },
 
-        'minBy'         =>
+        'minBy'             =>
         /**
          * Returns the item from a collection for which the supplied function returns the smallest value.
          *
@@ -715,7 +715,7 @@ $functions = [
                 return static::getCompareByResult(Phamda::lt(), $getValue, $collection);
             },
 
-        'modulo'        =>
+        'modulo'            =>
         /**
          * Divides two integers and returns the modulo.
          *
@@ -728,7 +728,7 @@ $functions = [
                 return $x % $y;
             },
 
-        'multiply'      =>
+        'multiply'          =>
         /**
          * Multiplies two numbers.
          *
@@ -741,7 +741,7 @@ $functions = [
                 return $x * $y;
             },
 
-        'nAry'          =>
+        'nAry'              =>
         /**
          * Wraps the given function in a function that accepts exactly the given amount of parameters.
          *
@@ -756,7 +756,7 @@ $functions = [
                 };
             },
 
-        'negate'        =>
+        'negate'            =>
         /**
          * Returns the negation of a number.
          *
@@ -768,7 +768,7 @@ $functions = [
                 return Phamda::multiply($x, -1);
             },
 
-        'none'          =>
+        'none'              =>
         /**
          * Returns `true` if no element in the collection matches the predicate, `false` otherwise.
          *
@@ -781,7 +781,7 @@ $functions = [
                 return ! Phamda::any($predicate, $collection);
             },
 
-        'not'           =>
+        'not'               =>
         /**
          * Wraps a predicate and returns a function that return `true` if the wrapped function returns a falsey value, `false` otherwise.
          *
@@ -795,7 +795,7 @@ $functions = [
                 };
             },
 
-        'partition'     =>
+        'partition'         =>
         /**
          * Returns the items of the original collection divided into two collections based on a predicate function.
          *
@@ -816,7 +816,7 @@ $functions = [
                 }, [[], []], $collection);
             },
 
-        'path'          =>
+        'path'              =>
         /**
          * Returns a value found at the given path.
          *
@@ -833,7 +833,7 @@ $functions = [
                 return $object;
             },
 
-        'pathEq'        =>
+        'pathEq'            =>
         /**
          * Returns `true` if the given value is found at the specified path, `false` otherwise.
          *
@@ -847,7 +847,7 @@ $functions = [
                 return Phamda::path($path, $object) === $value;
             },
 
-        'pick'          =>
+        'pick'              =>
         /**
          * Returns a new array, containing only the values that have keys matching the given list.
          *
@@ -867,7 +867,7 @@ $functions = [
                 return $new;
             },
 
-        'pickAll'       =>
+        'pickAll'           =>
         /**
          * Returns a new array, containing the values that have keys matching the given list, including keys that are not found in the item.
          *
@@ -885,7 +885,7 @@ $functions = [
                 return $new;
             },
 
-        'pluck'         =>
+        'pluck'             =>
         /**
          * Returns a new collection, where the items are single properties plucked from the given collection.
          *
@@ -898,7 +898,7 @@ $functions = [
                 return static::_map(Phamda::prop($name), $collection);
             },
 
-        'product'       =>
+        'product'           =>
         /**
          * Multiplies a list of numbers.
          *
@@ -910,7 +910,7 @@ $functions = [
                 return static::_reduce(Phamda::multiply(), 1, $values);
             },
 
-        'prop'          =>
+        'prop'              =>
         /**
          * Returns the given element of an array or property of an object.
          *
@@ -923,7 +923,7 @@ $functions = [
                 return static::_prop($name, $object);
             },
 
-        'propEq'        =>
+        'propEq'            =>
         /**
          * Returns `true` if the specified property has the given value, `false` otherwise.
          *
@@ -937,7 +937,7 @@ $functions = [
                 return static::_prop($name, $object) === $value;
             },
 
-        'reduce'        =>
+        'reduce'            =>
         /**
          * Returns a value accumulated by calling the given function for each element of the collection.
          *
@@ -951,7 +951,7 @@ $functions = [
                 return static::_reduce($function, $initial, $collection);
             },
 
-        'reduceRight'   =>
+        'reduceRight'       =>
         /**
          * Returns a value accumulated by calling the given function for each element of the collection in reverse order.
          *
@@ -965,7 +965,7 @@ $functions = [
                 return static::_reduce($function, $initial, static::_reverse($collection));
             },
 
-        'reject'        =>
+        'reject'            =>
         /**
          * Returns a new collection containing the items that do not match the given predicate.
          *
@@ -978,7 +978,7 @@ $functions = [
                 return static::_filter(Phamda::not($predicate), $collection);
             },
 
-        'reverse'       =>
+        'reverse'           =>
         /**
          * Returns a new collection where the items are in a reverse order.
          *
@@ -990,7 +990,7 @@ $functions = [
                 return static::_reverse($collection);
             },
 
-        'slice'         =>
+        'slice'             =>
         /**
          * Returns a new collection, containing the items of the original from index `start` (inclusive) to index `end` (exclusive).
          *
@@ -1004,7 +1004,7 @@ $functions = [
                 return static::_slice($start, $end, $collection);
             },
 
-        'sort'          =>
+        'sort'              =>
         /**
          * Returns a new collection sorted by the given comparator function.
          *
@@ -1017,7 +1017,7 @@ $functions = [
                 return static::_sort($comparator, $collection);
             },
 
-        'sortBy'        =>
+        'sortBy'            =>
         /**
          * Returns a new collection sorted by comparing the values provided by calling the given function for each item.
          *
@@ -1037,7 +1037,33 @@ $functions = [
                 return static::_sort($comparator, $collection);
             },
 
-        'subtract'      =>
+        'stringIndexOf'     =>
+        /**
+         * Returns the first index of a substring in a string, or `false` if the substring is not found.
+         *
+         * @param string $substring
+         * @param string $string
+         *
+         * @return int|false
+         */
+            function ($substring, $string) {
+                return strpos($string, $substring);
+            },
+
+        'stringLastIndexOf' =>
+        /**
+         * Returns the last index of a substring in a string, or `false` if the substring is not found.
+         *
+         * @param string $substring
+         * @param string $string
+         *
+         * @return int|false
+         */
+            function ($substring, $string) {
+                return strrpos($string, $substring);
+            },
+
+        'subtract'          =>
         /**
          * Subtracts two numbers.
          *
@@ -1050,7 +1076,7 @@ $functions = [
                 return $x - $y;
             },
 
-        'sum'           =>
+        'sum'               =>
         /**
          * Adds together a list of numbers.
          *
@@ -1062,7 +1088,7 @@ $functions = [
                 return static::_reduce(Phamda::add(), 0, $values);
             },
 
-        'tap'           =>
+        'tap'               =>
         /**
          * Calls the provided function with the given value as a parameter and returns the value.
          *
@@ -1077,7 +1103,7 @@ $functions = [
                 return $object;
             },
 
-        'times'         =>
+        'times'             =>
         /**
          * Calls the provided function the specified number of times and returns the results in an array.
          *
@@ -1090,7 +1116,7 @@ $functions = [
                 return static::_map($function, range(0, $count - 1));
             },
 
-        'unary'         =>
+        'unary'             =>
         /**
          * Wraps the given function in a function that accepts exactly one parameter.
          *
@@ -1104,7 +1130,7 @@ $functions = [
                 };
             },
 
-        'zip'           =>
+        'zip'               =>
         /**
          * Returns a new array of value pairs from the values of the given arrays with matching keys.
          *
@@ -1122,7 +1148,7 @@ $functions = [
                 return $zipped;
             },
 
-        'zipWith'       =>
+        'zipWith'           =>
         /**
          * Returns a new array of values created by calling the given function with the matching values of the given arrays.
          *
@@ -1141,7 +1167,7 @@ $functions = [
                 return $zipped;
             },
 
-        'where'         =>
+        'where'             =>
         /**
          * Returns true if the given object matches the specification.
          *

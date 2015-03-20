@@ -338,6 +338,19 @@ $functions = [
                 return $x === $y;
             },
 
+        'explode'           =>
+        /**
+         * Returns an array containing the parts of a string split by the given delimiter.
+         *
+         * @param string $delimiter
+         * @param string $string
+         *
+         * @return string[]
+         */
+            function ($delimiter, $string) {
+                return explode($delimiter, $string);
+            },
+
         'filter'            =>
         /**
          * Returns a new collection containing the items that match the given predicate.
@@ -536,6 +549,19 @@ $functions = [
                 return function (...$arguments) use ($condition, $onTrue, $onFalse) {
                     return $condition(...$arguments) ? $onTrue(...$arguments) : $onFalse(...$arguments);
                 };
+            },
+
+        'implode'           =>
+        /**
+         * Returns a string formed by combining a list of strings using the given glue string.
+         *
+         * @param string   $glue
+         * @param string[] $strings
+         *
+         * @return string
+         */
+            function ($glue, $strings) {
+                return implode($glue, $strings);
             },
 
         'inc'               =>

@@ -1063,6 +1063,46 @@ $functions = [
                 return strrpos($string, $substring);
             },
 
+        'substring'         =>
+        /**
+         * Returns a substring of the original string between given indexes.
+         *
+         * @param int    $start
+         * @param int    $end
+         * @param string $string
+         *
+         * @return string
+         */
+            function ($start, $end, $string) {
+                return substr($string, $start, $end - $start);
+            },
+
+        'substringFrom'     =>
+        /**
+         * Returns a substring of the original string starting from the given index.
+         *
+         * @param int    $start
+         * @param string $string
+         *
+         * @return string
+         */
+            function ($start, $string) {
+                return substr($string, $start);
+            },
+
+        'substringTo'       =>
+        /**
+         * Returns a substring of the original string ending before the given index.
+         *
+         * @param int    $end
+         * @param string $string
+         *
+         * @return string
+         */
+            function ($end, $string) {
+                return substr($string, 0, $end);
+            },
+
         'subtract'          =>
         /**
          * Subtracts two numbers.

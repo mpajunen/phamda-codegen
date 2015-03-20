@@ -14,7 +14,7 @@ class MethodSignatureBuilder extends AbstractMethodBuilder
         $method = (new PhamdaPrinter())->prettyPrint([$this->build()->getNode()]);
 
         $process = Phamda::pipe(
-            Phamda::curry('explode', "\n"),
+            Phamda::explode("\n"),
             Phamda::first(),
             Phamda::curry('trim'),
             Phamda::curry('str_replace', 'public function ', 'Phamda::')
@@ -63,14 +63,14 @@ class MethodSignatureBuilder extends AbstractMethodBuilder
     private function getTagPicker($tag)
     {
         return Phamda::pipe(
-            Phamda::curry(Phamda::binary('explode'), "\n"),
-            Phamda::filter(function($row) use ($tag) { return strpos($row, $tag) !== false; }),
+            Phamda::explode("\n"),
+            Phamda::filter(Phamda::stringIndexOf($tag)),
             Phamda::map(
                 Phamda::pipe(
-                    Phamda::curry(Phamda::binary('explode'), $tag),
+                    Phamda::explode($tag),
                     Phamda::last(),
                     Phamda::curry('trim'),
-                    Phamda::curry('explode', ' ')
+                    Phamda::explode(' ')
                 )
             )
         );

@@ -114,6 +114,32 @@ $functions = [
                 };
             },
 
+        'append'            =>
+        /**
+         * Return a new collection that contains all the items in the given collection and the given item last.
+         *
+         * @param mixed            $item
+         * @param array|Collection $collection
+         *
+         * @return array|Collection
+         */
+            function ($item, $collection) {
+                if (is_array($collection)) {
+                    $collection[] = $item;
+
+                    return $collection;
+                } elseif (method_exists($collection, 'append')) {
+                    return $collection->append($item);
+                } else {
+                    foreach ($collection as $collectionItem) {
+                        $items[] = $collectionItem;
+                    }
+                    $items[] = $item;
+
+                    return $items;
+                }
+            },
+
         'assoc'             =>
         /**
          * Returns a new array or object, setting the given value to the specified property.
@@ -922,6 +948,32 @@ $functions = [
          */
             function ($name, $collection) {
                 return static::_map(Phamda::prop($name), $collection);
+            },
+
+        'prepend'           =>
+        /**
+         * Return a new collection that contains the given item first and all the items in the given collection.
+         *
+         * @param mixed            $item
+         * @param array|Collection $collection
+         *
+         * @return array|Collection
+         */
+            function ($item, $collection) {
+                if (is_array($collection)) {
+                    array_unshift($collection, $item);
+
+                    return $collection;
+                } elseif (method_exists($collection, 'prepend')) {
+                    return $collection->prepend($item);
+                } else {
+                    $items[] = $item;
+                    foreach ($collection as $collectionItem) {
+                        $items[] = $collectionItem;
+                    }
+
+                    return $items;
+                }
             },
 
         'product'           =>

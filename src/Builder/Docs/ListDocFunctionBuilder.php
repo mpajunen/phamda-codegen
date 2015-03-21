@@ -29,9 +29,15 @@ class ListDocFunctionBuilder
             sprintf('`%s`', ((new MethodSignatureBuilder($this->function))->getSignature())),
             '',
             $this->getSummary(),
-            '##### Examples',
-            implode("\n", (new CommentExampleBuilder($this->function))->getRows()),
+            $this->getExamples(),
         ]);
+    }
+
+    private function getExamples()
+    {
+        $rows = (new CommentExampleBuilder($this->function))->getRows();
+
+        return $rows ? implode("\n", array_merge(['##### Examples'], $rows)) : '';
     }
 
     private function getSummary()

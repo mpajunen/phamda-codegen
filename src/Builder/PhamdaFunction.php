@@ -53,7 +53,7 @@ class PhamdaFunction
 
     public function getHelperMethodName($format)
     {
-        return sprintf($format, ucfirst(trim($this->getName(), '_')));
+        return sprintf($format, $this->getName() !== '_' ? ucfirst(trim($this->getName(), '_')) : '_');
     }
 
     public function getInnerFunctionParams()

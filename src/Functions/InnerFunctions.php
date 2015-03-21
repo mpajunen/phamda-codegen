@@ -5,6 +5,7 @@ namespace Phamda\Functions;
 use Phamda\Phamda;
 use Phamda\Collection\Collection;
 use Phamda\Exception\InvalidFunctionCompositionException;
+use Phamda\Placeholder;
 
 $functions = [
     'curried' => [
@@ -1305,6 +1306,15 @@ $functions = [
             },
     ],
     'simple'  => [
+        '_'        =>
+        /**
+         * Returns a placeholder to be used with curried functions.
+         *
+         * @return Placeholder
+         */
+            function () {
+                return self::$placeholder ?: self::$placeholder = new Placeholder();
+            },
 
         'compose'  =>
         /**

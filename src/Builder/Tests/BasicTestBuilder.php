@@ -57,6 +57,7 @@ class BasicTestBuilder implements BuilderInterface
     private function getSkipped()
     {
         return [
+            '_',
             'clone_',
             'construct',
             'constructN',

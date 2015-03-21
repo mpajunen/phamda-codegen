@@ -39,7 +39,7 @@ class Generator
     private function getSourceFunctions()
     {
         return new PhamdaFunctionCollection(
-            $this->getSourceStatements()[3]->expr->items,
+            $this->getSourceStatements()[4]->expr->items,
             $this->getCustomExampleSource()
         );
     }

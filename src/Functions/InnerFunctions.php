@@ -458,7 +458,7 @@ $functions = [
          * @return int|string|null
          */
             function (callable $predicate, $collection) {
-                foreach (static::_reverse($collection, true) as $index => $item) {
+                foreach (static::_reverse($collection) as $index => $item) {
                     if ($predicate($item)) {
                         return $index;
                     }
@@ -517,8 +517,8 @@ $functions = [
                     return $collection->groupBy($function);
                 }
 
-                return static::_reduce(function (array $collections, $item) use ($function) {
-                    $collections[$function($item)][] = $item;
+                return static::_reduce(function (array $collections, $item, $key) use ($function) {
+                    $collections[$function($item)][$key] = $item;
 
                     return $collections;
                 }, [], $collection);
@@ -862,8 +862,8 @@ $functions = [
                     return $collection->partition($predicate);
                 }
 
-                return static::_reduce(function (array $collections, $item) use ($predicate) {
-                    $collections[$predicate($item) ? 0 : 1][] = $item;
+                return static::_reduce(function (array $collections, $item, $key) use ($predicate) {
+                    $collections[$predicate($item) ? 0 : 1][$key] = $item;
 
                     return $collections;
                 }, [[], []], $collection);

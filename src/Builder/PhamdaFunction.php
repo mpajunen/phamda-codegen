@@ -2,6 +2,7 @@
 
 namespace Phamda\Builder;
 
+use Phamda\Phamda;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt;
@@ -88,12 +89,17 @@ class PhamdaFunction
 
     public function returnsCollection()
     {
-        return strpos($this->getDocComment(), '@return array|Collection') !== false;
+        return in_array('Collection', $this->getReturnTypes());
     }
 
     public function returnsCollections()
     {
-        return strpos($this->getDocComment(), '@return array[]|Collection[]') !== false;
+        return in_array('Collection[]', $this->getReturnTypes());
+    }
+
+    public function returnsTraversable()
+    {
+        return in_array('\Traversable', $this->getReturnTypes());
     }
 
     public function isCollectionFunction()
@@ -111,6 +117,21 @@ class PhamdaFunction
     public function __get($name)
     {
         return $this->source->$name;
+    }
+
+    private function getReturnTypes()
+    {
+        $process = Phamda::pipe(
+            Phamda::explode("\n"),
+            Phamda::filter(Phamda::stringIndexOf('@return')),
+            Phamda::first(),
+            Phamda::explode('@return'),
+            Phamda::last(),
+            Phamda::curry('trim'),
+            Phamda::explode('|')
+        );
+
+        return $process($this->getDocComment());
     }
 
     /**

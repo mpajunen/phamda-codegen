@@ -20,7 +20,8 @@ class CurriedMethodBuilder extends SimpleMethodBuilder
     {
         $params = [];
         foreach ($this->source->params as $index => $param) {
-            $newParam          = clone $param;
+            $newParam       = clone $param;
+            $newParam->type = null;
             if (! $newParam->variadic) {
                 $newParam->default = new Expr\ConstFetch(new Name('null'));
             }

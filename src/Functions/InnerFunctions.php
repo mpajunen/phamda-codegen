@@ -337,6 +337,23 @@ $functions = [
                 return $x / $y;
             },
 
+        'each'              =>
+        /**
+         * Calls the given function for each element in the collection and returns the original collection.
+         *
+         * @param callable                      $function
+         * @param array|\Traversable|Collection $collection
+         *
+         * @return array|\Traversable|Collection
+         */
+            function (callable $function, $collection) {
+                foreach ($collection as $key => $item) {
+                    $function($item, $key, $collection);
+                }
+
+                return $collection;
+            },
+
         'either'            =>
         /**
          * Returns a function that returns `true` when either of the predicates matches, `false` otherwise.

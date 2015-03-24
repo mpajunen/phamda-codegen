@@ -211,6 +211,21 @@ class InnerFunctions
     }
 
     /**
+     * Return the given `value` cast to the given `type`.
+     *
+     * @param string $type
+     * @param mixed  $value
+     *
+     * @return mixed
+     */
+    public static function cast($type, $value)
+    {
+        settype($value, $type);
+
+        return $value;
+    }
+
+    /**
      * Clones an object.
      *
      * @param object $object

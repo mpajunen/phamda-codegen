@@ -640,6 +640,26 @@ class CurriedFunctions
     }
 
     /**
+     * Returns a function that calls the specified method of a given object.
+     *
+     * @param int    $arity
+     * @param string $method
+     * @param mixed  ...$initialArguments
+     *
+     * @return callable
+     */
+    public static function invoker($arity, $method, ... $initialArguments)
+    {
+        $remainingCount = $arity - count($initialArguments) + 1;
+
+        return static::_curryN($remainingCount, function (... $arguments) use ($method, $initialArguments) {
+            $object = array_pop($arguments);
+
+            return $object->{$method}(...array_merge($initialArguments, $arguments));
+        });
+    }
+
+    /**
      * Returns `true` if a collection has no elements, `false` otherwise.
      *
      * @param array|\Traversable|Collection $collection
@@ -863,6 +883,33 @@ class CurriedFunctions
         return function (... $arguments) use ($predicate) {
             return ! $predicate(...$arguments);
         };
+    }
+
+    /**
+     * Wraps the given function and returns a new function that can be called with the remaining parameters.
+     *
+     * @param callable $function
+     * @param mixed    ...$initialArguments
+     *
+     * @return callable
+     */
+    public static function partial(callable $function, ... $initialArguments)
+    {
+        return static::_partialN(static::getArity($function), $function, ...$initialArguments);
+    }
+
+    /**
+     * Wraps the given function and returns a new function of fixed arity that can be called with the remaining parameters.
+     *
+     * @param int      $arity
+     * @param callable $function
+     * @param mixed    ...$initialArguments
+     *
+     * @return callable
+     */
+    public static function partialN($arity, callable $function, ... $initialArguments)
+    {
+        return static::_partialN($arity, $function, ...$initialArguments);
     }
 
     /**

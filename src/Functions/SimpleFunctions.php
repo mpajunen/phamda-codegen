@@ -46,58 +46,6 @@ class SimpleFunctions
     }
 
     /**
-     * Returns a function that calls the specified method of a given object.
-     *
-     * @param int    $arity
-     * @param string $method
-     * @param mixed  ...$initialArguments
-     *
-     * @return callable
-     */
-    public static function invoker($arity, $method, ... $initialArguments)
-    {
-        $remainingCount = $arity - count($initialArguments) + 1;
-
-        return static::_curryN($remainingCount, function (... $arguments) use ($method, $initialArguments) {
-            $object = array_pop($arguments);
-
-            return $object->{$method}(...array_merge($initialArguments, $arguments));
-        });
-    }
-
-    /**
-     * Wraps the given function and returns a new function that can be called with the remaining parameters.
-     *
-     * @param callable $function
-     * @param mixed    ...$initialArguments
-     *
-     * @return callable
-     */
-    public static function partial(callable $function, ... $initialArguments)
-    {
-        return Phamda::partialN(static::getArity($function), $function, ...$initialArguments);
-    }
-
-    /**
-     * Wraps the given function and returns a new function of fixed arity that can be called with the remaining parameters.
-     *
-     * @param int      $arity
-     * @param callable $function
-     * @param mixed    ...$initialArguments
-     *
-     * @return callable
-     */
-    public static function partialN($arity, callable $function, ... $initialArguments)
-    {
-        $remainingCount = $arity - count($initialArguments);
-        $partial        = function (... $arguments) use ($function, $initialArguments) {
-            return $function(...array_merge($initialArguments, $arguments));
-        };
-
-        return $remainingCount > 0 ? static::_curryN($remainingCount, $partial) : $partial;
-    }
-
-    /**
      * Returns a new function that calls each supplied function in turn and passes the result as a parameter to the next function.
      *
      * @param callable ...$functions

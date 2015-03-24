@@ -40,10 +40,6 @@ EOT;
     {
         $params = [$this->factory->param('expected')];
 
-        foreach ($this->source->uses as $index => $use) {
-            $params[] = $this->factory->param($use->var);
-        }
-
         foreach ($this->source->params as $param) {
             $newParam = clone $param;
             if ($param->variadic && $this->source->getInnerFunctionParams() !== []) {

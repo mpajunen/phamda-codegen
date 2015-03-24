@@ -10,11 +10,11 @@ use PhpParser\Node\Stmt;
 /**
  * @method getDocComment
  *
- * @property Node[]            $stmts  Statements
- * @property Node\Param[]      $params Parameters
- * @property Expr\ClosureUse[] $uses   use()s
- * @property bool              $byRef  Whether to return by reference
- * @property bool              $static Whether the closure is static
+ * @property int          $type   Type
+ * @property bool         $byRef  Whether to return by reference
+ * @property string       $name   Name
+ * @property Node\Param[] $params Parameters
+ * @property Node[]       $stmts  Statements
  */
 class PhamdaFunction
 {
@@ -24,7 +24,7 @@ class PhamdaFunction
     private $wrapType;
     private $exampleStatements;
 
-    public function __construct($name, $wrapType, Expr\Closure $source, callable $getFunction, array $exampleStatements)
+    public function __construct($name, $wrapType, Stmt\ClassMethod $source, callable $getFunction, array $exampleStatements)
     {
         $this->name              = $name;
         $this->wrapType          = $wrapType;
@@ -44,7 +44,10 @@ class PhamdaFunction
 
     public function getClosure()
     {
-        return $this->source;
+        return new Expr\Closure([
+            'params' => $this->source->params,
+            'stmts'  => $this->source->stmts,
+        ]);
     }
 
     public function getExampleStatements()

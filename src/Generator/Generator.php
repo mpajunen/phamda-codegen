@@ -8,6 +8,8 @@ use Phamda\Builder\PhamdaBuilder;
 use Phamda\Builder\PhamdaFunctionCollection;
 use Phamda\Builder\Tests\BasicTestBuilder;
 use Phamda\Builder\Tests\CollectionTestBuilder;
+use Phamda\Functions\CurriedFunctions;
+use Phamda\Functions\SimpleFunctions;
 use Phamda\Printer\PhamdaPrinter;
 use Phamda\Tests\FunctionExampleTest;
 use PhpParser\Builder;
@@ -39,20 +41,25 @@ class Generator
     private function getSourceFunctions()
     {
         return new PhamdaFunctionCollection(
-            $this->getStatement(__DIR__ . '/../Functions/InnerFunctions.php', Node\Expr\Assign::class)->expr->items,
-            $this->getStatement((new \ReflectionClass(FunctionExampleTest::class))->getFileName(), Node\Stmt\Class_::class)->stmts
+            [
+                'curried' => $this->getStatements(CurriedFunctions::class),
+                'simple'  => $this->getStatements(SimpleFunctions::class)
+            ],
+            $this->getStatements(FunctionExampleTest::class)
         );
     }
 
-    private function getStatement($file, $statementClass)
+    private function getStatements($class)
     {
+        $file = (new \ReflectionClass($class))->getFileName();
+
         foreach ($this->parseFile($file)[0]->stmts as $node) {
-            if ($node instanceof $statementClass) {
-                return $node;
+            if ($node instanceof Node\Stmt\Class_) {
+                return $node->stmts;
             }
         }
 
-        throw new \LogicException(sprintf('Statement of class "%s" not found in file "%s".', $statementClass, $file));
+        throw new \LogicException(sprintf('Class "%s" statement not found in file "%s".', $class, $file));
     }
 
     private function parseFile($file)

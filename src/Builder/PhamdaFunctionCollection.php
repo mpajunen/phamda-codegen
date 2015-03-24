@@ -6,20 +6,23 @@ use PhpParser\Node\Stmt\ClassMethod;
 
 class PhamdaFunctionCollection implements \Countable
 {
-    private $closures;
     private $exampleStatements;
     private $functions;
+    private $innerFunctions;
     private $types;
 
-    public function __construct(array $closureGroups, array $exampleFunctions)
+    public function __construct(array $methodGroups, array $exampleFunctions)
     {
-        foreach ($closureGroups as $group) {
-            foreach ($group->value->items as $item) {
-                $name = $item->key->value;
+        foreach ($methodGroups as $group => $methods) {
+            foreach ($methods as $method) {
+                if (! $method instanceof ClassMethod) {
+                    continue;
+                }
+                $name = $method->name;
 
-                $this->closures[$name]  = $item->value;
-                $this->functions[$name] = null;
-                $this->types[$name]     = $group->key->value;
+                $this->innerFunctions[$name] = $method;
+                $this->functions[$name]      = null;
+                $this->types[$name]          = $group;
             }
         }
 
@@ -59,7 +62,7 @@ class PhamdaFunctionCollection implements \Countable
         $this->functions[$name] = $function = new PhamdaFunction(
             $name,
             $this->types[$name],
-            $this->closures[$name],
+            $this->innerFunctions[$name],
             $getFunction,
             isset($this->exampleStatements[$name]) ? $this->exampleStatements[$name] : []
         );

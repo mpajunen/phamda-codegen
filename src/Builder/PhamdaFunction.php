@@ -82,25 +82,15 @@ class PhamdaFunction
         return $this->getLastParam()->name;
     }
 
+    public function hasReturnType($type)
+    {
+        return in_array($type, $this->getReturnTypes());
+    }
+
     public function returnsCallable()
     {
         return $this->getReturnExpression() instanceof Expr\Closure
             || ($this->innerFunction && $this->innerFunction->returnsCallable());
-    }
-
-    public function returnsCollection()
-    {
-        return in_array('Collection', $this->getReturnTypes());
-    }
-
-    public function returnsCollections()
-    {
-        return in_array('Collection[]', $this->getReturnTypes());
-    }
-
-    public function returnsTraversable()
-    {
-        return in_array('\Traversable', $this->getReturnTypes());
     }
 
     public function isCollectionFunction()

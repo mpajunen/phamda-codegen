@@ -88,10 +88,10 @@ class CollectionTestMethodBuilder extends BasicTestMethodBuilder
     {
         $result = new Expr\Variable('result');
 
-        if ($this->simple && ! $this->source->returnsTraversable()) {
-        } elseif (! $this->simple && ! $this->source->returnsCollection() && ! $this->source->returnsCollections()) {
+        if ($this->simple && ! $this->source->hasReturnType('\Traversable')) {
+        } elseif (! $this->simple && ! $this->source->hasReturnType('Collection') && ! $this->source->hasReturnType('Collection[]')) {
         } else {
-            $helperMethod = $this->source->returnsCollections() ? 'getCollectionGroupArray' : 'getCollectionArray';
+            $helperMethod = $this->source->hasReturnType('Collection[]') ? 'getCollectionGroupArray' : 'getCollectionArray';
 
             $result = new Expr\MethodCall(new Expr\Variable('this'), $helperMethod, [$result]);
         }

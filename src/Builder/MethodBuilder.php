@@ -21,10 +21,8 @@ class MethodBuilder extends AbstractMethodBuilder
     {
         $comment = $this->createBaseComment();
 
-        return $this->source->isCurried()
-            ? str_replace('callable|callable', 'callable', str_replace(
-                '* @return ', '* @return callable|', $comment
-            ))
+        return $this->source->isCurried() && ! $this->source->hasReturnType('callable')
+            ? str_replace('* @return ', '* @return callable|', $comment)
             : $comment;
     }
 

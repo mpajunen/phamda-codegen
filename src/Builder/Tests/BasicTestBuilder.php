@@ -3,7 +3,9 @@
 namespace Phamda\Builder\Tests;
 
 use Phamda\Builder\BuilderInterface;
+use Phamda\Builder\PhamdaFunction;
 use Phamda\Builder\PhamdaFunctionCollection;
+use Phamda\Phamda;
 use PhpParser\Builder;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Name;
@@ -42,16 +44,15 @@ class BasicTestBuilder implements BuilderInterface
 
     private function createClassMethods()
     {
-        $methods = [];
-        foreach ($this->functions->getFunctions() as $function) {
-            if (in_array($function->getName(), $this->getSkipped())) {
-                continue;
-            }
+        $create = Phamda::pipe(
+            Phamda::reject(function (PhamdaFunction $function) { return in_array($function->getName(), $this->getSkipped()); }),
+            Phamda::map(Phamda::pipe(
+                Phamda::construct(BasicTestMethodBuilder::class),
+                Phamda::invoker(0, 'build')
+            ))
+        );
 
-            $methods[] = (new BasicTestMethodBuilder($function))->build();
-        }
-
-        return $methods;
+        return $create($this->functions->getFunctions());
     }
 
     private function getSkipped()

@@ -4,6 +4,7 @@ namespace Phamda\Builder\Docs;
 
 use Phamda\Builder\CommentExampleBuilder;
 use Phamda\Builder\PhamdaFunction;
+use Phamda\Phamda;
 
 class ListDocFunctionBuilder
 {
@@ -35,9 +36,14 @@ class ListDocFunctionBuilder
 
     private function getExamples()
     {
-        $rows = (new CommentExampleBuilder($this->function))->getRows();
+        $process = Phamda::pipe(
+            Phamda::construct(CommentExampleBuilder::class),
+            Phamda::invoker(0, 'getRows'),
+            Phamda::ifElse(Phamda::isEmpty(), Phamda::identity(), Phamda::prepend('##### Examples')),
+            Phamda::implode("\n")
+        );
 
-        return $rows ? implode("\n", array_merge(['##### Examples'], $rows)) : '';
+        return $process($this->function);
     }
 
     private function getSummary()

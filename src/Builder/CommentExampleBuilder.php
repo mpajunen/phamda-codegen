@@ -41,7 +41,7 @@ class CommentExampleBuilder
                 'str_replace',
                 ["\n\$placeholder =", "\n    ", "\n}"],
                 [' // =>', ' ', ' }']),
-            Phamda::curry('explode', "\n"),
+            Phamda::explode("\n"),
             Phamda::map(function ($row) { return strpos($row, '//') !== false ? substr($row, 0, -1) : $row; })
         );
 

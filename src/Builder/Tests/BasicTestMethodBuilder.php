@@ -4,6 +4,7 @@ namespace Phamda\Builder\Tests;
 
 use Phamda\Builder\AbstractMethodBuilder;
 use Phamda\Builder\PhamdaFunction;
+use Phamda\Phamda;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -38,21 +39,21 @@ EOT;
 
     protected function createParams()
     {
-        $params = [$this->factory->param('expected')];
-
-        foreach ($this->source->params as $param) {
-            $newParam = clone $param;
+        $convertVariadic = function (Param $param) {
             if ($param->variadic && $this->source->getInnerFunctionParams() !== []) {
-                $newParam->type     = 'array';
-                $newParam->variadic = false;
+                $param->type     = 'array';
+                $param->variadic = false;
             }
+        };
 
-            $params[] = $newParam;
-        }
+        $process = Phamda::pipe(
+            Phamda::map(Phamda::clone_()),
+            Phamda::each($convertVariadic),
+            Phamda::prepend($this->factory->param('expected')),
+            Phamda::merge(Phamda::_(), $this->source->getInnerFunctionParams())
+        );
 
-        $params = array_merge($params, $this->source->getInnerFunctionParams());
-
-        return $params;
+        return $process($this->source->params);
     }
 
     protected function createStatements()
@@ -105,12 +106,10 @@ EOT;
 
     private function createArguments(array $sources)
     {
-        $args = [];
-        foreach ($sources as $source) {
-            /** @var Param $source */
-            $args[] = new Arg(new Expr\Variable($source->name), false, $source->variadic);
-        }
+        $create = function (Param $source) {
+            return new Arg(new Expr\Variable($source->name), false, $source->variadic);
+        };
 
-        return $args;
+        return Phamda::map($create, $sources);
     }
 }

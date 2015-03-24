@@ -3,6 +3,7 @@
 namespace Phamda\Builder\Tests;
 
 use Phamda\Builder\PhamdaFunction;
+use Phamda\Phamda;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Name;
@@ -27,15 +28,13 @@ class CollectionTestMethodBuilder extends BasicTestMethodBuilder
 
     protected function createParams()
     {
-        $params = [$this->factory->param('expected')];
+        $process = Phamda::pipe(
+            Phamda::map(Phamda::clone_()),
+            Phamda::prepend($this->factory->param('expected')),
+            Phamda::merge(Phamda::_(), $this->source->getInnerFunctionParams())
+        );
 
-        foreach ($this->source->params as $param) {
-            $params[] = clone $param;
-        }
-
-        $params = array_merge($params, $this->source->getInnerFunctionParams());
-
-        return $params;
+        return $process($this->source->params);
     }
 
     protected function createStatements()
@@ -101,20 +100,17 @@ class CollectionTestMethodBuilder extends BasicTestMethodBuilder
 
     private function createFunctionCall()
     {
-        $arguments = $this->createArguments($this->source->params);
-
-        return new Expr\StaticCall(new Name('Phamda'), $this->source->getName(), $arguments);
+        return new Expr\StaticCall(new Name('Phamda'), $this->source->getName(), $this->createArguments());
     }
 
-    private function createArguments(array $sources)
+    private function createArguments()
     {
-        $args = [];
-        foreach ($sources as $source) {
-            /** @var Param $source */
-            $name   = $source->name === $this->source->getCollectionArgumentName() ? '_' . $source->name : $source->name;
-            $args[] = new Arg(new Expr\Variable($name), false, $source->variadic);
-        }
+        $create = function (Param $source) {
+            $name = $source->name === $this->source->getCollectionArgumentName() ? '_' . $source->name : $source->name;
 
-        return $args;
+            return new Arg(new Expr\Variable($name), false, $source->variadic);
+        };
+
+        return Phamda::map($create, $this->source->params);
     }
 }

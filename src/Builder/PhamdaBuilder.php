@@ -2,6 +2,7 @@
 
 namespace Phamda\Builder;
 
+use Phamda\Phamda;
 use PhpParser\Builder;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Name;
@@ -34,17 +35,14 @@ class PhamdaBuilder implements BuilderInterface
     private function createClass()
     {
         return $this->factory->class('Phamda')
-             ->addStmt(new TraitUse([new Name('CoreFunctionsTrait')]))
-             ->addStmts($this->createClassMethods());
+            ->addStmt(new TraitUse([new Name('CoreFunctionsTrait')]))
+            ->addStmts($this->createClassMethods());
     }
 
     private function createClassMethods()
     {
-        $methods = [];
-        foreach ($this->functions->getFunctions() as $function) {
-            $methods[] = (new MethodBuilder($function))->build();
-        }
+        $create = function (PhamdaFunction $function) { return (new MethodBuilder($function))->build(); };
 
-        return $methods;
+        return Phamda::map($create, $this->functions->getFunctions());
     }
 }

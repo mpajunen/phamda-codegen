@@ -2,6 +2,7 @@
 
 namespace Phamda\Builder;
 
+use Phamda\Phamda;
 use PhpParser\Node\Stmt\ClassMethod;
 
 class PhamdaFunctionCollection implements \Countable
@@ -10,22 +11,19 @@ class PhamdaFunctionCollection implements \Countable
     private $functions;
     private $innerFunctions;
 
-    public function __construct(array $methods, array $exampleFunctions)
+    public function __construct(array $methods, array $exampleMethods)
     {
-        foreach ($methods as $method) {
-            if (! $method instanceof ClassMethod) {
-                continue;
-            }
+        $filter = Phamda::filter(Phamda::isInstance(ClassMethod::class));
+
+        foreach ($filter($methods) as $method) {
             $name = $method->name;
 
             $this->innerFunctions[$name] = $method;
             $this->functions[$name]      = null;
         }
 
-        foreach ($exampleFunctions as $function) {
-            if ($function instanceof ClassMethod) {
-                $this->exampleStatements[lcfirst(substr($function->name, strlen('test')))] = $function->stmts;
-            }
+        foreach ($filter($exampleMethods) as $method) {
+            $this->exampleStatements[lcfirst(substr($method->name, strlen('test')))] = $method->stmts;
         }
     }
 

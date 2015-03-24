@@ -6,6 +6,7 @@ use Phamda\Phamda;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Name;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 
 class MethodBuilder extends AbstractMethodBuilder
@@ -28,18 +29,21 @@ class MethodBuilder extends AbstractMethodBuilder
 
     protected function createParams()
     {
-        $params = [];
-        foreach ($this->source->params as $param) {
-            $newParam       = clone $param;
-            $newParam->type = null;
-            if (! $newParam->variadic) {
-                $newParam->default = new Expr\ConstFetch(new Name('null'));
-            }
+        $setProp = function ($name, $value, Param $param) {
+            $param->$name = $value;
+        };
 
-            $params[] = $newParam;
-        }
+        $process = Phamda::pipe(
+            Phamda::map(Phamda::clone_()),
+            Phamda::each(Phamda::curry($setProp, 'type', null)),
+            Phamda::each(Phamda::ifElse(
+                Phamda::propEq('variadic', false),
+                Phamda::curry($setProp, 'default', new Expr\ConstFetch(new Name('null'))),
+                Phamda::identity()
+            ))
+        );
 
-        return $params;
+        return $process($this->source->params);
     }
 
     protected function createStatements()

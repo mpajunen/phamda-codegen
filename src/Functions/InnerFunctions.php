@@ -817,6 +817,23 @@ class InnerFunctions
     }
 
     /**
+     * Returns an array containing that contains all the values in arrays `a` and `b`.
+     *
+     * @param array $a
+     * @param array $b
+     *
+     * @return array
+     */
+    public static function merge(array $a, array $b)
+    {
+        foreach ($b as $item) {
+            $a[] = $item;
+        }
+
+        return $a;
+    }
+
+    /**
      * Returns the smallest value in the collection.
      *
      * @param array|\Traversable $collection

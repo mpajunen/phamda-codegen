@@ -8,7 +8,7 @@ use Phamda\Exception\InvalidFunctionCompositionException;
 use Phamda\Phamda;
 use Phamda\Placeholder;
 
-class CurriedFunctions
+class InnerFunctions
 {
     use CoreFunctionsTrait;
 

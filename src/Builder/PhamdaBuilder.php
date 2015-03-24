@@ -42,25 +42,9 @@ class PhamdaBuilder implements BuilderInterface
     {
         $methods = [];
         foreach ($this->functions->getFunctions() as $function) {
-            $methods[] = $this->createClassMethod($function);
+            $methods[] = (new MethodBuilder($function))->build();
         }
 
         return $methods;
-    }
-
-    private function createClassMethod(PhamdaFunction $function)
-    {
-        switch ($function->getWrapType()) {
-            case 'curried':
-                $builder = new CurriedMethodBuilder($function);
-                break;
-            case 'simple':
-                $builder = new SimpleMethodBuilder($function);
-                break;
-            default:
-                throw new \LogicException(sprintf('Invalid method type "%s".', $function->getWrapType()));
-        }
-
-        return $builder->build();
     }
 }

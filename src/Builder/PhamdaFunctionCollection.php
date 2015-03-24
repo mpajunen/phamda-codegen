@@ -9,24 +9,18 @@ class PhamdaFunctionCollection implements \Countable
     private $exampleStatements;
     private $functions;
     private $innerFunctions;
-    private $types;
 
-    public function __construct(array $methodGroups, array $exampleFunctions)
+    public function __construct(array $methods, array $exampleFunctions)
     {
-        foreach ($methodGroups as $group => $methods) {
-            foreach ($methods as $method) {
-                if (! $method instanceof ClassMethod) {
-                    continue;
-                }
-                $name = $method->name;
-
-                $this->innerFunctions[$name] = $method;
-                $this->functions[$name]      = null;
-                $this->types[$name]          = $group;
+        foreach ($methods as $method) {
+            if (! $method instanceof ClassMethod) {
+                continue;
             }
-        }
+            $name = $method->name;
 
-        ksort($this->types, SORT_STRING | SORT_FLAG_CASE);
+            $this->innerFunctions[$name] = $method;
+            $this->functions[$name]      = null;
+        }
 
         foreach ($exampleFunctions as $function) {
             if ($function instanceof ClassMethod) {
@@ -45,14 +39,14 @@ class PhamdaFunctionCollection implements \Countable
      */
     public function getFunctions()
     {
-        foreach (array_keys($this->types) as $name) {
+        foreach (array_keys($this->innerFunctions) as $name) {
             yield $name => $this->getFunction($name);
         }
     }
 
     public function count()
     {
-        return count($this->types);
+        return count($this->innerFunctions);
     }
 
     private function createFunction($name)
@@ -61,7 +55,6 @@ class PhamdaFunctionCollection implements \Countable
 
         $this->functions[$name] = $function = new PhamdaFunction(
             $name,
-            $this->types[$name],
             $this->innerFunctions[$name],
             $getFunction,
             isset($this->exampleStatements[$name]) ? $this->exampleStatements[$name] : []

@@ -21,13 +21,11 @@ class PhamdaFunction
     private $innerFunction;
     private $name;
     private $source;
-    private $wrapType;
     private $exampleStatements;
 
-    public function __construct($name, $wrapType, Stmt\ClassMethod $source, callable $getFunction, array $exampleStatements)
+    public function __construct($name, Stmt\ClassMethod $source, callable $getFunction, array $exampleStatements)
     {
         $this->name              = $name;
-        $this->wrapType          = $wrapType;
         $this->source            = $source;
         $this->innerFunction     = $this->createInnerFunction($getFunction);
         $this->exampleStatements = $exampleStatements;
@@ -77,11 +75,6 @@ class PhamdaFunction
     public function getName()
     {
         return $this->name;
-    }
-
-    public function getWrapType()
-    {
-        return $this->wrapType;
     }
 
     public function getCollectionArgumentName()

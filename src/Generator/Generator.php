@@ -8,7 +8,7 @@ use Phamda\Builder\PhamdaBuilder;
 use Phamda\Builder\PhamdaFunctionCollection;
 use Phamda\Builder\Tests\BasicTestBuilder;
 use Phamda\Builder\Tests\CollectionTestBuilder;
-use Phamda\Functions\CurriedFunctions;
+use Phamda\Functions\InnerFunctions;
 use Phamda\Printer\PhamdaPrinter;
 use Phamda\Tests\FunctionExampleTest;
 use PhpParser\Builder;
@@ -40,9 +40,7 @@ class Generator
     private function getSourceFunctions()
     {
         return new PhamdaFunctionCollection(
-            [
-                'curried' => $this->getStatements(CurriedFunctions::class)
-            ],
+            $this->getStatements(InnerFunctions::class),
             $this->getStatements(FunctionExampleTest::class)
         );
     }

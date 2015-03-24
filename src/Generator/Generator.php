@@ -39,34 +39,25 @@ class Generator
     private function getSourceFunctions()
     {
         return new PhamdaFunctionCollection(
-            $this->getSourceStatements()[4]->expr->items,
-            $this->getCustomExampleSource()
+            $this->getStatement(__DIR__ . '/../Functions/InnerFunctions.php', Node\Expr\Assign::class)->expr->items,
+            $this->getStatement((new \ReflectionClass(FunctionExampleTest::class))->getFileName(), Node\Stmt\Class_::class)->stmts
         );
     }
 
-    private function getCustomExampleSource()
+    private function getStatement($file, $statementClass)
     {
-        $file = (new \ReflectionClass(FunctionExampleTest::class))->getFileName();
-
-        foreach ($this->createParser()->parse(file_get_contents($file))[0]->stmts as $node) {
-            if ($node instanceof Node\Stmt\Class_) {
-                return $node->stmts;
+        foreach ($this->parseFile($file)[0]->stmts as $node) {
+            if ($node instanceof $statementClass) {
+                return $node;
             }
         }
 
-        throw new \LogicException(sprintf('Class statement not found.'));
+        throw new \LogicException(sprintf('Statement of class "%s" not found in file "%s".', $statementClass, $file));
     }
 
-    private function getSourceStatements()
+    private function parseFile($file)
     {
-        return $this->createParser()
-            ->parse(file_get_contents(__DIR__ . '/../Functions/InnerFunctions.php'))[0]
-            ->stmts;
-    }
-
-    private function createParser()
-    {
-        return new Parser(new Lexer\Emulative());
+        return (new Parser(new Lexer\Emulative()))->parse(file_get_contents($file));
     }
 
     private function getPhpFileComment()

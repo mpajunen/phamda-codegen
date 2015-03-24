@@ -63,7 +63,7 @@ EOT;
             $argumentSource = $this->source->params;
 
             if ($offset !== 0) {
-                if ($this->source->getWrapType() === 'simple') {
+                if (! $this->source->isCurried()) {
                     break;
                 }
 

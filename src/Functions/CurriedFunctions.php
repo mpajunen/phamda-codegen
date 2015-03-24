@@ -4,11 +4,23 @@ namespace Phamda\Functions;
 
 use Phamda\Collection\Collection;
 use Phamda\CoreFunctionsTrait;
+use Phamda\Exception\InvalidFunctionCompositionException;
 use Phamda\Phamda;
+use Phamda\Placeholder;
 
 class CurriedFunctions
 {
     use CoreFunctionsTrait;
+
+    /**
+     * Returns a placeholder to be used with curried functions.
+     *
+     * @return Placeholder
+     */
+    public static function _()
+    {
+        return static::$placeholder ?: static::$placeholder = new Placeholder();
+    }
 
     /**
      * Adds two numbers.
@@ -225,6 +237,18 @@ class CurriedFunctions
     }
 
     /**
+     * Returns a new function that calls each supplied function in turn in reverse order and passes the result as a parameter to the next function.
+     *
+     * @param callable ...$functions
+     *
+     * @return callable
+     */
+    public static function compose(... $functions)
+    {
+        return Phamda::pipe(...array_reverse($functions));
+    }
+
+    /**
      * Wraps the constructor of the given class to a function.
      *
      * @param string $class
@@ -393,6 +417,18 @@ class CurriedFunctions
     public static function explode($delimiter, $string)
     {
         return explode($delimiter, $string);
+    }
+
+    /**
+     * Returns a function that always returns `false`.
+     *
+     * @return callable
+     */
+    public static function false()
+    {
+        return function () {
+            return false;
+        };
     }
 
     /**
@@ -1003,6 +1039,29 @@ class CurriedFunctions
     }
 
     /**
+     * Returns a new function that calls each supplied function in turn and passes the result as a parameter to the next function.
+     *
+     * @param callable ...$functions
+     *
+     * @return callable
+     */
+    public static function pipe(... $functions)
+    {
+        if (count($functions) < 2) {
+            throw InvalidFunctionCompositionException::create();
+        }
+
+        return function (... $arguments) use ($functions) {
+            $result = null;
+            foreach ($functions as $function) {
+                $result = $result !== null ? $function($result) : $function(...$arguments);
+            }
+
+            return $result;
+        };
+    }
+
+    /**
      * Returns a new collection, where the items are single properties plucked from the given collection.
      *
      * @param string                        $name
@@ -1297,6 +1356,18 @@ class CurriedFunctions
     public static function times(callable $function, $count)
     {
         return static::_map($function, range(0, $count - 1));
+    }
+
+    /**
+     * Returns a function that always returns `true`.
+     *
+     * @return callable
+     */
+    public static function true()
+    {
+        return function () {
+            return true;
+        };
     }
 
     /**

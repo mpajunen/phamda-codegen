@@ -11,9 +11,11 @@ class CurriedMethodBuilder extends SimpleMethodBuilder
 {
     protected function createComment()
     {
-        return str_replace('callable|callable', 'callable', str_replace(
-            '* @return ', '* @return callable|', parent::createComment()
-        ));
+        return $this->source->isCurried()
+            ? str_replace('callable|callable', 'callable', str_replace(
+                '* @return ', '* @return callable|', parent::createComment()
+            ))
+            : parent::createComment();
     }
 
     protected function createParams()
@@ -34,20 +36,14 @@ class CurriedMethodBuilder extends SimpleMethodBuilder
 
     protected function createStatements()
     {
-        $arity = $this->source->getArity();
-
-        if ($arity < 1) {
-            throw new \LogicException(sprintf('Invalid curried function "%s", arity "%s".', $this->source->getName(), $arity));
-        } elseif ($arity > 3) {
-            throw new \LogicException(sprintf('CurryN is not supported, arity "%s" required for function "%s".', $arity, $this->source->getName()));
-        }
-
-        return [new Stmt\Return_($this->getCurryWrap($arity))];
+        return $this->source->isCurried()
+            ? [new Stmt\Return_($this->getCurryWrap())]
+            : $this->source->stmts;
     }
 
-    private function getCurryWrap($arity)
+    private function getCurryWrap()
     {
-        return new Expr\StaticCall(new Name('static'), 'curry' . $arity, [
+        return new Expr\StaticCall(new Name('static'), 'curry' . $this->source->getArity(), [
             $this->source->getClosure(),
             new Arg(new Expr\FuncCall(new Name('func_get_args'))),
         ]);

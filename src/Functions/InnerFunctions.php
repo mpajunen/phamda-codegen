@@ -622,7 +622,7 @@ class InnerFunctions
      * @param callable $onTrue
      * @param callable $onFalse
      *
-     * @return mixed
+     * @return callable
      */
     public static function ifElse(callable $condition, callable $onTrue, callable $onFalse)
     {

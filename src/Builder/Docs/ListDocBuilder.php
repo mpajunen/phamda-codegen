@@ -16,22 +16,20 @@ class ListDocBuilder
 
     public function build()
     {
-        $builders = Phamda::map(Phamda::construct(ListDocFunctionBuilder::class), $this->functions->getFunctions());
-
         return $this->getHeader(count($this->functions))
-            . $this->getSection('getLink', $builders)
+            . $this->getPart('getLink')
             . "\n"
-            . $this->getSection('getSection', $builders);
+            . $this->getPart('getSection');
     }
 
-    private function getSection($method, array $builders)
+    private function getPart($method)
     {
         $process = Phamda::pipe(
-            Phamda::map(Phamda::unary(Phamda::invoker(0, $method))),
+            Phamda::map([ListDocFunctionBuilder::class, $method]),
             Phamda::implode("\n")
         );
 
-        return $process($builders);
+        return $process($this->functions->getFunctions());
     }
 
     private function getHeader($count)

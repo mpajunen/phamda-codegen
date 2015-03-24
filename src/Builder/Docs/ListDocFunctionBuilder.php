@@ -8,33 +8,26 @@ use Phamda\Phamda;
 
 class ListDocFunctionBuilder
 {
-    private $function;
-
-    public function __construct(PhamdaFunction $function)
+    public static function getLink(PhamdaFunction $function)
     {
-        $this->function = $function;
+        return sprintf('* [%1$s](#%1$s)', $function->getName());
     }
 
-    public function getLink()
-    {
-        return sprintf('* [%1$s](#%1$s)', $this->function->getName());
-    }
-
-    public function getSection()
+    public static function getSection(PhamdaFunction $function)
     {
         return implode("\n", [
             '',
             '',
-            sprintf('<a name="%s"></a>', $this->function->getName()),
-            '### ' . $this->function->getName(),
-            sprintf('`%s`', ((new MethodSignatureBuilder($this->function))->getSignature())),
+            sprintf('<a name="%s"></a>', $function->getName()),
+            '### ' . $function->getName(),
+            sprintf('`%s`', ((new MethodSignatureBuilder($function))->getSignature())),
             '',
-            $this->getSummary(),
-            $this->getExamples(),
+            self::getSummary($function),
+            self::getExamples($function),
         ]);
     }
 
-    private function getExamples()
+    private static function getExamples(PhamdaFunction $function)
     {
         $process = Phamda::pipe(
             Phamda::construct(CommentExampleBuilder::class),
@@ -43,12 +36,12 @@ class ListDocFunctionBuilder
             Phamda::implode("\n")
         );
 
-        return $process($this->function);
+        return $process($function);
     }
 
-    private function getSummary()
+    private static function getSummary(PhamdaFunction $function)
     {
-        $row = explode("\n", $this->function->getDocComment())[1];
+        $row = explode("\n", $function->getDocComment())[1];
 
         return substr($row, strpos($row, '*') + 2);
     }

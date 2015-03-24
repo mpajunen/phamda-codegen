@@ -13,10 +13,6 @@
         "nikic/php-parser": "~1.1"
     },
     "autoload": {
-        "psr-4": {"Phamda\\": "src/"},
-        "files": [
-            "../phamda/src/CoreFunctionsTrait.php",
-            "../phamda/src/Phamda.php"
-        ]
+        "psr-4": {"Phamda\\": "src/"}
     }
 }

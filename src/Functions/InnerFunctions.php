@@ -832,7 +832,7 @@ class InnerFunctions
     }
 
     /**
-     * Returns an array containing that contains all the values in arrays `a` and `b`.
+     * Returns an array that contains all the values in arrays `a` and `b`.
      *
      * @param array $a
      * @param array $b

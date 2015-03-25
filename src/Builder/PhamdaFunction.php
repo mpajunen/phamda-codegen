@@ -37,7 +37,7 @@ class PhamdaFunction
         $lastParam = end($this->source->params);
         $base      = count($this->source->params);
 
-        return $lastParam && $lastParam->variadic ? $base - 1 : $base;
+        return $lastParam && $lastParam->variadic && $lastParam->name !== 'arguments' ? $base - 1 : $base;
     }
 
     public function isCurried()

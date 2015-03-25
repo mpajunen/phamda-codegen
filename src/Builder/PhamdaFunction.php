@@ -18,6 +18,7 @@ use PhpParser\Node\Stmt;
  */
 class PhamdaFunction
 {
+    private $comment;
     private $innerFunction;
     private $name;
     private $source;
@@ -29,6 +30,7 @@ class PhamdaFunction
         $this->source            = $source;
         $this->innerFunction     = $this->createInnerFunction($getFunction);
         $this->exampleStatements = $exampleStatements;
+        $this->comment           = new PhamdaFunctionComment($source->getDocComment());
     }
 
     public function getArity()
@@ -38,6 +40,11 @@ class PhamdaFunction
         $base      = count($this->source->params);
 
         return $lastParam && $lastParam->variadic && $lastParam->name !== 'arguments' ? $base - 1 : $base;
+    }
+
+    public function getComment()
+    {
+        return $this->comment;
     }
 
     public function isCurried()

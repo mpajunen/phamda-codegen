@@ -64,7 +64,7 @@ class MethodBuilder extends AbstractMethodBuilder
     private function createBaseComment()
     {
         $rows         = explode("\n", $this->source->getDocComment());
-        $exampleStart = Phamda::findIndex(function ($row) { return strpos($row, '@') !== false; }, $rows);
+        $exampleStart = Phamda::findIndex(Phamda::stringIndexOf('@'), $rows);
 
         return implode("\n", array_merge(
             array_slice($rows, 0, $exampleStart),

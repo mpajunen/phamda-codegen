@@ -22,7 +22,7 @@ class ListDocFunctionBuilder
             '### ' . $function->getName(),
             sprintf('`%s`', ((new MethodSignatureBuilder($function))->getSignature())),
             '',
-            self::getSummary($function),
+            implode("\n", $function->getComment()->summary),
             self::getExamples($function),
         ]);
     }
@@ -37,12 +37,5 @@ class ListDocFunctionBuilder
         );
 
         return $process($function);
-    }
-
-    private static function getSummary(PhamdaFunction $function)
-    {
-        $row = explode("\n", $function->getDocComment())[1];
-
-        return substr($row, strpos($row, '*') + 2);
     }
 }

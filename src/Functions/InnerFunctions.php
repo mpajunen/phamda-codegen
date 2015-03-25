@@ -1323,7 +1323,7 @@ class InnerFunctions
      */
     public static function substring($start, $end, $string)
     {
-        return substr($string, $start, $end - $start);
+        return substr($string, $start, $end >= 0 ? $end - $start : $end);
     }
 
     /**

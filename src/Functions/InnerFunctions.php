@@ -154,6 +154,21 @@ class InnerFunctions
     }
 
     /**
+     * Calls the `function` using the values of the given `arguments` list as positional arguments.
+     *
+     * Effectively creates an unary function from a variadic function.
+     *
+     * @param callable $function
+     * @param array    $arguments
+     *
+     * @return mixed
+     */
+    public static function apply(callable $function, array $arguments)
+    {
+        return $function(... $arguments);
+    }
+
+    /**
      * Returns a new array or object, setting the given value to the specified property.
      *
      * @param string       $property
@@ -1414,6 +1429,21 @@ class InnerFunctions
         return function ($a) use ($function) {
             return $function($a);
         };
+    }
+
+    /**
+     * Calls the `function` using the given `arguments` as a single array list argument.
+     *
+     * Effectively creates an variadic function from a unary function.
+     *
+     * @param callable $function
+     * @param mixed    ...$arguments
+     *
+     * @return mixed
+     */
+    public static function unapply(callable $function, ... $arguments)
+    {
+        return $function($arguments);
     }
 
     /**

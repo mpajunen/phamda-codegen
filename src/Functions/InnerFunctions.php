@@ -586,6 +586,19 @@ class InnerFunctions
     }
 
     /**
+     * Returns a list containing the flattened items created by applying the `function` to each item of the `list`.
+     *
+     * @param callable $function
+     * @param array    $list
+     *
+     * @return array
+     */
+    public static function flatMap(callable $function, array $list)
+    {
+        return static::_flatten(static::_map($function, $list), false);
+    }
+
+    /**
      * Returns an array that contains all the items on the `list`, with all arrays flattened.
      *
      * @param array $list

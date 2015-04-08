@@ -586,6 +586,30 @@ class InnerFunctions
     }
 
     /**
+     * Returns an array that contains all the items on the `list`, with all arrays flattened.
+     *
+     * @param array $list
+     *
+     * @return array
+     */
+    public static function flatten(array $list)
+    {
+        return static::_flatten($list, true);
+    }
+
+    /**
+     * Returns an array that contains all the items on the `list`, with arrays on the first nesting level flattened.
+     *
+     * @param array $list
+     *
+     * @return array
+     */
+    public static function flattenLevel(array $list)
+    {
+        return static::_flatten($list, false);
+    }
+
+    /**
      * Wraps the given function and returns a new function for which the order of the first two parameters is reversed.
      *
      * @param callable $function

@@ -1378,6 +1378,18 @@ class InnerFunctions
     }
 
     /**
+     * Returns a new collection that contains all the items from the original `collection` except the first.
+     *
+     * @param array|\Traversable|Collection $collection
+     *
+     * @return array|Collection
+     */
+    public static function tail($collection)
+    {
+        return static::_slice(1, null, $collection);
+    }
+
+    /**
      * Calls the provided function with the given value as a parameter and returns the value.
      *
      * @param callable $function

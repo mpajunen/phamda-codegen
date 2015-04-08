@@ -279,6 +279,19 @@ class InnerFunctions
     }
 
     /**
+     * Returns a string concatenated of `a` and `b`.
+     *
+     * @param string $a
+     * @param string $b
+     *
+     * @return string
+     */
+    public static function concat($a, $b)
+    {
+        return $a . $b;
+    }
+
+    /**
      * Wraps the constructor of the given class to a function.
      *
      * @param string $class

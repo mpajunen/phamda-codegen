@@ -471,6 +471,35 @@ class InnerFunctions
     }
 
     /**
+     * Returns a new object or array containing all the fields of the original `object`, using given `transformations`.
+     *
+     * @param callable[]                $transformations
+     * @param array|object|\ArrayAccess $object
+     *
+     * @return array|object
+     */
+    public static function evolve(array $transformations, $object)
+    {
+        $isObject = is_object($object);
+
+        if ($isObject) {
+            $object = clone $object;
+        }
+
+        foreach ($transformations as $field => $function) {
+            $value = $function(static::_prop($field, $object));
+
+            if ($isObject && ! $object instanceof \ArrayAccess) {
+                $object->$field = $value;
+            } else {
+                $object[$field] = $value;
+            }
+        }
+
+        return $object;
+    }
+
+    /**
      * Returns an array containing the parts of a string split by the given delimiter.
      *
      * @param string $delimiter

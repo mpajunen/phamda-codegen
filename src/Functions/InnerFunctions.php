@@ -407,6 +407,8 @@ class InnerFunctions
     /**
      * Calls the given function for each element in the collection and returns the original collection.
      *
+     * The supplied `function` receives one argument: `item`.
+     *
      * @param callable                      $function
      * @param array|\Traversable|Collection $collection
      *
@@ -415,7 +417,7 @@ class InnerFunctions
     public static function each(callable $function, $collection)
     {
         foreach ($collection as $key => $item) {
-            $function($item, $key, $collection);
+            $function($item);
         }
 
         return $collection;
@@ -496,6 +498,8 @@ class InnerFunctions
     /**
      * Returns a new collection containing the items that match the given predicate.
      *
+     * The supplied `predicate` receives one argument: `item`.
+     *
      * @param callable                      $predicate
      * @param array|\Traversable|Collection $collection
      *
@@ -518,7 +522,7 @@ class InnerFunctions
      */
     public static function filterIndexed(callable $predicate, $collection)
     {
-        return static::_filter($predicate, $collection);
+        return static::_filterIndexed($predicate, $collection);
     }
 
     /**
@@ -895,6 +899,8 @@ class InnerFunctions
     /**
      * Returns a new collection where values are created from the original collection by calling the supplied function.
      *
+     * The supplied `function` receives one argument: `item`.
+     *
      * @param callable                      $function
      * @param array|\Traversable|Collection $collection
      *
@@ -917,7 +923,7 @@ class InnerFunctions
      */
     public static function mapIndexed(callable $function, $collection)
     {
-        return static::_map($function, $collection);
+        return static::_mapIndexed($function, $collection);
     }
 
     /**
@@ -1288,6 +1294,8 @@ class InnerFunctions
     /**
      * Returns a value accumulated by calling the given function for each element of the collection.
      *
+     * The supplied `function` receives one argument: `item`.
+     *
      * @param callable           $function
      * @param mixed              $initial
      * @param array|\Traversable $collection
@@ -1312,11 +1320,13 @@ class InnerFunctions
      */
     public static function reduceIndexed(callable $function, $initial, $collection)
     {
-        return static::_reduce($function, $initial, $collection);
+        return static::_reduceIndexed($function, $initial, $collection);
     }
 
     /**
      * Returns a value accumulated by calling the given function for each element of the collection in reverse order.
+     *
+     * The supplied `function` receives one argument: `item`.
      *
      * @param callable           $function
      * @param mixed              $initial
@@ -1342,11 +1352,13 @@ class InnerFunctions
      */
     public static function reduceRightIndexed(callable $function, $initial, $collection)
     {
-        return static::_reduce($function, $initial, static::_reverse($collection));
+        return static::_reduceIndexed($function, $initial, static::_reverse($collection));
     }
 
     /**
      * Returns a new collection containing the items that do not match the given predicate.
+     *
+     * The supplied `predicate` receives one argument: `item`.
      *
      * @param callable                      $predicate
      * @param array|\Traversable|Collection $collection
@@ -1370,7 +1382,7 @@ class InnerFunctions
      */
     public static function rejectIndexed(callable $predicate, $collection)
     {
-        return static::_filter(Phamda::not($predicate), $collection);
+        return static::_filterIndexed(Phamda::not($predicate), $collection);
     }
 
     /**

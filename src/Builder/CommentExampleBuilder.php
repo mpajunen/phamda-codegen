@@ -97,7 +97,7 @@ class CommentExampleBuilder
             ? $print
             : function ($value, $key) use ($print) { return sprintf('%s => %s', $print($key), $print($value)); };
 
-        return sprintf('[%s]', implode(', ', Phamda::map($mapPrint, $values)));
+        return sprintf('[%s]', implode(', ', Phamda::mapIndexed($mapPrint, $values)));
     }
 
     private function getCustomExampleStatements()

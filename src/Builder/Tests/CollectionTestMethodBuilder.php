@@ -30,8 +30,7 @@ class CollectionTestMethodBuilder extends BasicTestMethodBuilder
     {
         $process = Phamda::pipe(
             Phamda::map(Phamda::clone_()),
-            Phamda::prepend($this->factory->param('expected')),
-            Phamda::merge(Phamda::_(), $this->source->getInnerFunctionParams())
+            Phamda::prepend($this->factory->param('expected'))
         );
 
         return $process($this->source->params);

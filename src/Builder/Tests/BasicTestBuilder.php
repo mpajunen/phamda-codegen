@@ -38,6 +38,7 @@ class BasicTestBuilder implements BuilderInterface
             ->extend('\PHPUnit_Framework_TestCase')
             ->addStmt(new TraitUse([
                 new Name('BasicProvidersTrait'),
+                new Name('CurryTestTrait'),
             ]))
             ->addStmts($this->createClassMethods());
     }

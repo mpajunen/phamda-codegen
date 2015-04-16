@@ -39,7 +39,7 @@ class PhamdaFunction
         $lastParam = end($this->source->params);
         $base      = count($this->source->params);
 
-        return $lastParam && $lastParam->variadic && $lastParam->name !== 'arguments' ? $base - 1 : $base;
+        return $this->isVariadic() && $lastParam->name !== 'arguments' ? $base - 1 : $base;
     }
 
     public function getComment()
@@ -50,6 +50,14 @@ class PhamdaFunction
     public function isCurried()
     {
         return $this->getArity() !== 0;
+    }
+
+    public function isVariadic()
+    {
+        /** @var Node\Param $lastParam */
+        $lastParam = end($this->source->params);
+
+        return $lastParam && $lastParam->variadic;
     }
 
     public function getClosure()

@@ -58,32 +58,56 @@ EOT;
 
     protected function createStatements()
     {
-        $statements = [];
-        foreach (range(0, count($this->source->params)) as $offset) {
-            $function       = null;
-            $argumentSource = $this->source->params;
+        return array_merge($this->createResultTestStatements(), $this->createCurryTestStatements());
+    }
 
-            if ($offset !== 0) {
-                if (! $this->source->isCurried()) {
-                    break;
-                }
+    private function createResultTestStatements()
+    {
+        $statements     = [];
+        $function       = null;
+        $argumentSource = $this->source->params;
 
-                $function       = new Expr\Variable('curried' . ($offset - 1));
-                $statements[]   = new Expr\Assign($function, $this->createFunctionCall(array_slice($this->source->params, 0, $offset - 1)));
-                $argumentSource = array_slice($this->source->params, $offset - 1);
-            }
-
-            if ($this->source->returnsCallable()) {
-                $call           = $this->createFunctionCall($argumentSource, $function);
-                $function       = new Expr\Variable('main' . $offset);
-                $statements[]   = new Expr\Assign($function, $call);
-                $argumentSource = $this->source->getInnerFunctionParams();
-            }
-
-            $statements[] = $this->createAssert($this->createFunctionCall($argumentSource, $function), $offset === 0);
+        if ($this->source->returnsCallable()) {
+            $call           = $this->createFunctionCall($argumentSource, $function);
+            $function       = new Expr\Variable('main0');
+            $statements[]   = new Expr\Assign($function, $call);
+            $argumentSource = $this->source->getInnerFunctionParams();
         }
 
+        $statements[] = $this->createAssert($this->createFunctionCall($argumentSource, $function), true);
+
         return $statements;
+    }
+
+    private function createCurryTestStatements()
+    {
+        if (count($this->source->params) === 0 || ! $this->source->isCurried()) {
+            return [];
+        }
+
+        $result    = new Expr\Variable('result');
+        $arguments = $this->source->params;
+
+        if ($this->source->returnsCallable()) {
+            $resultExpr = $this->createFunctionCall($this->source->getInnerFunctionParams(), $result);
+        } elseif ($this->source->isVariadic()) {
+            $resultExpr = $this->createFunctionCall(array_slice($this->source->params, -1), $result);
+            $arguments  = array_slice($this->source->params, 0, -1);
+        } else {
+            $resultExpr = $result;
+        }
+
+        $foreach = new Stmt\Foreach_(
+            new Expr\MethodCall(new Expr\Variable('this'), 'getCurriedResults', array_merge(
+                [$this->createFunctionCall([])],
+                $this->createArguments($arguments)
+            )),
+            $result
+        );
+
+        $foreach->stmts = [$this->createAssert($resultExpr, false)];
+
+        return [$foreach];
     }
 
     private function createAssert(Expr $call, $isDirectCall)

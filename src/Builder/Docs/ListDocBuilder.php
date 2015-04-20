@@ -17,8 +17,6 @@ class ListDocBuilder
     public function build()
     {
         return $this->getHeader(count($this->functions))
-            . $this->getPart('getLink')
-            . "\n"
             . $this->getPart('getSection');
     }
 
@@ -35,7 +33,8 @@ class ListDocBuilder
     private function getHeader($count)
     {
         return <<<EOT
-# Phamda functions
+Phamda functions
+================
 
 Currently included functions ($count):
 

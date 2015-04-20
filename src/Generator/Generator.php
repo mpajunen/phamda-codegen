@@ -29,7 +29,7 @@ class Generator
         $write('src/Phamda.php', $this->printClass(new PhamdaBuilder($functions)));
         $write('tests/BasicTest.php', $this->printClass(new BasicTestBuilder($functions)));
         $write('tests/CollectionTest.php', $this->printClass(new CollectionTestBuilder($functions)));
-        $write('docs/Functions.md', (new ListDocBuilder($functions))->build());
+        $write('docs/functions.rst', (new ListDocBuilder($functions))->build());
     }
 
     private function printClass(BuilderInterface $builder)

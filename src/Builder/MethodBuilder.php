@@ -63,16 +63,26 @@ class MethodBuilder extends AbstractMethodBuilder
 
     private function createBaseComment()
     {
-        $rows         = explode("\n", $this->source->getDocComment());
-        $exampleStart = Phamda::findIndex(Phamda::stringIndexOf('@'), $rows);
+        $rows           = explode("\n", $this->source->getDocComment());
+        $exampleStart   = Phamda::findIndex(Phamda::stringIndexOf('@'), $rows);
+        $exampleProcess = $this->getExampleProcess();
 
         return implode("\n", array_merge(
             array_slice($rows, 0, $exampleStart),
-            array_map(function ($row) {
-                return self::COMMENT_ROW_PREFIX . ' ' . $row;
-            }, (new CommentExampleBuilder($this->source))->getRows()),
+            $exampleProcess((new CommentExampleBuilder($this->source))->getRows()),
             [self::COMMENT_ROW_PREFIX],
             array_slice($rows, $exampleStart)
         ));
+    }
+
+    private function getExampleProcess()
+    {
+        $process = Phamda::pipe(
+            Phamda::prepend('```php'),
+            Phamda::append('```'),
+            Phamda::map(Phamda::concat(self::COMMENT_ROW_PREFIX . ' '))
+        );
+
+        return Phamda::ifElse(Phamda::isEmpty(), Phamda::identity(), $process);
     }
 }

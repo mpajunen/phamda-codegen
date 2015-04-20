@@ -22,9 +22,7 @@ class CommentExampleBuilder
 
     public function getRows()
     {
-        $examples = $this->getCustomExamples() ?: $this->getBasicExamples();
-
-        return $examples ? array_merge(['```php'], $examples, ['```']) : [];
+        return $this->getCustomExamples() ?: $this->getBasicExamples();
     }
 
     private function getCustomExamples()

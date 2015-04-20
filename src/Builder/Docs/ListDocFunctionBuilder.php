@@ -8,23 +8,30 @@ use Phamda\Phamda;
 
 class ListDocFunctionBuilder
 {
-    public static function getLink(PhamdaFunction $function)
-    {
-        return sprintf('* [%1$s](#%1$s)', $function->getName());
-    }
-
     public static function getSection(PhamdaFunction $function)
     {
         return implode("\n", [
             '',
             '',
-            sprintf('<a name="%s"></a>', $function->getName()),
-            '### ' . $function->getName(),
-            sprintf('`%s`', ((new MethodSignatureBuilder($function))->getSignature())),
+            $function->getName(),
+            str_repeat('-', strlen($function->getName())),
+            sprintf('``%s``', ((new MethodSignatureBuilder($function))->getSignature())),
             '',
-            implode("\n", $function->getComment()->summary),
+            self::getSummary($function),
+            '',
             self::getExamples($function),
         ]);
+    }
+
+    private static function getSummary(PhamdaFunction $function)
+    {
+        $process = Phamda::pipe(
+            Phamda::implode("\n"),
+            Phamda::explode('`'),
+            Phamda::implode('``')
+        );
+
+        return $process($function->getComment()->summary);
     }
 
     private static function getExamples(PhamdaFunction $function)
@@ -32,7 +39,8 @@ class ListDocFunctionBuilder
         $process = Phamda::pipe(
             Phamda::construct(CommentExampleBuilder::class),
             Phamda::invoker(0, 'getRows'),
-            Phamda::ifElse(Phamda::isEmpty(), Phamda::identity(), Phamda::prepend('##### Examples')),
+            Phamda::map(Phamda::concat('    ')),
+            Phamda::ifElse(Phamda::isEmpty(), Phamda::identity(), Phamda::merge(['.. code:: php', ''])),
             Phamda::implode("\n")
         );
 

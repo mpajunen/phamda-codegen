@@ -40,7 +40,7 @@ class ListDocFunctionBuilder
             Phamda::construct(CommentExampleBuilder::class),
             Phamda::invoker(0, 'getRows'),
             Phamda::map(Phamda::concat('    ')),
-            Phamda::ifElse(Phamda::isEmpty(), Phamda::identity(), Phamda::merge(['.. code:: php', ''])),
+            Phamda::ifElse(Phamda::isEmpty(), Phamda::identity(), Phamda::merge(['.. code-block:: php', ''])),
             Phamda::implode("\n")
         );
 

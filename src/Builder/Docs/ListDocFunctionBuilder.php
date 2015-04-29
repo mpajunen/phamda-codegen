@@ -13,6 +13,8 @@ class ListDocFunctionBuilder
         return implode("\n", [
             '',
             '',
+            sprintf('.. _%s:', $function->getName()),
+            '',
             $function->getName(),
             str_repeat('-', strlen($function->getName())),
             sprintf('``%s``', ((new MethodSignatureBuilder($function))->getSignature())),

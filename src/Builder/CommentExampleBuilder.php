@@ -82,7 +82,7 @@ class CommentExampleBuilder
             }
         };
 
-        return sprintf('Phamda::%s(%s); // => %s',
+        return sprintf('P::%s(%s); // => %s',
             $this->source->getName(),
             implode(', ', array_map($print, $parameters)),
             $print($expected)

@@ -17,7 +17,7 @@ class MethodSignatureBuilder extends AbstractMethodBuilder
             Phamda::explode("\n"),
             Phamda::first(),
             Phamda::curry('trim'),
-            Phamda::curry('str_replace', 'public function ', 'Phamda::')
+            Phamda::curry('str_replace', 'public function ', 'P::')
         );
 
         return $this->getReturnType() . ' ' . $process($method);

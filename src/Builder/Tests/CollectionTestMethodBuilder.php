@@ -9,7 +9,6 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String;
-use PhpParser\Node\Stmt;
 
 class CollectionTestMethodBuilder extends BasicTestMethodBuilder
 {
@@ -42,7 +41,7 @@ class CollectionTestMethodBuilder extends BasicTestMethodBuilder
             $this->createCollectionAssignment(),
             $this->createResultAssignment(),
             $this->createResultAssert(),
-            $this->createImmutabilityAssert()
+            $this->createImmutabilityAssert(),
         ];
     }
 
@@ -51,7 +50,7 @@ class CollectionTestMethodBuilder extends BasicTestMethodBuilder
         return new Expr\Assign(
             new Expr\Variable('_' . $this->source->getCollectionArgumentName()),
             new Expr\New_(new Name($this->simple ? 'ArrayContainer' : 'ArrayCollection'), [
-                new Expr\Variable($this->source->getCollectionArgumentName())
+                new Expr\Variable($this->source->getCollectionArgumentName()),
             ])
         );
     }

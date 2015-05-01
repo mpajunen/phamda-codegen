@@ -11,11 +11,9 @@ use Phamda\Builder\Tests\CollectionTestBuilder;
 use Phamda\Functions\InnerFunctions;
 use Phamda\Printer\PhamdaPrinter;
 use Phamda\Tests\FunctionExampleTest;
-use PhpParser\Builder;
 use PhpParser\Lexer;
 use PhpParser\Node;
 use PhpParser\Parser;
-use PhpParser\PrettyPrinter;
 
 class Generator
 {

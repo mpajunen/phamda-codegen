@@ -4,7 +4,6 @@ namespace Phamda\Builder;
 
 use PhpParser\Builder\Method;
 use PhpParser\BuilderFactory;
-use PhpParser\Node\Expr;
 
 class AbstractMethodBuilder implements BuilderInterface
 {

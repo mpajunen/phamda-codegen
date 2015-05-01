@@ -63,7 +63,7 @@ class InnerFunctions
      */
     public static function allPass(array $predicates)
     {
-        return function (... $arguments) use ($predicates) {
+        return function (...$arguments) use ($predicates) {
             foreach ($predicates as $predicate) {
                 if (! $predicate(...$arguments)) {
                     return false;
@@ -116,7 +116,7 @@ class InnerFunctions
      */
     public static function anyPass(array $predicates)
     {
-        return function (... $arguments) use ($predicates) {
+        return function (...$arguments) use ($predicates) {
             foreach ($predicates as $predicate) {
                 if ($predicate(...$arguments)) {
                     return true;
@@ -165,7 +165,7 @@ class InnerFunctions
      */
     public static function apply(callable $function, array $arguments)
     {
-        return $function(... $arguments);
+        return $function(...$arguments);
     }
 
     /**
@@ -220,7 +220,7 @@ class InnerFunctions
      */
     public static function both(callable $a, callable $b)
     {
-        return function (... $arguments) use ($a, $b) {
+        return function (...$arguments) use ($a, $b) {
             return $a(...$arguments) && $b(...$arguments);
         };
     }
@@ -273,7 +273,7 @@ class InnerFunctions
      *
      * @return callable
      */
-    public static function compose(... $functions)
+    public static function compose(...$functions)
     {
         return Phamda::pipe(...array_reverse($functions));
     }
@@ -299,7 +299,7 @@ class InnerFunctions
      *
      * @return object
      */
-    public static function construct($class, ... $initialArguments)
+    public static function construct($class, ...$initialArguments)
     {
         return Phamda::constructN(static::getConstructorArity($class), $class, ...$initialArguments);
     }
@@ -313,9 +313,9 @@ class InnerFunctions
      *
      * @return object
      */
-    public static function constructN($arity, $class, ... $initialArguments)
+    public static function constructN($arity, $class, ...$initialArguments)
     {
-        return static::_curryN($arity, function (... $arguments) use ($class) {
+        return static::_curryN($arity, function (...$arguments) use ($class) {
             return new $class(...array_merge($arguments));
         }, ...$initialArguments);
     }
@@ -347,7 +347,7 @@ class InnerFunctions
      *
      * @return callable|mixed
      */
-    public static function curry(callable $function, ... $initialArguments)
+    public static function curry(callable $function, ...$initialArguments)
     {
         return static::_curryN(static::getArity($function), $function, ...$initialArguments);
     }
@@ -361,7 +361,7 @@ class InnerFunctions
      *
      * @return callable|mixed
      */
-    public static function curryN($length, callable $function, ... $initialArguments)
+    public static function curryN($length, callable $function, ...$initialArguments)
     {
         return static::_curryN($length, $function, ...$initialArguments);
     }
@@ -452,7 +452,7 @@ class InnerFunctions
      */
     public static function either(callable $a, callable $b)
     {
-        return function (... $arguments) use ($a, $b) {
+        return function (...$arguments) use ($a, $b) {
             return $a(...$arguments) || $b(...$arguments);
         };
     }
@@ -698,7 +698,7 @@ class InnerFunctions
      */
     public static function flip(callable $function)
     {
-        return function ($a, $b, ... $arguments) use ($function) {
+        return function ($a, $b, ...$arguments) use ($function) {
             return $function($b, $a, ...$arguments);
         };
     }
@@ -773,7 +773,7 @@ class InnerFunctions
      */
     public static function ifElse(callable $condition, callable $onTrue, callable $onFalse)
     {
-        return function (... $arguments) use ($condition, $onTrue, $onFalse) {
+        return function (...$arguments) use ($condition, $onTrue, $onFalse) {
             return $condition(...$arguments) ? $onTrue(...$arguments) : $onFalse(...$arguments);
         };
     }
@@ -831,11 +831,11 @@ class InnerFunctions
      *
      * @return callable
      */
-    public static function invoker($arity, $method, ... $initialArguments)
+    public static function invoker($arity, $method, ...$initialArguments)
     {
         $remainingCount = $arity - count($initialArguments) + 1;
 
-        return static::_curryN($remainingCount, function (... $arguments) use ($method, $initialArguments) {
+        return static::_curryN($remainingCount, function (...$arguments) use ($method, $initialArguments) {
             $object = array_pop($arguments);
 
             return $object->{$method}(...array_merge($initialArguments, $arguments));
@@ -1058,7 +1058,7 @@ class InnerFunctions
      */
     public static function nAry($arity, callable $function)
     {
-        return function (... $arguments) use ($arity, $function) {
+        return function (...$arguments) use ($arity, $function) {
             return $function(...array_slice($arguments, 0, $arity));
         };
     }
@@ -1097,7 +1097,7 @@ class InnerFunctions
      */
     public static function not(callable $predicate)
     {
-        return function (... $arguments) use ($predicate) {
+        return function (...$arguments) use ($predicate) {
             return ! $predicate(...$arguments);
         };
     }
@@ -1110,7 +1110,7 @@ class InnerFunctions
      *
      * @return callable
      */
-    public static function partial(callable $function, ... $initialArguments)
+    public static function partial(callable $function, ...$initialArguments)
     {
         return static::_partialN(static::getArity($function), $function, ...$initialArguments);
     }
@@ -1124,7 +1124,7 @@ class InnerFunctions
      *
      * @return callable
      */
-    public static function partialN($arity, callable $function, ... $initialArguments)
+    public static function partialN($arity, callable $function, ...$initialArguments)
     {
         return static::_partialN($arity, $function, ...$initialArguments);
     }
@@ -1174,7 +1174,7 @@ class InnerFunctions
      * @param mixed        $value
      * @param array|object $object
      *
-     * @return boolean
+     * @return bool
      */
     public static function pathEq(array $path, $value, $object)
     {
@@ -1226,13 +1226,13 @@ class InnerFunctions
      *
      * @return callable
      */
-    public static function pipe(... $functions)
+    public static function pipe(...$functions)
     {
         if (count($functions) < 2) {
             throw InvalidFunctionCompositionException::create();
         }
 
-        return function (... $arguments) use ($functions) {
+        return function (...$arguments) use ($functions) {
             $result = null;
             foreach ($functions as $function) {
                 $result = $result !== null ? $function($result) : $function(...$arguments);
@@ -1640,7 +1640,7 @@ class InnerFunctions
      *
      * @return mixed
      */
-    public static function unapply(callable $function, ... $arguments)
+    public static function unapply(callable $function, ...$arguments)
     {
         return $function($arguments);
     }

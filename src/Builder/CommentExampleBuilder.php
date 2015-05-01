@@ -4,7 +4,6 @@ namespace Phamda\Builder;
 
 use Phamda\Phamda;
 use Phamda\Printer\PhamdaPrinter;
-use PhpParser\Lexer;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
@@ -62,7 +61,7 @@ class CommentExampleBuilder
         return Phamda::reject(function ($example) { return strpos($example, '{') !== false; }, $examples);
     }
 
-    private function getTestDataExample($expected, ... $parameters)
+    private function getTestDataExample($expected, ...$parameters)
     {
         $print = function ($variable) use (&$print) {
             if (is_callable($variable)) {

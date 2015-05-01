@@ -3,7 +3,6 @@
 namespace Phamda\Builder;
 
 use Phamda\Phamda;
-use PhpParser\Builder;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\TraitUse;

@@ -8,19 +8,23 @@ use PhpParser\PrettyPrinter\Standard;
 
 class PhamdaPrinter extends Standard
 {
-    public function pExpr_Array(Expr\Array_ $node) {
+    public function pExpr_Array(Expr\Array_ $node)
+    {
         return '[' . $this->pCommaSeparated($node->items) . ']';
     }
 
-    public function pExpr_BooleanNot(Expr\BooleanNot $node) {
+    public function pExpr_BooleanNot(Expr\BooleanNot $node)
+    {
         return $this->pPrefixOp('Expr_BooleanNot', '! ', $node->expr);
     }
 
-    public function pExpr_Closure(Expr\Closure $node) {
+    public function pExpr_Closure(Expr\Closure $node)
+    {
         return str_replace(' use(', ' use (', parent::pExpr_Closure($node));
     }
 
-    protected function pStmts(array $nodes, $indent = true) {
+    protected function pStmts(array $nodes, $indent = true)
+    {
         $result = '';
         /** @var Node $node */
         foreach ($nodes as $index => $node) {

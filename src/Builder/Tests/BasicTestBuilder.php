@@ -5,7 +5,6 @@ namespace Phamda\Builder\Tests;
 use Phamda\Builder\BuilderInterface;
 use Phamda\Builder\PhamdaFunctionCollection;
 use Phamda\Phamda;
-use PhpParser\Builder;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\TraitUse;

@@ -43,6 +43,7 @@ class MethodSignatureBuilder extends AbstractMethodBuilder
     {
         $setTypeHint = function ($type, Param $param) {
             $param->type = $type;
+
             return $param;
         };
 

@@ -245,7 +245,7 @@ class InnerFunctions
      *
      * @param object $object
      *
-     * @return mixed
+     * @return object
      */
     public static function clone_($object)
     {
@@ -345,7 +345,7 @@ class InnerFunctions
      * @param callable $function
      * @param mixed    ...$initialArguments
      *
-     * @return callable
+     * @return callable|mixed
      */
     public static function curry(callable $function, ... $initialArguments)
     {
@@ -359,7 +359,7 @@ class InnerFunctions
      * @param callable $function
      * @param mixed    ...$initialArguments
      *
-     * @return callable
+     * @return callable|mixed
      */
     public static function curryN($length, callable $function, ... $initialArguments)
     {

@@ -19,7 +19,7 @@ use PhpParser\Node\Stmt;
 class PhamdaFunction
 {
     private $comment;
-    private $innerFunction;
+    private $innerParameters;
     private $name;
     private $source;
     private $exampleStatements;
@@ -28,7 +28,7 @@ class PhamdaFunction
     {
         $this->name              = $name;
         $this->source            = $source;
-        $this->innerFunction     = $this->createInnerFunction($getFunction);
+        $this->innerParameters   = $this->createInnerParameters($getFunction);
         $this->exampleStatements = $exampleStatements;
         $this->comment           = new PhamdaFunctionComment($source->getDocComment());
     }
@@ -80,11 +80,7 @@ class PhamdaFunction
 
     public function getInnerFunctionParams()
     {
-        if ($this->getReturnExpression() instanceof Expr\Closure) {
-            return $this->getReturnExpression()->params;
-        }
-
-        return $this->innerFunction ? $this->innerFunction->getInnerFunctionParams() : [];
+        return $this->innerParameters;
     }
 
     public function getName()
@@ -104,8 +100,12 @@ class PhamdaFunction
 
     public function returnsCallable()
     {
-        return $this->getReturnExpression() instanceof Expr\Closure
-            || ($this->innerFunction && $this->innerFunction->returnsCallable());
+        return $this->getReturnTypes() === ['callable'];
+    }
+
+    public function returnsObject()
+    {
+        return $this->getReturnTypes() === ['object'];
     }
 
     public function isCollectionFunction()
@@ -159,19 +159,27 @@ class PhamdaFunction
         return null;
     }
 
-    /**
-     * @param callable $getFunction
-     *
-     * @return PhamdaFunction
-     */
-    private function createInnerFunction(callable $getFunction)
+    private function createInnerParameters(callable $getFunction)
     {
         $return = $this->getReturnExpression();
 
-        if ($return instanceof Expr\StaticCall && $return->class->parts === ['Phamda']) {
-            return $getFunction($return->name);
+        if ($return instanceof Expr\Closure) {
+            return $return->params;
+        } elseif ($return instanceof Expr\StaticCall) {
+            if ($return->class->parts === ['Phamda']) {
+                /** @var static $function */
+                $function = $getFunction($return->name);
+
+                return $function->getInnerFunctionParams();
+            } elseif (in_array($return->name, ['_curryN'])) {
+                $function = $return->args[1]->value;
+
+                return $function instanceof Expr\Closure ? $function->params : [];
+            } elseif (in_array($return->name, ['_partialN'])) {
+                return [new Node\Param('arguments', null, null, false, true)];
+            }
         }
 
-        return null;
+        return [];
     }
 }

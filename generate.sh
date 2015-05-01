@@ -1,6 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 script_dir=$(dirname $0)
-cd $script_dir
-php app/generate.php ../phamda
-cd ../phamda
-php-cs-fixer fix .
+php $script_dir/generate.php $1
+php-cs-fixer fix $1 --level=none --fixers=align_equals

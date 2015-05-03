@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Phamda Code Generator library
+ *
+ * (c) Mikael Pajunen <mikael.pajunen@gmail.com>
+ *
+ * For the full copyright and license information, please see the LICENSE
+ * file that was distributed with this source code.
+ */
+
 if (! isset($argv[1])) {
     die("Output directory needed as the first parameter!\n");
 }

@@ -2,13 +2,13 @@
 
 namespace Phamda\CodeGen;
 
+use Phamda\Builder\InnerFunctions;
 use Phamda\CodeGen\Builder\BuilderInterface;
 use Phamda\CodeGen\Builder\Docs\ListDocBuilder;
 use Phamda\CodeGen\Builder\PhamdaBuilder;
 use Phamda\CodeGen\Builder\Tests\BasicTestBuilder;
 use Phamda\CodeGen\Builder\Tests\CollectionTestBuilder;
 use Phamda\CodeGen\Functions\FunctionCollection;
-use Phamda\CodeGen\Functions\InnerFunctions;
 use Phamda\Tests\FunctionExampleTest;
 use PhpParser\Lexer;
 use PhpParser\Node;

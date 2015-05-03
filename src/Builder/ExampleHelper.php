@@ -1,6 +1,6 @@
 <?php
 
-namespace Phamda\Builder;
+namespace Phamda\CodeGen\Builder;
 
 use Phamda\Tests\BasicProvidersTrait;
 

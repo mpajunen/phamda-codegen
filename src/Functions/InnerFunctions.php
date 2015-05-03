@@ -1,6 +1,6 @@
 <?php
 
-namespace Phamda\Functions;
+namespace Phamda\CodeGen\Functions;
 
 use Phamda\Collection\Collection;
 use Phamda\CoreFunctionsTrait;

@@ -10,5 +10,5 @@ if (! is_dir($argv[1])) {
 require __DIR__ . '/vendor/autoload.php';
 require $argv[1] . '/vendor/autoload.php';
 
-$generator = new \Phamda\Generator\Generator();
+$generator = new \Phamda\CodeGen\Generator();
 $generator->generate($argv[1]);

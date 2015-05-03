@@ -1,7 +1,9 @@
 <?php
 
-namespace Phamda\Builder;
+namespace Phamda\CodeGen\Builder;
 
+use Phamda\CodeGen\Functions\FunctionCollection;
+use Phamda\CodeGen\Functions\FunctionWrap;
 use Phamda\Phamda;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Name;
@@ -15,7 +17,7 @@ class PhamdaBuilder implements BuilderInterface
     private $functions;
     private $variables;
 
-    public function __construct(PhamdaFunctionCollection $functions, array $variables = [])
+    public function __construct(FunctionCollection $functions, array $variables = [])
     {
         $this->factory   = new BuilderFactory();
         $this->functions = $functions;
@@ -40,7 +42,7 @@ class PhamdaBuilder implements BuilderInterface
 
     private function createClassMethods()
     {
-        $create = function (PhamdaFunction $function) { return (new MethodBuilder($function))->build(); };
+        $create = function (FunctionWrap $function) { return (new MethodBuilder($function))->build(); };
 
         return Phamda::map($create, $this->functions->getFunctions());
     }

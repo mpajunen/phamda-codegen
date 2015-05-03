@@ -1,6 +1,6 @@
 {
-    "name": "mpajunen/meta-phamda",
-    "description": "Meta-Phamda generates code in the Phamda library",
+    "name": "phamda/codegen",
+    "description": "Generate function wrappers and test code for Phamda",
     "license": "MIT",
     "authors": [
         {
@@ -13,6 +13,6 @@
         "nikic/php-parser": "~1.1"
     },
     "autoload": {
-        "psr-4": {"Phamda\\": "src/"}
+        "psr-4": {"Phamda\\CodeGen\\": "src/"}
     }
 }

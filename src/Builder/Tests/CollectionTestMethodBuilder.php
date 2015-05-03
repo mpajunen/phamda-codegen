@@ -1,8 +1,8 @@
 <?php
 
-namespace Phamda\Builder\Tests;
+namespace Phamda\CodeGen\Builder\Tests;
 
-use Phamda\Builder\PhamdaFunction;
+use Phamda\CodeGen\Functions\FunctionWrap;
 use Phamda\Phamda;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -14,7 +14,7 @@ class CollectionTestMethodBuilder extends BasicTestMethodBuilder
 {
     private $simple;
 
-    public function __construct(PhamdaFunction $source, $simple)
+    public function __construct(FunctionWrap $source, $simple)
     {
         parent::__construct($source);
         $this->simple = $simple;

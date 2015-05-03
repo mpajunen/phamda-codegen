@@ -1,6 +1,6 @@
 <?php
 
-namespace Phamda\Builder;
+namespace Phamda\CodeGen\Functions;
 
 use Phamda\Phamda;
 use PhpParser\Node;
@@ -16,7 +16,7 @@ use PhpParser\Node\Stmt;
  * @property Node\Param[] $params Parameters
  * @property Node[]       $stmts  Statements
  */
-class PhamdaFunction
+class FunctionWrap
 {
     private $comment;
     private $innerParameters;
@@ -30,7 +30,7 @@ class PhamdaFunction
         $this->source            = $source;
         $this->innerParameters   = $this->createInnerParameters($getFunction);
         $this->exampleStatements = $exampleStatements;
-        $this->comment           = new PhamdaFunctionComment($source->getDocComment());
+        $this->comment           = new FunctionComment($source->getDocComment());
     }
 
     public function getArity()

@@ -1,14 +1,14 @@
 <?php
 
-namespace Phamda\Builder\Docs;
+namespace Phamda\CodeGen\Builder\Docs;
 
-use Phamda\Builder\CommentExampleBuilder;
-use Phamda\Builder\PhamdaFunction;
+use Phamda\CodeGen\Builder\CommentExampleBuilder;
+use Phamda\CodeGen\Functions\FunctionWrap;
 use Phamda\Phamda;
 
 class ListDocFunctionBuilder
 {
-    public static function getSection(PhamdaFunction $function)
+    public static function getSection(FunctionWrap $function)
     {
         return implode("\n", [
             '',
@@ -25,7 +25,7 @@ class ListDocFunctionBuilder
         ]);
     }
 
-    private static function getSummary(PhamdaFunction $function)
+    private static function getSummary(FunctionWrap $function)
     {
         $process = Phamda::pipe(
             Phamda::implode("\n"),
@@ -36,7 +36,7 @@ class ListDocFunctionBuilder
         return $process($function->getComment()->summary);
     }
 
-    private static function getExamples(PhamdaFunction $function)
+    private static function getExamples(FunctionWrap $function)
     {
         $process = Phamda::pipe(
             Phamda::construct(CommentExampleBuilder::class),

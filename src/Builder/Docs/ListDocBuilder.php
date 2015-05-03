@@ -1,15 +1,15 @@
 <?php
 
-namespace Phamda\Builder\Docs;
+namespace Phamda\CodeGen\Builder\Docs;
 
-use Phamda\Builder\PhamdaFunctionCollection;
+use Phamda\CodeGen\Functions\FunctionCollection;
 use Phamda\Phamda;
 
 class ListDocBuilder
 {
     private $functions;
 
-    public function __construct(PhamdaFunctionCollection $functions)
+    public function __construct(FunctionCollection $functions)
     {
         $this->functions = $functions;
     }

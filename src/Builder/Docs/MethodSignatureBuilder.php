@@ -1,17 +1,17 @@
 <?php
 
-namespace Phamda\Builder\Docs;
+namespace Phamda\CodeGen\Builder\Docs;
 
-use Phamda\Builder\AbstractMethodBuilder;
+use Phamda\CodeGen\Builder\AbstractMethodBuilder;
+use Phamda\CodeGen\Printer;
 use Phamda\Phamda;
-use Phamda\Printer\PhamdaPrinter;
 use PhpParser\Node\Param;
 
 class MethodSignatureBuilder extends AbstractMethodBuilder
 {
     public function getSignature()
     {
-        $method = (new PhamdaPrinter())->prettyPrint([$this->build()->getNode()]);
+        $method = (new Printer())->prettyPrint([$this->build()->getNode()]);
 
         $process = Phamda::pipe(
             Phamda::explode("\n"),

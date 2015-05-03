@@ -1,12 +1,12 @@
 <?php
 
-namespace Phamda\Printer;
+namespace Phamda\CodeGen;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\PrettyPrinter\Standard;
 
-class PhamdaPrinter extends Standard
+class Printer extends Standard
 {
     public function pExpr_Array(Expr\Array_ $node)
     {

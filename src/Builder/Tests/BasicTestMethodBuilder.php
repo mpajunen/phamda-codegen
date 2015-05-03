@@ -1,9 +1,9 @@
 <?php
 
-namespace Phamda\Builder\Tests;
+namespace Phamda\CodeGen\Builder\Tests;
 
-use Phamda\Builder\AbstractMethodBuilder;
-use Phamda\Builder\PhamdaFunction;
+use Phamda\CodeGen\Builder\AbstractMethodBuilder;
+use Phamda\CodeGen\Functions\FunctionWrap;
 use Phamda\Phamda;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Arg;
@@ -17,7 +17,7 @@ class BasicTestMethodBuilder extends AbstractMethodBuilder
 {
     protected $factory;
 
-    public function __construct(PhamdaFunction $source)
+    public function __construct(FunctionWrap $source)
     {
         parent::__construct($source);
         $this->factory = new BuilderFactory();

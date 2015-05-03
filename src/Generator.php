@@ -1,15 +1,14 @@
 <?php
 
-namespace Phamda\Generator;
+namespace Phamda\CodeGen;
 
-use Phamda\Builder\BuilderInterface;
-use Phamda\Builder\Docs\ListDocBuilder;
-use Phamda\Builder\PhamdaBuilder;
-use Phamda\Builder\PhamdaFunctionCollection;
-use Phamda\Builder\Tests\BasicTestBuilder;
-use Phamda\Builder\Tests\CollectionTestBuilder;
-use Phamda\Functions\InnerFunctions;
-use Phamda\Printer\PhamdaPrinter;
+use Phamda\CodeGen\Builder\BuilderInterface;
+use Phamda\CodeGen\Builder\Docs\ListDocBuilder;
+use Phamda\CodeGen\Builder\PhamdaBuilder;
+use Phamda\CodeGen\Builder\Tests\BasicTestBuilder;
+use Phamda\CodeGen\Builder\Tests\CollectionTestBuilder;
+use Phamda\CodeGen\Functions\FunctionCollection;
+use Phamda\CodeGen\Functions\InnerFunctions;
 use Phamda\Tests\FunctionExampleTest;
 use PhpParser\Lexer;
 use PhpParser\Node;
@@ -32,12 +31,12 @@ class Generator
 
     private function printClass(BuilderInterface $builder)
     {
-        return $this->getPhpFileComment() . (new PhamdaPrinter())->prettyPrint([$builder->build()]);
+        return $this->getPhpFileComment() . (new Printer())->prettyPrint([$builder->build()]);
     }
 
     private function getSourceFunctions()
     {
-        return new PhamdaFunctionCollection(
+        return new FunctionCollection(
             $this->getStatements(InnerFunctions::class),
             $this->getStatements(FunctionExampleTest::class)
         );

@@ -1,9 +1,9 @@
 <?php
 
-namespace Phamda\Builder\Tests;
+namespace Phamda\CodeGen\Builder\Tests;
 
-use Phamda\Builder\BuilderInterface;
-use Phamda\Builder\PhamdaFunctionCollection;
+use Phamda\CodeGen\Builder\BuilderInterface;
+use Phamda\CodeGen\Functions\FunctionCollection;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\TraitUse;
@@ -14,7 +14,7 @@ class CollectionTestBuilder implements BuilderInterface
 {
     private $functions;
 
-    public function __construct(PhamdaFunctionCollection $functions)
+    public function __construct(FunctionCollection $functions)
     {
         $this->functions = $functions;
     }

@@ -1,9 +1,10 @@
 <?php
 
-namespace Phamda\Builder;
+namespace Phamda\CodeGen\Builder;
 
+use Phamda\CodeGen\Functions\FunctionWrap;
+use Phamda\CodeGen\Printer;
 use Phamda\Phamda;
-use Phamda\Printer\PhamdaPrinter;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
@@ -14,7 +15,7 @@ class CommentExampleBuilder
 
     private $source;
 
-    public function __construct(PhamdaFunction $source)
+    public function __construct(FunctionWrap $source)
     {
         $this->source = $source;
     }
@@ -31,7 +32,7 @@ class CommentExampleBuilder
             return [];
         }
 
-        $printed = (new PhamdaPrinter())->prettyPrint($statements);
+        $printed = (new Printer())->prettyPrint($statements);
 
         $process = Phamda::pipe(
             Phamda::curry(

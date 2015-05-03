@@ -1,10 +1,10 @@
 <?php
 
-namespace Phamda\Builder;
+namespace Phamda\CodeGen\Functions;
 
 use Phamda\Phamda;
 
-class PhamdaFunctionComment
+class FunctionComment
 {
     public $parameters;
     public $return;

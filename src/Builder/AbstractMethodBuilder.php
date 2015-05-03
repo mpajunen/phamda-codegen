@@ -1,7 +1,8 @@
 <?php
 
-namespace Phamda\Builder;
+namespace Phamda\CodeGen\Builder;
 
+use Phamda\CodeGen\Functions\FunctionWrap;
 use PhpParser\Builder\Method;
 use PhpParser\BuilderFactory;
 
@@ -9,7 +10,7 @@ class AbstractMethodBuilder implements BuilderInterface
 {
     protected $source;
 
-    public function __construct(PhamdaFunction $source)
+    public function __construct(FunctionWrap $source)
     {
         $this->source = $source;
     }

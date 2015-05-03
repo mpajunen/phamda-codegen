@@ -1,11 +1,11 @@
 <?php
 
-namespace Phamda\Builder;
+namespace Phamda\CodeGen\Functions;
 
 use Phamda\Phamda;
 use PhpParser\Node\Stmt\ClassMethod;
 
-class PhamdaFunctionCollection implements \Countable
+class FunctionCollection implements \Countable
 {
     private $exampleStatements;
     private $functions;
@@ -33,7 +33,7 @@ class PhamdaFunctionCollection implements \Countable
     }
 
     /**
-     * @return PhamdaFunction[]
+     * @return FunctionWrap[]
      */
     public function getFunctions()
     {
@@ -51,7 +51,7 @@ class PhamdaFunctionCollection implements \Countable
     {
         $getFunction = function ($name) { return $this->getFunction($name); };
 
-        $this->functions[$name] = $function = new PhamdaFunction(
+        $this->functions[$name] = $function = new FunctionWrap(
             $name,
             $this->innerFunctions[$name],
             $getFunction,

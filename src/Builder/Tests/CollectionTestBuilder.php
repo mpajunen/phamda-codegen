@@ -12,6 +12,7 @@
 namespace Phamda\CodeGen\Builder\Tests;
 
 use Phamda\CodeGen\Builder\BuilderInterface;
+use Phamda\CodeGen\Builder\GeneratedClassComment;
 use Phamda\CodeGen\Functions\FunctionCollection;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Name;
@@ -48,6 +49,7 @@ class CollectionTestBuilder implements BuilderInterface
     private function createClass(BuilderFactory $factory)
     {
         return $factory->class('CollectionTest')
+            ->setDocComment(GeneratedClassComment::create('Test cases for basic functionality with collection objects.'))
             ->extend('\PHPUnit_Framework_TestCase')
             ->addStmt(new TraitUse([
                 new Name('BasicProvidersTrait'),

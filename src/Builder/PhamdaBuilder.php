@@ -45,6 +45,7 @@ class PhamdaBuilder implements BuilderInterface
     private function createClass()
     {
         return $this->factory->class('Phamda')
+            ->setDocComment(GeneratedClassComment::create('The main API class of Phamda.'))
             ->addStmt(new TraitUse([new Name('CoreFunctionsTrait')]))
             ->addStmts($this->createClassMethods());
     }

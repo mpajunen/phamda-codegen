@@ -12,6 +12,7 @@
 namespace Phamda\CodeGen\Builder\Tests;
 
 use Phamda\CodeGen\Builder\BuilderInterface;
+use Phamda\CodeGen\Builder\GeneratedClassComment;
 use Phamda\CodeGen\Functions\FunctionCollection;
 use Phamda\Phamda;
 use PhpParser\BuilderFactory;
@@ -42,6 +43,7 @@ class BasicTestBuilder implements BuilderInterface
     private function createClass(BuilderFactory $factory)
     {
         return $factory->class('BasicTest')
+            ->setDocComment(GeneratedClassComment::create('Test cases for basic functionality and currying.'))
             ->extend('\PHPUnit_Framework_TestCase')
             ->addStmt(new TraitUse([
                 new Name('BasicProvidersTrait'),

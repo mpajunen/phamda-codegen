@@ -19,22 +19,22 @@ class ListDocFunctionBuilder
 {
     public static function getSection(FunctionWrap $function)
     {
-        return implode("\n", [
-            '',
-            '',
+        $parts = array_filter([
             sprintf('.. _%s:', $function->getName()),
-            '',
-            $function->getName(),
-            str_repeat('-', strlen($function->getName())),
-            sprintf('``%s``', ((new MethodSignatureBuilder($function))->getSignature())),
-            '',
-            self::getSummary($function),
-            '',
+            implode("\n", [
+                $function->getName(),
+                str_repeat('-', strlen($function->getName())),
+                sprintf('``%s``', (new MethodSignatureBuilder($function))->getSignature()),
+            ]),
+            self::convertText([str_replace('@deprecated Since', 'Deprecated since', $function->getComment()->deprecation)]),
+            self::convertText($function->getComment()->summary),
             self::getExamples($function),
         ]);
+
+        return "\n\n" . implode("\n\n", $parts);
     }
 
-    private static function getSummary(FunctionWrap $function)
+    private static function convertText($text)
     {
         $process = Phamda::pipe(
             Phamda::implode("\n"),
@@ -42,7 +42,7 @@ class ListDocFunctionBuilder
             Phamda::implode('``')
         );
 
-        return $process($function->getComment()->summary);
+        return $process($text);
     }
 
     private static function getExamples(FunctionWrap $function)

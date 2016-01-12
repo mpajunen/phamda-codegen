@@ -15,6 +15,7 @@ use Phamda\Phamda;
 
 class FunctionComment
 {
+    public $deprecation;
     public $parameters;
     public $return;
     public $summary;
@@ -37,9 +38,11 @@ class FunctionComment
 
         $firstParameter = Phamda::findIndex(Phamda::curry($hasSubstring, '@param'), $rows);
         $return         = Phamda::findIndex(Phamda::curry($hasSubstring, '@return'), $rows);
+        $deprecation    = Phamda::findIndex(Phamda::curry($hasSubstring, '@deprecated'), $rows);
 
-        $this->summary    = Phamda::slice(0, ($firstParameter ? $firstParameter : $return) - 1, $rows);
-        $this->parameters = Phamda::slice($firstParameter, $return - 1, $rows);
-        $this->return     = $rows[$return];
+        $this->summary     = Phamda::slice(0, ($firstParameter ? $firstParameter : $return) - 1, $rows);
+        $this->parameters  = Phamda::slice($firstParameter, $return - 1, $rows);
+        $this->return      = $rows[$return];
+        $this->deprecation = isset($deprecation) ? $rows[$deprecation] : null;
     }
 }

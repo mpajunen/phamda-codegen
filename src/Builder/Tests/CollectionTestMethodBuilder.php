@@ -107,7 +107,7 @@ class CollectionTestMethodBuilder extends BasicTestMethodBuilder
 
     private function createFunctionCall()
     {
-        return new Expr\StaticCall(new Name('Phamda'), $this->source->getName(), $this->createArguments());
+        return new Expr\StaticCall(new Name('P'), $this->source->getName(), $this->createArguments());
     }
 
     private function createArguments()

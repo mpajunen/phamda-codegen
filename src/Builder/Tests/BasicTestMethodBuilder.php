@@ -134,7 +134,7 @@ EOT;
 
         return $function !== null
             ? new Expr\FuncCall($function, $arguments)
-            : new Expr\StaticCall(new Name('Phamda'), $this->source->getName(), $arguments);
+            : new Expr\StaticCall(new Name('P'), $this->source->getName(), $arguments);
     }
 
     private function createArguments(array $sources)

@@ -34,16 +34,16 @@ class CollectionTestBuilder implements BuilderInterface
         $factory = new BuilderFactory();
 
         return $factory->namespace('Phamda\Tests')
-            ->addStmt($this->createUse('Phamda\Phamda'))
+            ->addStmt($this->createUse('Phamda\Phamda', new Name('P')))
             ->addStmt($this->createUse('Phamda\Tests\Fixtures\ArrayCollection'))
             ->addStmt($this->createUse('Phamda\Tests\Fixtures\ArrayContainer'))
             ->addStmt($this->createClass($factory))
             ->getNode();
     }
 
-    private function createUse($class)
+    private function createUse($class, Name $alias = null)
     {
-        return new Use_([new UseUse(new Name($class))]);
+        return new Use_([new UseUse(new Name($class), $alias)]);
     }
 
     private function createClass(BuilderFactory $factory)

@@ -35,7 +35,7 @@ class BasicTestBuilder implements BuilderInterface
         $factory = new BuilderFactory();
 
         return $factory->namespace('Phamda\Tests')
-            ->addStmt(new Use_([new UseUse(new Name('Phamda\Phamda'))]))
+            ->addStmt(new Use_([new UseUse(new Name('Phamda\Phamda'), new Name('P'))]))
             ->addStmt($this->createClass($factory))
             ->getNode();
     }

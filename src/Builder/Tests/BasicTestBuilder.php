@@ -55,7 +55,7 @@ class BasicTestBuilder implements BuilderInterface
     private function createClassMethods()
     {
         $create = Phamda::pipe(
-            Phamda::reject(Phamda::invoker(0, 'returnsObject')),
+            Phamda::reject(Phamda::unary(Phamda::invoker(0, 'returnsObject'))),
             Phamda::map(Phamda::pipe(
                 Phamda::construct(BasicTestMethodBuilder::class),
                 Phamda::invoker(0, 'build')

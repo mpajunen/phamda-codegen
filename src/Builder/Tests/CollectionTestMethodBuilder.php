@@ -17,7 +17,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
-use PhpParser\Node\Scalar\String;
+use PhpParser\Node\Scalar\String_;
 
 class CollectionTestMethodBuilder extends BasicTestMethodBuilder
 {
@@ -77,7 +77,7 @@ class CollectionTestMethodBuilder extends BasicTestMethodBuilder
         return new Expr\MethodCall(new Expr\Variable('this'), 'assertSame', [
             new Expr\Variable('expected'),
             $this->createResultComparison(),
-            new String(sprintf('%s works for%s collection objects.', $this->source->getName(), $this->simple ? ' simple' : '')),
+            new String_(sprintf('%s works for%s collection objects.', $this->source->getName(), $this->simple ? ' simple' : '')),
         ]);
     }
 
@@ -86,7 +86,7 @@ class CollectionTestMethodBuilder extends BasicTestMethodBuilder
         return new Expr\MethodCall(new Expr\Variable('this'), 'assertSame', [
             new Expr\Variable($this->source->getCollectionArgumentName()),
             new Expr\MethodCall(new Expr\Variable('_' . $this->source->getCollectionArgumentName()), 'toArray'),
-            new String(sprintf('%s does not modify original collection values.', $this->source->getName())),
+            new String_(sprintf('%s does not modify original collection values.', $this->source->getName())),
         ]);
     }
 

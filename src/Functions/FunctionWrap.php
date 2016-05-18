@@ -120,7 +120,7 @@ class FunctionWrap
     public function isCollectionFunction()
     {
         return $this->getLastParam() !== false
-            && in_array($this->getLastParam()->name, ['collection', 'values'])
+            && in_array($this->getLastParam()->name, ['collection', 'list', 'map', 'values'])
             && $this->getLastParam()->type === null;
     }
 

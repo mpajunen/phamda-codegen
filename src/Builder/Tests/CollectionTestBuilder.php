@@ -37,6 +37,7 @@ class CollectionTestBuilder implements BuilderInterface
             ->addStmt($this->createUse('Phamda\Phamda', new Name('P')))
             ->addStmt($this->createUse('Phamda\Tests\Fixtures\ArrayCollection'))
             ->addStmt($this->createUse('Phamda\Tests\Fixtures\ArrayContainer'))
+            ->addStmt($this->createUse('PHPUnit\Framework\TestCase'))
             ->addStmt($this->createClass($factory))
             ->getNode();
     }
@@ -50,7 +51,7 @@ class CollectionTestBuilder implements BuilderInterface
     {
         return $factory->class('CollectionTest')
             ->setDocComment(GeneratedClassComment::create('Test cases for basic functionality with collection objects.'))
-            ->extend('\PHPUnit_Framework_TestCase')
+            ->extend('TestCase')
             ->addStmt(new TraitUse([
                 new Name('BasicProvidersTrait'),
                 new Name('CollectionTestTrait'),

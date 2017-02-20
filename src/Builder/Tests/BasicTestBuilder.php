@@ -36,6 +36,7 @@ class BasicTestBuilder implements BuilderInterface
 
         return $factory->namespace('Phamda\Tests')
             ->addStmt(new Use_([new UseUse(new Name('Phamda\Phamda'), new Name('P'))]))
+            ->addStmt(new Use_([new UseUse(new Name('PHPUnit\Framework\TestCase'))]))
             ->addStmt($this->createClass($factory))
             ->getNode();
     }
@@ -44,7 +45,7 @@ class BasicTestBuilder implements BuilderInterface
     {
         return $factory->class('BasicTest')
             ->setDocComment(GeneratedClassComment::create('Test cases for basic functionality and currying.'))
-            ->extend('\PHPUnit_Framework_TestCase')
+            ->extend('TestCase')
             ->addStmt(new TraitUse([
                 new Name('BasicProvidersTrait'),
                 new Name('CurryTestTrait'),
